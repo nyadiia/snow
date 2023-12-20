@@ -31,12 +31,13 @@
         system = "x86_64-linux";
         specialArgs = inputs;
         modules = [
-          ./configuration.nix
+          .hosts/system.nix
+          .hosts/hyprdash
           nixos-hardware.nixosModules.framework-11th-gen-intel
           home-manager.nixosModules.home-manager {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.nyadiia = import ./home.nix;
+            home-manager.users.nyadiia = import ./home-manager;
             # Optionally, use home-manager.extraSpecialArgs to pass
             # arguments to home.nix
           }
