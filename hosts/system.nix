@@ -16,19 +16,26 @@
     neovim
     wget
     curl
-    tailscale
     git
     delta
-    zellij
+    tmux
     usbutils
   ];
 
   services = { 
-    # TODO: remember to login to tailscale!! sorry this isn't declaritive but i'm not putting api keys on github :)
+    # TODO: remember to login to tailscale!! 
+    # sorry this isn't declaritive but i'm not putting api keys on github :)
     tailscale.enable = true;
     dbus = { 
       enable = true;
-      packages = with pkgs; [ dconf ];
+      packages = [ pkgs.dconf ];
+    };
+
+    syncthing = {
+      enable = true;
+      user = "nyadiia";
+      dataDir = "/home/nyadiia/Documents";    # Default folder for new synced folders
+      configDir = "/home/nyadiia/Documents/.config/syncthing";   # Folder for Syncthing's settings and keys
     };
   };
 
@@ -36,6 +43,7 @@
     isNormalUser = true;
     extraGroups = [ "sudo" "libvirtd" ];
     home = "/home/nyadiia";
+    # for systems that don't use home-manager ( like servers )
     shell = pkgs.fish;
     # !! please use home-manager if you can !!
     openssh.authorizedKeys.keys = [
@@ -45,8 +53,8 @@
 
   # Fonts config
   fonts = {
-    enableDefaultFonts = true;
-    fonts = with pkgs;  [
+    enableDefaultPackages = true;
+    packages = with pkgs;  [
       noto-fonts
       noto-fonts-cjk
       twitter-color-emoji
@@ -75,7 +83,6 @@
     };
   };
 
-  # Allow nonfree software
   nixpkgs.config.allowUnfree = true;
 
   # Use the systemd-boot EFI boot loader.
@@ -91,4 +98,6 @@
 
   # Enable virtualization
   virtualisation.libvirtd.enable = true;
+
+  system.stateVersion = "23.11";
 }

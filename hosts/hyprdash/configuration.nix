@@ -2,55 +2,34 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, unstable, ... }:
 
 {
-  imports =
-    [
-      # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
-
   networking.networkmanager.enable = true;
   networking.hostName = "hyprdash";
 
   # User info
-
-  nixpkgs.overlays =
-    let
-      vencord = self: super: {
-        discord = super.discord.override { withOpenASAR = true; withVencord = true; };
-      };
-    in
-    [ vencord ];
+  nixpkgs.config.permittedInsecurePackages = [
+    "electron-25.9.0"
+  ];
 
   users.users.nyadiia = {
     extraGroups = ["networkmanager" "video"];
-    # !! please use home-manager if you can !!
     packages = with pkgs; [
-      any-nix-shell
       obsidian
       spotify
       nixpkgs-fmt
-      discord
+      (unstable.discord.override {
+        withOpenASAR = true;
+        withVencord = true;
+      })
       tigervnc
       prismlauncher
     ];
   };
 
-  # GNOME
-  services.xserver = {
-    enable = true;
-    displayManager.gdm.enable = true;
-    desktopManager.gnome = {
-      enable = true;
-      # enable fractional scaling on wayland
-      extraGSettingsOverridePackages = [ pkgs.gnome.mutter ];
-      extraGSettingsOverrides = ''
-        [org.gnome.mutter]
-        experimental-features=['scale-monitor-framebuffer']
-      '';
-    };
+  services = {
+    
   };
 
   # disable pulseaudio and enable pipewire
@@ -58,7 +37,6 @@
   services = {
     # framework specific services
     fwupd.enable = true;
-    fprintd.enable = true;
 
     # general services
     printing.enable = true;
@@ -68,4 +46,4 @@
       pulse.enable = true;
     };
   };
-};
+}
