@@ -33,7 +33,7 @@
       };
       "garlic" = {
         hostname = "128.101.131.5";
-        user = "root";
+        user = "potte488";
       };
       "willow" = {
         hostname = "128.101.131.7";
