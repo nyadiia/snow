@@ -1,10 +1,5 @@
 { pkgs, ... }:
 {
-  environment.systemPackages = with pkgs; [
-    gnome
-    gdm
-  ];
-
   # GNOME
   services.xserver = {
     enable = true;

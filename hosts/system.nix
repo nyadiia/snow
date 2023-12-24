@@ -10,6 +10,13 @@
     fish.enable = true;
     gnupg.agent.enable = true;
     dconf.enable = true;
+    command-not-found.enable = false;
+    nix-index = {
+      enable = true;
+      enableFishIntegration = true;
+      enableZshIntegration = false;
+      enableBashIntegration = false;
+    };
   };
 
   environment.systemPackages = with pkgs; [
@@ -41,7 +48,6 @@
 
   users.users.nyadiia = {
     isNormalUser = true;
-    extraGroups = [ "sudo" "libvirtd" ];
     home = "/home/nyadiia";
     # for systems that don't use home-manager ( like servers )
     shell = pkgs.fish;

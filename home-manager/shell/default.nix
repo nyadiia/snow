@@ -2,6 +2,7 @@
   imports = [
     ./starship
     ./zoxide.nix
+    ./ssh.nix
   ];
 
   programs.fish = {
@@ -17,4 +18,9 @@
   };
 
   programs.fzf.enable = true;
+
+  programs.nix-index = {
+    enable = true;
+    enableFishIntegration = true;
+  };
 }
