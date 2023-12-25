@@ -35,7 +35,6 @@
   dconf.settings = {
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
-      clock-show-seconds = true;
       gtk-theme = "Orchis-Pink-Dark-Compact";
     };
     "org/gnome/desktop/wm/preferences" = {
