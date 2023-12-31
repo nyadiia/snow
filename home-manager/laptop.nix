@@ -6,6 +6,7 @@
     ./gnome.nix
     ./firefox.nix
     ./sway.nix
+    ./vscode.nix
   ];
 
   home.pointerCursor = {
