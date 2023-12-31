@@ -1,6 +1,7 @@
 { config, pkgs, unstable, ... }:
 
 {
+
   networking.networkmanager.enable = true;
   networking.hostName = "hyprdash";
 
@@ -11,21 +12,13 @@
 
   programs = {
     virt-manager.enable = true;
+    light.enable = true;
   };
+
+  security.polkit.enable = true;
 
   users.users.nyadiia = {
     extraGroups = ["networkmanager" "video" "wheel" "libvirtd" ];
-    packages = with pkgs; [
-      obsidian
-      spotify
-      nixpkgs-fmt
-      (unstable.discord.override {
-        withOpenASAR = true;
-        withVencord = true;
-      })
-      tigervnc
-      prismlauncher
-    ];
   };
 
   # disable pulseaudio and enable pipewire

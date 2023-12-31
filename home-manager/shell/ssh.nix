@@ -6,15 +6,12 @@
     matchBlocks = {
       # my tailnet
       "hyprdash" = {
-        hostname = "100.106.53.95";
         user = "nyadiia";
       };
       "crystal-heart" = {
-        hostname = "100.88.38.130";
         user = "nyadiia";
       };
       "farewell" = {
-        hostname = "100.122.216.134";
         user = "nyadiia";
       };
 
@@ -44,13 +41,6 @@
       "acm.umn.edu" = {
         user = "root";
       };
-
-      # localhost only
-      "balsam" = {
-        hostname = "10.0.100.227";
-        user = "nyadiia";
-      };
     };
-
   };
 }
