@@ -19,20 +19,30 @@
     };
   };
 
+
   environment.systemPackages = with pkgs; [
+    tmux
     neovim
     wget
     curl
+    usbutils
+
+    # not really needed on desktop (home-manager handles it) but nice for servers
     git
     delta
-    tmux
-    usbutils
+
+    # iphone bs
+    libimobiledevice
+    idevicerestore
+    ifuse
   ];
 
   services = { 
     # TODO: remember to login to tailscale!! 
     # sorry this isn't declaritive but i'm not putting api keys on github :)
     tailscale.enable = true;
+    usbmuxd.enable = true;
+
     dbus = { 
       enable = true;
       packages = [ pkgs.dconf ];

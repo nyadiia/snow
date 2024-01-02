@@ -1,3 +1,5 @@
-programs.vscode = {
-  enable = true;
-};
+{
+  programs.vscode = {
+    enable = true;
+  };
+}

@@ -5,6 +5,10 @@
     kitty.enable = true;
   };
 
+  home.packages = with pkgs; lib.mkAfter [
+    autotiling
+  ];
+
   wayland.windowManager.sway = {
     enable = true;
     package = unstable.swayfx;
@@ -29,9 +33,9 @@
 
       bars = [{ command = "waybar"; }];
 
-      output = {
-        "*".background = "~/Pictures/wallpaper.png fill";
-      };
+#      output = {
+#        "*".background = "~/Pictures/wallpaper.png fill";
+#      };
 
       startup = [
         { command = "autotiling"; }
