@@ -28,7 +28,7 @@
     obsidian
     spotify
     nixpkgs-fmt
-    (unstable.discord.override {
+    (pkgs.discord.override {
       withOpenASAR = true;
       withVencord = true;
     })

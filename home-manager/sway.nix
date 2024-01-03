@@ -3,10 +3,12 @@
 {
   programs = {
     kitty.enable = true;
+    waybar.enable = true;
   };
 
   home.packages = with pkgs; lib.mkAfter [
     autotiling
+    swayosd
   ];
 
   wayland.windowManager.sway = {

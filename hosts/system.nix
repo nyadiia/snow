@@ -26,6 +26,7 @@
     wget
     curl
     usbutils
+    links2
 
     # not really needed on desktop (home-manager handles it) but nice for servers
     git
@@ -41,6 +42,7 @@
     # TODO: remember to login to tailscale!! 
     # sorry this isn't declaritive but i'm not putting api keys on github :)
     tailscale.enable = true;
+    # iphone stuff
     usbmuxd.enable = true;
 
     dbus = { 
@@ -91,6 +93,8 @@
     settings = {
       auto-optimise-store = true;
       experimental-features = [ "nix-command" "flakes" ];
+      substituters = ["https://hyprland.cachix.org"];
+      trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
     };
     gc = {
       automatic = true;

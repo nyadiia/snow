@@ -21,9 +21,29 @@
     extraGroups = ["networkmanager" "video" "wheel" "libvirtd" ];
   };
 
+  systemd.services.greetd.serviceConfig = {
+    Type = "idle";
+    StandardInput = "tty";
+    StandardOutput = "tty";
+    StandardError = "journal"; # Without this errors will spam on screen
+    # Without these bootlogs will spam on screen
+    TTYReset = true;
+    TTYVHangup = true;
+    TTYVTDisallocate = true;
+  };
+
   # disable pulseaudio and enable pipewire
   hardware.pulseaudio.enable = false;
   services = {
+    greetd = {
+      enable = false;
+      settings = {
+        default_session = {
+          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd sway";
+          user = "greeter";
+        };
+      };
+    };
     # framework specific services
     fwupd.enable = true;
 
