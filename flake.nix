@@ -13,9 +13,23 @@
     # hardware goofyness
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
+    # hyprland
+    hyprland.url = "github:hyprwm/Hyprland";
+    hyprland-plugins = {
+      url = "github:hyprwm/hyprland-plugins";
+      inputs.hyprland.follows = "hyprland";
+    };
+
+    # anyrun
+    anyrun.url = "github:Kirottu/anyrun";
+    anyrun.inputs.nixpkgs.follows = "nixpkgs";
+
+    # ironbar
+    ironbar.url = "github:JakeStanger/ironbar";
+    ironbar.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, nixos-hardware, home-manager, ... }: 
+  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, nixos-hardware, home-manager, anyrun, ironbar, ... }: 
 
   let 
     system = "x86_64-linux";
@@ -25,19 +39,24 @@
   in {
     nixosConfigurations = {
       hyprdash = nixpkgs.lib.nixosSystem {
-        inherit system;
+        #inherit system;
         specialArgs = {
-          inherit unstable inputs;
+          inherit inputs unstable;
         };
+	system.packages = [ anyrun.packages.${system}.anyrun ];
         modules = [
           ./hosts/hyprdash
-	  ./modules/gnome.nix
+	 # ./modules/gnome.nix
+	  ./modules/hyprland.nix
           nixos-hardware.nixosModules.framework-11th-gen-intel
           home-manager.nixosModules.home-manager {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.users.nyadiia = import ./home-manager/laptop.nix;
             home-manager.extraSpecialArgs = { inherit inputs unstable; };
+	    home-manager.sharedModules = [
+	      inputs.ironbar.homeManagerModules.default
+	    ];
           }
         ];
       };

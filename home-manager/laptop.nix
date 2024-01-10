@@ -7,6 +7,7 @@
     ./firefox.nix
     ./sway.nix
     ./vscode.nix
+    ./hyprland.nix
   ];
 
   home.pointerCursor = {
@@ -29,10 +30,15 @@
     spotify
     nixpkgs-fmt
     (pkgs.discord.override {
-      withOpenASAR = true;
+      withOpenASAR = false;
       withVencord = true;
     })
     tigervnc
     prismlauncher
+    swww
+    playerctl
+    xfce.thunar
+    tofi
+    wl-clipboard
   ];
 }
