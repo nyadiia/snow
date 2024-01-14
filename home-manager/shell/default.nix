@@ -10,6 +10,9 @@
     interactiveShellInit = ''
       set fish_greeting 
     '';
+    shellInit = ''
+      any-nix-shell fish --info-right | source
+    '';
     shellAliases = {
       s = "ssh";
       cl = "clear";

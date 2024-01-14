@@ -26,7 +26,7 @@
     mandatoryFeatures = [ ];
   }
   ];
-  nix.distributedBuilds = false;
+  nix.distributedBuilds = true;
   # optional, useful when the builder has a faster internet connection than yours
   nix.extraOptions = ''
     builders-use-substitutes = true
@@ -48,6 +48,13 @@
   programs = {
     virt-manager.enable = true;
     light.enable = true;
+    thunar = {
+      enable = true;
+      plugins = with pkgs.xfce; [
+        thunar-archive-plugin
+        thunar-volman
+      ];
+    };
   };
 
   security.polkit.enable = true;
@@ -66,7 +73,8 @@
     TTYVHangup = true;
     TTYVTDisallocate = true;
   };
-
+  
+  powerManagement.powertop.enable = true;
   # disable pulseaudio and enable pipewire
   hardware.pulseaudio.enable = false;
   services = {
@@ -88,5 +96,11 @@
       alsa.enable = true;
       pulse.enable = true;
     };
+    gvfs.enable = true; # Mount, trash, and other functionalities
+    tumbler.enable = true; # Thumbnail support for images
   };
+
+  boot.kernelParams = [
+    "mem_sleep_default=deep"
+  ];
 }

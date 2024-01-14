@@ -7,7 +7,12 @@
 {
   # User info
   programs = {
-    fish.enable = true;
+    fish = {
+      enable = true;
+      promptInit = ''
+        ${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right | source
+      '';
+    };
     gnupg.agent.enable = true;
     dconf.enable = true;
     command-not-found.enable = false;
@@ -27,6 +32,9 @@
     curl
     usbutils
     links2
+    ripgrep
+    any-nix-shell
+    neofetch
 
     # not really needed on desktop (home-manager handles it) but nice for servers
     git

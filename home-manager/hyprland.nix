@@ -3,7 +3,10 @@
   imports = [
     ./swaylock.nix
     ./mako.nix
-    ./ironbar.nix
+    ./waybar.nix
+    ./kitty.nix
+    ./gtk.nix
+    ./fuzzel.nix
   ];
   services.cliphist.enable = true;
 
@@ -27,20 +30,6 @@
         ",preferred,auto,auto"
       ];
       misc.vfr = true;
-
-      env = [
-	"QT_QPA_PLATFORM,wayland;xcb"
-        "QT_AUTO_SCREEN_SCALE_FACTOR,1"
-        "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
-        "GDK_BACKEND,wayland"
-        "CLUTTER_BACKEND,wayland"
-        "SDL_VIDEODRIVER,wayland"
-        "MOZ_ENABLE_WAYLAND,1"
-        "MOZ_DRM_DEVICE,/dev/dri/renderD128"
-        "XDG_CURRENT_DESKTOP,Hyprland"
-        "XDG_SESSION_TYPE,wayland"
-        "XDG_SESSION_DESKTOP,Hyprland"
-      ];
 
       input = {
         kb_layout = "us";
@@ -71,7 +60,11 @@
       };
       bezier = "ease-out,0.165,0.84,0.44,1";
       animations = {
-        animation = "workspaces,1,3,ease-out";
+        animation = [
+	  "workspaces,1,3,ease-out"
+	  "windows,1,3,ease-out"
+	  "windowsOut,1,3,ease-out"
+	];
       };
       decoration = {
         rounding = "10";
@@ -91,8 +84,9 @@
         [
           "$mod, W, exec, firefox"
           "$mod, N, exec, thunar"
-	  "$mod, D, exec, tofi-drun --drun-launch=true"
+	  "$mod, D, exec, fuzzel"
           ", Print, exec, grimblast copy area"
+          "$mod, Print, exec, grimblast copy screen"
 	  "$mod, Return, exec, $term"
 	  "$mod, Q, killactive"
 	  "$mod, P, pseudo" # dwindle
@@ -130,7 +124,8 @@
        );
       # works even when locked
       bindl = [
-	",switch:Lid Switch, exec, swaylock"
+        # doesn't work with fingerprint enabled
+        # ",switch:Lid Switch, exec, swaylock"
 
 	# audio
 	",XF86AudioMute, exec, amixer sset Master toggle"
@@ -151,7 +146,6 @@
       ];
     };
     extraConfig = ''
-      # window resize
       bind = $mod, R, submap, resize
       
       submap = resize

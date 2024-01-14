@@ -5,7 +5,7 @@
 add_newline = true
 
 format = '$username$directory$character'
-right_format = '$container$hostname$status$git_status$git_branch'
+right_format = '$container$hostname$status$git_status$git_branch$nix_shell'
 
 [character]
 format = '[❯ ](#FF0066)'
@@ -60,3 +60,7 @@ disabled = true
 
 [git_state]
 disabled = true
+
+[nix_shell]
+format = ' [$state]($style)'
+
