@@ -44,6 +44,10 @@
     libimobiledevice
     idevicerestore
     ifuse
+
+    # fs
+    ntfs3g
+    zip unzip
   ];
 
   services = { 
@@ -52,6 +56,7 @@
     tailscale.enable = true;
     # iphone stuff
     usbmuxd.enable = true;
+    usbmuxd.package = pkgs.usbmuxd2;
 
     dbus = { 
       enable = true;
@@ -103,13 +108,9 @@
       experimental-features = [ "nix-command" "flakes" ];
       substituters = [
         "https://hyprland.cachix.org"
-	"https://anyrun.cachix.org"
-	"https://jakestanger.cachix.org"
       ];
       trusted-public-keys = [
         "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
-	"anyrun.cachix.org-1:pqBobmOjI7nKlsUMV25u9QHa9btJK65/C8vnO3p346s="
-	"jakestanger.cachix.org-1:VWJE7AWNe5/KOEvCQRxoE8UsI2Xs2nHULJ7TEjYm7mM="
       ];
     };
     gc = {
@@ -146,6 +147,7 @@
 
   # Enable virtualization
   virtualisation.libvirtd.enable = true;
+  virtualisation.spiceUSBRedirection.enable = true;
 
   system.stateVersion = "23.11";
 }

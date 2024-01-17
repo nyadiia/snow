@@ -14,9 +14,6 @@
     enable = true;
     package = inputs.hyprland.packages.${pkgs.system}.hyprland; 
     settings = {
-      exec = [
-	"swww img ~/Pictures/nge.jpg"
-      ];
       exec-once = [
         "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
 	"wl-paste --type text --watch cliphist store" #Stores only text data
@@ -24,11 +21,15 @@
         "swww init"
 	"mako"
       ];
+      exec = [
+	"swww img ~/Pictures/nge.jpg"
+      ];
 
       monitor = [
         "eDP-1,preferred,auto,1.175"
         ",preferred,auto,auto"
       ];
+      xwayland.force_zero_scaling = true;
       misc.vfr = true;
 
       input = {
@@ -89,10 +90,12 @@
           "$mod, Print, exec, grimblast copy screen"
 	  "$mod, Return, exec, $term"
 	  "$mod, Q, killactive"
+	  "$mod Shift, R, exec, hyprctl reload && pkill -USR2 waybar"
 	  "$mod, P, pseudo" # dwindle
 	  "$mod, E, togglesplit" # dwindle 
 	  "$mod Shift, Space, togglefloating"
 	  "$mod, F, fullscreen"
+	  "$mod, V, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
 	  
 	  # move focus
 	  "$mod, Left, movefocus, l"
@@ -128,7 +131,7 @@
         # ",switch:Lid Switch, exec, swaylock"
 
 	# audio
-	",XF86AudioMute, exec, amixer sset Master toggle"
+	",XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
         ",XF86AudioPlay, exec, playerctl play-pause"
         ",XF86AudioNext, exec, playerctl next"
         ",XF86AudioPrev, exec, playerctl previous"
@@ -137,12 +140,15 @@
       # works while locked and repeats when held
       bindel = [
 	# audio
-	",XFAudioRaiseVolume, exec, amixer -D pulse sset Master 5%+"
-	",XFAudioLowerVolume, exec, amixer -D pulse sset Master 5%-"
+	",XFAudioRaiseVolume, exec, wpctl set-vol @DEFAULT_AUDIO_SINK@ 5%+"
+	",XFAudioLowerVolume, exec, wpctl set-vol @DEFAULT_AUDIO_SINK@ 5%-"
 
 	# brightness
 	",XF86MonBrightnessUp, exec, light -A 5"
 	",XF86MonBrightnessDown, exec, light -U 5"
+      ];
+      bindm = [
+        "$mod, mouse:272, movewindow"
       ];
     };
     extraConfig = ''

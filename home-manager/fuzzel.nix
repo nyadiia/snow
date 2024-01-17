@@ -7,7 +7,7 @@
         terminal = "${pkgs.kitty}/bin/kitty";
         layer = "overlay";
         width = 45;
-        lines = 5;
+        lines = 15;
       };
       colors = {
         background = "11111bcc";

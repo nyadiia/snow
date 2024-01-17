@@ -21,6 +21,14 @@
       window#waybar.hidden {
         opacity: 0.2;
       }
+
+      tooltip {
+        border: 2px solid #f5c2e7;
+        border-radius: 15px;
+        background-color: rgba(17, 17, 27, 0.8);
+        padding: 10px;
+	margin: 10px;
+      }
       
       #workspaces {
         border-style: solid;
@@ -84,11 +92,11 @@
       
       #clock {
         border-style: solid;
-        border-width: 2px 0px 2px 2px;
+        border-width: 2px;
 	border-color: #f5c2e7;
-        border-radius: 20px 0px 0px 20px;
+        border-radius: 20px;
         padding-left: 10px;
-        padding-right: 5px;
+        padding-right: 10px;
         transition: none;
         color: #ffffff;
         background: rgba(17, 17, 27, 0.8);
@@ -193,11 +201,10 @@
       }
     '';
     settings = [{
-      height = 20;
+      height = 36;
       layer = "top";
       position = "top";
       margin = "3 3 0 3";
-      tray = { spacing = 10; };
       modules-center = [ "clock" "custom/weather" ];
       modules-left = [ "hyprland/workspaces" "hyprland/window" "hyprland/submap" ];
       modules-right = [
@@ -211,13 +218,13 @@
       "hyprland/window" = {
         seperate-outputs = true;
       };
-      "custom/weather" = {
-        format = "{}°";
-        tooltip = true;
-        interval = 3600;
-        exec = "wttrbar";
-        return-type = "json";
-      };
+#      "custom/weather" = {
+#        format = "{}°";
+#        tooltip = true;
+#        interval = 3600;
+#        exec = "wttrbar --location Minneapolis";
+#        return-type = "json";
+#      };
       battery = {
         format = "{capacity}% {icon}";
         format-alt = "{time} {icon}";
@@ -231,7 +238,19 @@
       };
       clock = {
         format-alt = "{:%Y-%m-%d}";
-        tooltip-format = "{:%Y-%m-%d | %H:%M}";
+	tooltip-format = "<tt><small>{calendar}</small></tt>";
+        calendar = {
+          mode = "year";
+	  mode-mon-col = 3;
+          weeks-pos = "right";
+          format = {
+            months = "<span color='#ffead3'><b>{}</b></span>";
+            days = "<span color='#ecc6d9'><b>{}</b></span>";
+	    weeks = "<span color='#99ffdd'>{}</span>";
+            weekdays = "<span color='#ffcc66'><b>{}</b></span>";
+            today = "<span color='#ff6699'><b><u>{}</u></b></span>";
+	  };
+	};
       };
       cpu = {
         format = "{usage}% ";

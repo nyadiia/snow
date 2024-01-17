@@ -1,5 +1,4 @@
-{ config, pkgs, unstable, ... }:
-
+{ config, pkgs, unstable, inputs, ... }:
 {
   nix.buildMachines = [ {
     hostName = "farewell";
@@ -55,6 +54,8 @@
         thunar-volman
       ];
     };
+    steam.enable = true;
+    steam.gamescopeSession.enable = true;
   };
 
   security.polkit.enable = true;
@@ -77,6 +78,7 @@
   powerManagement.powertop.enable = true;
   # disable pulseaudio and enable pipewire
   hardware.pulseaudio.enable = false;
+  security.rtkit.enable = true;
   services = {
     greetd = {
       enable = true;
@@ -94,6 +96,7 @@
     pipewire = {
       enable = true;
       alsa.enable = true;
+      alsa.support32Bit = true;
       pulse.enable = true;
     };
     gvfs.enable = true; # Mount, trash, and other functionalities

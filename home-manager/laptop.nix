@@ -39,10 +39,10 @@
     obsidian
     spotify
     nixpkgs-fmt
-    (unstable.discord.override {
-      withOpenASAR = true;
-      withVencord = true;
-    })
+    vesktop
+    (pkgs.writeShellScriptBin "discord" ''
+      exec ${pkgs.vesktop}/bin/vencorddesktop --enable-features=UseOzonePlatform --ozone-platform=wayland
+    '')
     tigervnc
     prismlauncher
     swww
@@ -51,6 +51,8 @@
     wl-clipboard
     libnotify
     pavucontrol
+    octaveFull
+    qalculate-gtk
     gnome.file-roller
     inputs.hyprland-contrib.packages.${pkgs.system}.grimblast
   ];

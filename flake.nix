@@ -24,44 +24,41 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # anyrun
-    anyrun.url = "github:Kirottu/anyrun";
-    anyrun.inputs.nixpkgs.follows = "nixpkgs";
-
-    # ironbar
-    ironbar.url = "github:JakeStanger/ironbar";
-    ironbar.inputs.nixpkgs.follows = "nixpkgs";
+#    # matlab
+#    nix-matlab = {
+#      # Recommended if you also override the default nixpkgs flake, common among
+#      # nixos-unstable users:
+#      inputs.nixpkgs.follows = "nixpkgs";
+#      url = "gitlab:doronbehar/nix-matlab";
+#    };
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, nixos-hardware, home-manager, anyrun, ironbar, ... }: 
+  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, ... }:
 
   let 
     system = "x86_64-linux";
     pkgs = import nixpkgs { inherit system; };
     unstable = import nixpkgs-unstable { inherit system; config = { allowUnfree = true; }; };
-    
+#    flake-overlays = [
+#      inputs.nix-matlab.overlay
+#    ];
+
   in {
     nixosConfigurations = {
       hyprdash = nixpkgs.lib.nixosSystem {
-        #inherit system;
         specialArgs = {
           inherit inputs unstable;
         };
-	system.packages = [ anyrun.packages.${system}.anyrun ];
         modules = [
-          ./hosts/hyprdash
-	 # ./modules/gnome.nix
+	  ./hosts/hyprdash
 	  ./modules/hyprland.nix
-          nixos-hardware.nixosModules.framework-11th-gen-intel
+          inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
           home-manager.nixosModules.home-manager {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.users.nyadiia = import ./home-manager/laptop.nix;
             home-manager.extraSpecialArgs = { inherit inputs unstable; };
-	    home-manager.sharedModules = [
-	      inputs.ironbar.homeManagerModules.default
-	    ];
-          }
+	  }
         ];
       };
     };
