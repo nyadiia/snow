@@ -31,10 +31,9 @@
     GDK_BACKEND = "wayland";
     CLUTTER_BACKEND = "wayland";
     SDL_VIDEODRIVER = "wayland";
-
   };
 
-  home.packages = with pkgs; [
+  home.packages = (with pkgs; [
     mpv
     obsidian
     spotify
@@ -51,9 +50,21 @@
     wl-clipboard
     libnotify
     pavucontrol
-    octaveFull
     qalculate-gtk
     gnome.file-roller
     inputs.hyprland-contrib.packages.${pkgs.system}.grimblast
-  ];
+    ffmpeg
+
+    octaveFull
+  ]) ++ (with pkgs.octavePackages; [
+    symbolic
+    io
+    ocl
+    linear-algebra
+    matgeom
+    general
+    audio
+    fuzzy-logic-toolkit
+    control
+  ]);
 }

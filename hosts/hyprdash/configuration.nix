@@ -46,6 +46,7 @@
 
   programs = {
     virt-manager.enable = true;
+    seahorse.enable = true;
     light.enable = true;
     thunar = {
       enable = true;
