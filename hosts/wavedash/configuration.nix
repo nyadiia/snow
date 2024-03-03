@@ -24,7 +24,7 @@
       supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-x86_64-v3" ];
       mandatoryFeatures = [ ];
     }];
-  nix.distributedBuilds = true;
+  nix.distributedBuilds = false;
   # optional, useful when the builder has a faster internet connection than yours
   nix.extraOptions = ''
     builders-use-substitutes = true

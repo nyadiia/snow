@@ -25,7 +25,7 @@
     mandatoryFeatures = [ ];
   }
   ];
-  nix.distributedBuilds = true;
+  nix.distributedBuilds = false;
   # optional, useful when the builder has a faster internet connection than yours
   nix.extraOptions = ''
     builders-use-substitutes = true
@@ -78,8 +78,8 @@
       openRPCPort = true; #Open firewall for RPC
     };
 
-    # framework specific services
-    fwupd.enable = true;
+    # # framework specific services
+    # fwupd.enable = true;
 
     # general services
     printing.enable = true;
