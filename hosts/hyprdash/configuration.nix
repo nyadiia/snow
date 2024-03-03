@@ -62,7 +62,7 @@
   security.polkit.enable = true;
 
   users.users.nyadiia = {
-    extraGroups = ["networkmanager" "video" "wheel" "libvirtd" ];
+    extraGroups = ["networkmanager" "video" "wheel" "libvirtd" "docker" ];
   };
 
   systemd.services.greetd.serviceConfig = {
