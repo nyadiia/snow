@@ -55,7 +55,7 @@
       ];
     };
     steam.enable = true;
-    steam.gamescopeSessionenable = true;
+    steam.gamescopeSession.enable = true;
   };
 
   security.polkit.enable = true;
