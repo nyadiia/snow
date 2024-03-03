@@ -73,10 +73,10 @@
       settings.KbdInteractiveAuthentication = false;
     };
 
-    transmission = { 
-      enable = true; #Enable transmission daemon
-      openRPCPort = true; #Open firewall for RPC
-    };
+    # transmission = { 
+    #   enable = true; #Enable transmission daemon
+    #   openRPCPort = true; #Open firewall for RPC
+    # };
 
     # # framework specific services
     # fwupd.enable = true;
