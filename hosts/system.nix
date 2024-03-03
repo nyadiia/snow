@@ -5,6 +5,8 @@
 { config, pkgs, ... }:
 
 {
+  networking.networkmanager.enable = true;
+
   # User info
   programs = {
     fish = {

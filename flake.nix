@@ -24,6 +24,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-index-database ={
+      url = "github:Mic92/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     #    # matlab
     #    nix-matlab = {
     #      # Recommended if you also override the default nixpkgs flake, common among
@@ -33,7 +38,7 @@
     #    };
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, ... }:
+  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, nix-index-database, ... }:
 
     let
       system = "x86_64-linux";
@@ -53,6 +58,7 @@
           modules = [
             ./hosts/hyprdash
             ./modules/hyprland.nix
+            nix-index-database.nixosModules.nix-index
             inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
             home-manager.nixosModules.home-manager
             {
@@ -70,6 +76,7 @@
           modules = [
             ./hosts/wavedash
             ./modules/hyprland.nix
+            nix-index-database.nixosModules.nix-index
             # inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
             home-manager.nixosModules.home-manager
             {
@@ -78,6 +85,23 @@
               home-manager.users.nyadiia = import ./home-manager/desktop.nix;
               home-manager.extraSpecialArgs = { inherit inputs unstable; };
             }
+          ];
+        };
+        demodash = nixpkgs.lib.nixosSystem {
+          specialArgs = {
+            inherit inputs unstable;
+          };
+          modules = [
+            ./hosts/demodash
+            nix-index-database.nixosModules.nix-index
+            # inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
+            # home-manager.nixosModules.home-manager
+            # {
+            #   home-manager.useGlobalPkgs = true;
+            #   home-manager.useUserPackages = true;
+            #   home-manager.users.nyadiia = import ./home-manager/desktop.nix;
+            #   home-manager.extraSpecialArgs = { inherit inputs unstable; };
+            # }
           ];
         };
       };
