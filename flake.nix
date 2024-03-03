@@ -38,7 +38,7 @@
     #    };
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, nix-index-database, ... }:
+  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, nixos-hardware, nix-index-database, ... }:
 
     let
       system = "x86_64-linux";
@@ -59,7 +59,7 @@
             ./hosts/hyprdash
             ./modules/hyprland.nix
             nix-index-database.nixosModules.nix-index
-            inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
+            nixos-hardware.nixosModules.framework-11th-gen-intel
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
@@ -77,7 +77,6 @@
             ./hosts/wavedash
             ./modules/hyprland.nix
             nix-index-database.nixosModules.nix-index
-            # inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
@@ -94,7 +93,8 @@
           modules = [
             ./hosts/demodash
             nix-index-database.nixosModules.nix-index
-            # inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
+            nixos-hardware.nixosModules.common-cpu-intel-sandy-bridge
+            nixos-hardware.nixosModules.common-gpu-amd
             # home-manager.nixosModules.home-manager
             # {
             #   home-manager.useGlobalPkgs = true;

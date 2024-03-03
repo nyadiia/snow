@@ -34,4 +34,13 @@
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+
+  boot.kernelParams = lib.mkBefore [
+    "hid_apple.iso_layout=0"
+  ];
+
+  hardware.facetimehd.enable = lib.mkDefault
+    (config.nixpkgs.config.allowUnfree or false);
+
+  services.mbpfan.enable = lib.mkDefault true;
 }
