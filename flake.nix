@@ -95,13 +95,13 @@
             nix-index-database.nixosModules.nix-index
             nixos-hardware.nixosModules.common-cpu-intel-sandy-bridge
             nixos-hardware.nixosModules.common-gpu-amd
-            # home-manager.nixosModules.home-manager
-            # {
-            #   home-manager.useGlobalPkgs = true;
-            #   home-manager.useUserPackages = true;
-            #   home-manager.users.nyadiia = import ./home-manager/desktop.nix;
-            #   home-manager.extraSpecialArgs = { inherit inputs unstable; };
-            # }
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.nyadiia = import ./home-manager/server.nix;
+              home-manager.extraSpecialArgs = { inherit inputs unstable; };
+            }
           ];
         };
       };

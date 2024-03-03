@@ -14,6 +14,12 @@
       "farewell" = {
         user = "nyadiia";
       };
+      "demodash" = {
+        user = "nyadiia";
+      };
+      "wavedash" = {
+        user = "nyadiia";
+      };
 
       # acm servers
       "argo" = {
