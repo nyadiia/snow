@@ -1,18 +1,5 @@
 { config, pkgs, unstable, inputs, lib, ... }:
-{
-  nix.buildMachines = [ {
-    hostName = "farewell";
-    system = "x86_64-linux";
-    protocol = "ssh-ng";
-    # if the builder supports building for multiple architectures, 
-    # replace the previous line by, e.g.
-    # systems = ["x86_64-linux" "aarch64-linux"];
-    maxJobs = 8;
-    speedFactor = 2;
-    supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-x86_64-v3" ];
-    mandatoryFeatures = [ ];
-  }
-  {  
+{ nix.buildMachines = [ {  
     hostName = "vm";
     system = "x86_64-linux";
     protocol = "ssh-ng";
@@ -23,8 +10,7 @@
     speedFactor = 5;
     supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-x86_64-v3" ];
     mandatoryFeatures = [ ];
-  }
-  ];
+  }];
   nix.distributedBuilds = false;
   # optional, useful when the builder has a faster internet connection than yours
   nix.extraOptions = ''
@@ -33,7 +19,7 @@
 
   nix.settings.system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-x86-64-v2" "gccarch-sandybridge" ];
 
-  networking.hostName = "demodash";
+  networking.hostName = "farewell";
 
   # User info
   security.polkit.enable = true;

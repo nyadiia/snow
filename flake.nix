@@ -104,6 +104,23 @@
             }
           ];
         };
+        farewell = nixpkgs.lib.nixosSystem {
+          specialArgs = {
+            inherit inputs unstable;
+          };
+          modules = [
+            ./hosts/farewell
+            nix-index-database.nixosModules.nix-index
+            nixos-hardware.nixosModules.common-cpu-intel
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.nyadiia = import ./home-manager/server.nix;
+              home-manager.extraSpecialArgs = { inherit inputs unstable; };
+            }
+          ];
+        };
       };
     };
 }
