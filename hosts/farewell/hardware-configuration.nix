@@ -23,11 +23,6 @@
       fsType = "vfat";
     };
 
-  fileSystems."/home/nyadiia/mnt" =
-    { device = "/dev/disk/by-uuid/69D1-3630";
-      fsType = "exfat";
-    };
-
   swapDevices =
     [ { device = "/dev/disk/by-uuid/8bc5dcb9-1c49-4d83-8165-397c5984699f"; }
     ];
