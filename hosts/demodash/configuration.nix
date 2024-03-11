@@ -45,20 +45,6 @@
     ];
   };
 
-  system.autoUpgrade = {
-    enable = true;
-    flake = inputs.self.outPath;
-    flags = [
-      "--update-input"
-      "nixpkgs"
-      "--update-input"
-      "nixpkgs-unstable"
-      "-L" # print build logs
-    ];
-    dates = "02:00";
-    randomizedDelaySec = "45min";
-  };
-
   # disable pulseaudio and enable pipewire
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
