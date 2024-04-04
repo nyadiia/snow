@@ -10,13 +10,17 @@
         lines = 15;
       };
       colors = {
-        background = "11111bcc";
-        text = "a6adc8ff";
-        match = "f5c2e7ff";
-        selection-match = "f38ba8ff";
-        selection = "313244ff";
-        selection-text = "cdd6f4ff";
-        border = "f5c2e7ff";
+        background = "282828ff";
+        text = "ebdbb2ff";
+        match = "d65d0eff";
+        selection-match = "1d2021ff";
+        selection = "d65d0eff";
+        selection-text = "ebdbb2ff";
+        border = "ebdbb2ff";
+      };
+      border = {
+        width = 1;
+        radius = 3;
       };
     };
   };

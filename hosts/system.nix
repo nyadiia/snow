@@ -42,6 +42,8 @@
     ripgrep
     any-nix-shell
     neofetch
+    yazi
+    profile-sync-daemon
 
     # not really needed on desktop (home-manager handles it) but nice for servers
     git
@@ -57,25 +59,27 @@
     zip unzip
   ];
 
-  services = { 
-    # TODO: remember to login to tailscale!! 
+  services = {
+    # TODO: remember to login to tailscale!!
     # sorry this isn't declaritive but i'm not putting api keys on github :)
     tailscale.enable = true;
     # iphone stuff
     usbmuxd.enable = true;
     usbmuxd.package = pkgs.usbmuxd2;
 
-    dbus = { 
+    udisks2.enable = true;
+
+    dbus = {
       enable = true;
       packages = [ pkgs.dconf ];
     };
 
-    syncthing = {
-      enable = true;
-      user = "nyadiia";
-      dataDir = "/home/nyadiia/Documents";    # Default folder for new synced folders
-      configDir = "/home/nyadiia/Documents/.config/syncthing";   # Folder for Syncthing's settings and keys
-    };
+    # syncthing = {
+    #   enable = true;
+    #   user = "nyadiia";
+    #   dataDir = "/home/nyadiia/Documents";    # Default folder for new synced folders
+    #   configDir = "/home/nyadiia/Documents/.config/syncthing";   # Folder for Syncthing's settings and keys
+    # };
   };
 
   users.users.nyadiia = {
@@ -98,6 +102,7 @@
       twitter-color-emoji
       (nerdfonts.override { fonts = [ "FiraCode" ]; })
       cozette
+      corefonts
     ];
     fontconfig = {
       defaultFonts = {
@@ -114,10 +119,10 @@
       auto-optimise-store = true;
       experimental-features = [ "nix-command" "flakes" ];
       substituters = [
-        "https://hyprland.cachix.org"
+        "https://cache.garnix.io"
       ];
       trusted-public-keys = [
-        "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+        "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
       ];
     };
     gc = {
@@ -150,7 +155,7 @@
     };
   };
   # Configure keymap in X11
-  services.xserver.layout = "us";
+  services.xserver.xkb.layout = "us";
 
   # Enable virtualization
   virtualisation.libvirtd.enable = true;

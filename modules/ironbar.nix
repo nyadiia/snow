@@ -4,10 +4,8 @@
     # And configure
     programs.ironbar = {
       enable = true;
-      config = {};
-      style = "";
+      config = import ./config.toml;
       package = inputs.ironbar;
-      features = ["feature" "another_feature"];
     };
   }
 }

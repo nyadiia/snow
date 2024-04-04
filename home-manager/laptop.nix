@@ -5,17 +5,16 @@
     ./common.nix
     ./firefox.nix
     ./vscode.nix
+    # ./nvim.nix
     ./hyprland.nix
   ];
 
   home.pointerCursor = {
-    name = "Adwaita";
-    package = pkgs.gnome.adwaita-icon-theme;
-    size = 24;
-    x11 = {
-      enable = true;
-      defaultCursor = "Adwaita";
-    };
+    name = "BreezeX-RosePine-Linux";
+    package = pkgs.rose-pine-cursor;
+    size = 20;
+    x11.enable = true;
+    gtk.enable = true;
   };
 
   home.sessionVariables = {
@@ -39,9 +38,6 @@
     spotify
     nixpkgs-fmt
     vesktop
-    (pkgs.writeShellScriptBin "discord" ''
-      exec ${pkgs.vesktop}/bin/vencorddesktop --enable-features=UseOzonePlatform --ozone-platform=wayland
-    '')
     tigervnc
     prismlauncher
     swww
@@ -52,8 +48,11 @@
     pavucontrol
     qalculate-gtk
     gnome.file-roller
-    inputs.hyprland-contrib.packages.${pkgs.system}.grimblast
+    grimblast
     ffmpeg
+    signal-desktop
+    hyprlock
+    rustup
 
     octaveFull
   ]) ++ (with pkgs.octavePackages; [

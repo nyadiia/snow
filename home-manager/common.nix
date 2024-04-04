@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, nix-index-database, ... }:
 
 {
   imports = [
@@ -39,8 +39,8 @@
   home = {
     stateVersion = "23.11";
     sessionVariables = {
-      EDITOR = "neovim";
-      VISUAL = "neovim";
+      EDITOR = "nvim";
+      VISUAL = "nvim";
       NIXOS_OZONE_WL = "1";
     };
   };

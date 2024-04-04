@@ -1,9 +1,8 @@
 { inputs, pkgs, ... }:
 {
   imports = [
-    ./swaylock.nix
     ./mako.nix
-    ./waybar.nix
+    ./ironbar.nix
     ./kitty.nix
     ./gtk.nix
     ./fuzzel.nix
@@ -12,17 +11,22 @@
 
   wayland.windowManager.hyprland = {
     enable = true;
-    package = inputs.hyprland.packages.${pkgs.system}.hyprland; 
     settings = {
+      "$mod" = "SUPER";
+      "$term" = "kitty";
+      "$runner" = "fuzzel";
+      "$browser" = "firefox";
+
       exec-once = [
         "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
-	"wl-paste --type text --watch cliphist store" #Stores only text data
-	"wl-paste --type image --watch cliphist store" #Stores only image data
+        "ironbar &"
+	      "wl-paste --type text --watch cliphist store" #Stores only text data
+	      "wl-paste --type image --watch cliphist store" #Stores only image data
         "swww init"
-	"mako"
+	      "mako &"
       ];
       exec = [
-	"swww img ~/Pictures/nge.jpg"
+	      "swww img ~/Pictures/nge.jpg"
       ];
 
       monitor = [
@@ -34,82 +38,80 @@
 
       input = {
         kb_layout = "us";
-	repeat_rate  = 50;
-	repeat_delay = 250;
-	touchpad.natural_scroll = true;
-	sensitivity = 0;
+	      repeat_rate  = 50;
+	      repeat_delay = 250;
+	      touchpad.natural_scroll = true;
+	      sensitivity = 0;
       };
       gestures = {
         workspace_swipe = true;
         workspace_swipe_fingers = "3";
       };
-      
+
       dwindle = {
         pseudotile = true;
-	preserve_split = true;
+      	preserve_split = true;
+      	no_gaps_when_only = 1;
       };
+
+      # workspace = "w[t1], bordersize:0, rounding:0, gapsout:0";
 
       general = {
-	layout = "dwindle";
+      	layout = "dwindle";
 
-	gaps_in     = 3;
-	gaps_out    = 3;
-	border_size = 2;
+      	gaps_in     = 3;
+      	gaps_out    = 3;
+      	border_size = 2;
 
-	"col.active_border"   = "rgb(f5c2e7)";
-	"col.inactive_border" = "rgba(585b70aa)";
+      	"col.active_border"   = "rgb(ebdbb2)";
+      	"col.inactive_border" = "rgb(1d2021)";
       };
-      bezier = "ease-out,0.165,0.84,0.44,1";
+
+      # bezier = "ease-out,0.165,0.84,0.44,1";
       animations = {
-        animation = [
-	  "workspaces,1,3,ease-out"
-	  "windows,1,3,ease-out"
-	  "windowsOut,1,3,ease-out"
-	];
-      };
-      decoration = {
-        rounding = "10";
-	blur = {
-	  enabled = true;
-	  passes = "3";
-	};
-	drop_shadow = false;
-        shadow_range = "10";
-        shadow_render_power = "3";
-        "col.shadow" = "rgba(1a1a1aee)";
+        enabled = false;
+         #  animation = [
+      	  #   "workspaces,1,3,ease-out"
+      	  #   "windows,1,3,ease-out"
+      	  #   "windowsOut,1,3,ease-out"
+      	  # ];
       };
 
-      "$mod" = "SUPER";
-      "$term" = "kitty";
+      decoration = {
+        rounding = "3";
+	      blur.enabled = false;
+	      drop_shadow = false;
+      };
+
       bind =
         [
-          "$mod, W, exec, firefox"
+          "$mod, W, exec, $browser"
           "$mod, N, exec, thunar"
-	  "$mod, D, exec, fuzzel"
+	        "$mod, D, exec, $runner"
           ", Print, exec, grimblast copy area"
           "$mod, Print, exec, grimblast copy screen"
-	  "$mod, Return, exec, $term"
-	  "$mod, Q, killactive"
-	  "$mod Shift, R, exec, hyprctl reload && pkill -USR2 waybar"
-	  "$mod, P, pseudo" # dwindle
-	  "$mod, E, togglesplit" # dwindle 
-	  "$mod Shift, Space, togglefloating"
-	  "$mod, F, fullscreen"
-	  "$mod, V, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
-	  
-	  # move focus
-	  "$mod, Left, movefocus, l"
-	  "$mod, Right, movefocus, r"
-	  "$mod, Up, movefocus, u"
-	  "$mod, Down, movefocus, d"
+	        "$mod, Return, exec, $term"
+	        "$mod, Q, killactive"
+	        "$mod Shift, R, exec, hyprctl reload && pkill -USR2 waybar"
+	        "$mod, P, pseudo" # dwindle
+	        "$mod, E, togglesplit" # dwindle
+	        "$mod Shift, Space, togglefloating"
+	        "$mod, F, fullscreen"
+	        "$mod, V, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
+	        "$mod, L, exec, hyprlock"
 
-	  # move window
-	  "$mod Shift, Left, movewindow, l"
-	  "$mod Shift, Right, movewindow, r"
-	  "$mod Shift, Up, movewindow, u"
-	  "$mod Shift, Down, movewindow, d"
-        ]
-        ++ (
+	        # move focus
+	        "$mod, Left, movefocus, l"
+	        "$mod, Right, movefocus, r"
+	        "$mod, Up, movefocus, u"
+	        "$mod, Down, movefocus, d"
+
+	        # move window
+	        "$mod Shift, Left, movewindow, l"
+	        "$mod Shift, Right, movewindow, r"
+	        "$mod Shift, Up, movewindow, u"
+	        "$mod Shift, Down, movewindow, d"
+        ] ++ (
           # workspaces
           # binds $mod + [shift +] {1..10} to [move to] workspace {1..10}
           builtins.concatLists (builtins.genList (
@@ -122,30 +124,29 @@
               "$mod, ${ws}, workspace, ${toString (x + 1)}"
               "$mod SHIFT, ${ws}, movetoworkspace, ${toString (x + 1)}"
             ]
-	  )
-       10)
-       );
-      # works even when locked
+          ) 10)
+        );
+      # works while locked
       bindl = [
         # doesn't work with fingerprint enabled
-        # ",switch:Lid Switch, exec, swaylock"
+        ",switch:Lid Switch, exec, hyprlock"
 
-	# audio
-	",XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+	      # audio
+	      ",XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
         ",XF86AudioPlay, exec, playerctl play-pause"
         ",XF86AudioNext, exec, playerctl next"
         ",XF86AudioPrev, exec, playerctl previous"
       ];
-      
+
       # works while locked and repeats when held
       bindel = [
-	# audio
-	",XFAudioRaiseVolume, exec, wpctl set-vol @DEFAULT_AUDIO_SINK@ 5%+"
-	",XFAudioLowerVolume, exec, wpctl set-vol @DEFAULT_AUDIO_SINK@ 5%-"
+	      # audio
+	      ",XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"
+	      ",XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
 
-	# brightness
-	",XF86MonBrightnessUp, exec, light -A 5"
-	",XF86MonBrightnessDown, exec, light -U 5"
+	      # brightness
+	      ",XF86MonBrightnessUp, exec, light -A 5"
+	      ",XF86MonBrightnessDown, exec, light -U 5"
       ];
       bindm = [
         "$mod, mouse:272, movewindow"
@@ -153,7 +154,7 @@
     };
     extraConfig = ''
       bind = $mod, R, submap, resize
-      
+
       submap = resize
       binde = , right, resizeactive, 20 0
       binde = , left, resizeactive, -20 0

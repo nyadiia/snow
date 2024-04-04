@@ -1,7 +1,9 @@
 { lib, ... }:
 {
-  programs.zoxide.enable = true;
-  programs.fish.shellAliases = lib.mkBefore {
-    cd = "z";
+  programs.zoxide = {
+    enable = true;
+    options = [
+      "--cmd cd"
+    ];
   };
 }

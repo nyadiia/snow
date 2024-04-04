@@ -3,10 +3,12 @@
   gtk = {
     enable = true;
     theme = {
-      name = "Orchis-Pink-Dark-Compact";
-      package = pkgs.orchis-theme.override {
-        tweaks = [ "macos" "black" "compact" ];
-      };
+      name = "gruvbox-dark";
+      package = pkgs.gruvbox-dark-gtk;
+    };
+    iconTheme = {
+      name = "oomox-gruvbox-dark";
+      package = pkgs.gruvbox-dark-icons-gtk;
     };
   };
 }
