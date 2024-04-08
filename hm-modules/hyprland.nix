@@ -1,4 +1,4 @@
-{ inputs, pkgs, ... }:
+{ inputs, config, lib, pkgs, ... }:
 {
   imports = [
     ./mako.nix
@@ -8,6 +8,13 @@
     ./fuzzel.nix
   ];
   services.cliphist.enable = true;
+
+  options.hyprland = {
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      defaults = config.
+    };
+  };
 
   wayland.windowManager.hyprland = {
     enable = true;

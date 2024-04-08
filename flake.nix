@@ -14,8 +14,8 @@
     # hardware goofyness
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
-    # # hyprland
-    # hyprland.url = "github:hyprwm/Hyprland";
+    # hyprland
+    hyprland.url = "github:hyprwm/Hyprland";
     # hyprland-plugins = {
     #   url = "github:hyprwm/hyprland-plugins";
     #   inputs.hyprland.follows = "hyprland";
@@ -25,7 +25,7 @@
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
 
-    nix-index-database ={
+    nix-index-database = {
       url = "github:Mic92/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -53,11 +53,13 @@
     };
   };
 
+  nixConfig = { };
+
   outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, nixos-hardware, nix-index-database, ... }:
 
     let
       system = "x86_64-linux";
-      pkgs = import nixpkgs { inherit system; config = { allowUnfree = true; }; };
+      # pkgs = import nixpkgs { inherit system; config = { allowUnfree = true; }; };
       unstable = import nixpkgs-unstable { inherit system; config = { allowUnfree = true; }; };
       flake-overlays = [
         inputs.nix-matlab.overlay
@@ -74,7 +76,8 @@
             ./hosts/hyprdash
             nix-index-database.nixosModules.nix-index
             nixos-hardware.nixosModules.framework-11th-gen-intel
-            home-manager.nixosModules.home-manager {
+            home-manager.nixosModules.home-manager
+            {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.users.nyadiia.imports = [

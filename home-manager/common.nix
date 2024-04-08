@@ -1,4 +1,4 @@
-{ pkgs, nix-index-database, ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -24,6 +24,12 @@
     };
   };
 
+  dconf.settings = {
+    "org/virt-manager/virt-manager/connections" = {
+      autoconnect = ["qemu:///system" "qemu+ssh://root@vm/system" "qemu+ssh://root@argo/system"];
+      uris = ["qemu:///system" "qemu+ssh://root@vm/system" "qemu+ssh://root@argo/system"];
+    };
+  };
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";

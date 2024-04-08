@@ -8,7 +8,7 @@
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
-      set fish_greeting 
+      set fish_greeting
     '';
     shellInit = ''
       any-nix-shell fish --info-right | source

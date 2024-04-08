@@ -54,7 +54,17 @@
     hyprlock
     rustup
 
-    octaveFull
+    (octaveFull.withPackages (opkgs: with opkgs; [
+      symbolic
+      io
+      ocl
+      linear-algebra
+      matgeom
+      general
+      audio
+      fuzzy-logic-toolkit
+      control
+    ]))
   ]) ++ (with pkgs.octavePackages; [
     symbolic
     io
