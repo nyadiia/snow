@@ -126,11 +126,13 @@
         "https://cache.garnix.io"
         "https://hyprland.cachix.org"
         "https://nixpkgs-unfree.cachix.org"
+        "https://walker.cachix.org"
       ];
       trusted-public-keys = [
         "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
         "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
         "nixpkgs-unfree.cachix.org-1:hqvoInulhbV4nJ9yJOEr+4wxhDV4xq2d1DK7S6Nj6rs="
+        "walker.cachix.org-1:fG8q+uAaMqhsMxWjwvk0IMb4mFPFLqHjuvfwQxE4oJM="
       ];
     };
     gc = {
