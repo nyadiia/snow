@@ -14,12 +14,12 @@
       };
 
       ssh-keys = lib.mkOption {
-        type = lib.types.listOf.str;
+        type = lib.types.listOf lib.types.nonEmpty.str;
         default = [];
       };
 
       groups = lib.mkOption {
-        type = lib.types.listOf.nonEmptyStr;
+        type = lib.types.listOf lib.types.nonEmptyStr;
         default = [];
       };
     };
@@ -34,10 +34,10 @@
       default = true;
     };
 
-    # syncthing.enable = lib.mkEnableOption  {
-    #   type = lib.types.bool;
-    #   default = true;
-    # };
+    syncthing.enable = lib.mkEnableOption  {
+      type = lib.types.bool;
+      default = true;
+    };
 
     laptop = lib.mkOption {
       type = lib.types.bool;
@@ -80,7 +80,9 @@
       isNormalUser = true;
       shell = pkgs.fish;
       openssh.authorizedKeys.keys = config.custom.ssh-keys;
-      extraGroups = [ "networkmanager" "wheel" ] ++ lib.mkIf config.custom.laptop [ "video" ] ++ config.custom.user.groups ;
+      extraGroups = [ "networkmanager" "wheel" ]
+        ++ (lib.optionals config.custom.laptop) ["video"]
+        ++ config.custom.user.groups;
     };
 
     programs.command-not-found.enable = lib.mkIf config.custom.nix-index.enable false;
@@ -94,12 +96,12 @@
       dockerCompat = true;
     };
 
-    # programs.syncthing = lib.mkIf config.custom.syncthing.enable {
-    #   enable = true;
-    #   user = config.custom.user.name;
-    #   dataDir = "/home/${config.custom.user.name}/Documents";    # Default folder for new synced folders
-    #   configDir = "/home/${config.custom.user.name}/Documents/.config/syncthing";   # Folder for Syncthing's settings and keys
-    # };
+    services.syncthing = lib.mkIf config.custom.syncthing.enable {
+      enable = true;
+      user = config.custom.user.name;
+      dataDir = "/home/${config.custom.user.name}/Documents";    # Default folder for new synced folders
+      configDir = "/home/${config.custom.user.name}/Documents/.config/syncthing";   # Folder for Syncthing's settings and keys
+    };
 
     services.dbus = lib.mkIf (!config.custom.server) {
       enable = true;

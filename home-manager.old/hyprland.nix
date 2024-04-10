@@ -19,7 +19,9 @@
       "$browser" = "firefox";
 
       exec-once = [
+        # i don't think this first line is needed but whatever
         "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
+        "cliphist wipe"
         "ironbar &"
 	      "wl-paste --type text --watch cliphist store" #Stores only text data
 	      "wl-paste --type image --watch cliphist store" #Stores only image data
@@ -52,9 +54,9 @@
       dwindle = {
         pseudotile = true;
       	preserve_split = true;
-      	# no_gaps_when_only = 1;
       };
 
+      # no gaps when there's only one window on any given workspace
       workspace = "w[t1], bordersize:0, rounding:0, gapsout:0";
 
       general = {

@@ -10,7 +10,7 @@
   services.cliphist.enable = true;
 
   options.hm.hyprland = {
-    enable = lib.mkOption {
+    enable = lib.mkEnableOption {
       type = lib.types.bool;
       defaults = true;
     };
@@ -26,7 +26,7 @@
       "$browser" = "firefox";
 
       exec-once = [
-        "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
+       #  "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
         "ironbar &"
 	      "wl-paste --type text --watch cliphist store" #Stores only text data
 	      "wl-paste --type image --watch cliphist store" #Stores only image data

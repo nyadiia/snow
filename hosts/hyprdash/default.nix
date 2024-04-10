@@ -1,22 +1,22 @@
-{ pkgs, ... }:
-
+{ ... }:
 {
   imports = [
     ../system.nix
+    ../home.nix
     ./hardware-configuration.nix
     # /etc/nixos/hardware-configuration.nix
   ];
-  # nixpkgs.overlays = [
-  #   (self: super: {
-  #     blas = super.blas.override {
-  #       blasProvider = self.mkl;
-  #     };
+  nixpkgs.overlays = [
+    (self: super: {
+      blas = super.blas.override {
+        blasProvider = self.mkl;
+      };
 
-  #     lapack = super.lapack.override {
-  #       lapackProvider = self.mkl;
-  #     };
-  #   })
-  # ];
+      lapack = super.lapack.override {
+        lapackProvider = self.mkl;
+      };
+    })
+  ];
   networking.hostName = "hyprdash";
   custom = {
     user = {

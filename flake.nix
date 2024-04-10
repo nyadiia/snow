@@ -5,7 +5,7 @@
     # nixpkgs
     # nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     # Home Manager
     home-manager.url = "github:nix-community/home-manager";
@@ -33,7 +33,7 @@
     # ironbar
     ironbar = {
       url = "github:JakeStanger/ironbar";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     nixvim = {
@@ -55,7 +55,7 @@
 
   nixConfig = { };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, nixos-hardware, nix-index-database, ... }:
+  outputs = inputs@{ self, nixpkgs, home-manager, nixos-hardware, nix-index-database, ... }:
 
     # let
     #   system = "x86_64-linux";
