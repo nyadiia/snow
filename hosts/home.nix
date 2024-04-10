@@ -1,7 +1,5 @@
-{ config, lib, pkgs }:
-let
-  username = config.custom.user.name;
-in
+{ config, lib, pkgs, inputs, ... }:
+
 {
   options.hm = {
     imports = lib.mkOption {
@@ -10,38 +8,36 @@ in
     };
   };
 
-  config = {
-    home-manager = {
-      useGlobalPkgs = true;
-      useUserPkgs = true;
+  config.home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
 
-      users.${username} = {
-        imports = config.hm.imports;
-        home = {
-          username = username;
-          homeDirectory = "/home/${username}";
-          stateVersion = config.system.stateVersion;
-          sessionVariables = {
-            EDITOR = "nvim";
-            VISUAL = "nvim";
-          };
+    users.${config.custom.user.name} = {
+      imports = inputs.home-manager.nixosModules.home-manager
+        ++ config.hm.imports;
+      home = {
+        username = config.system.user.name;
+        homeDirectory = "/home/${config.custom.user.name}";
+        stateVersion = config.system.stateVersion;
+        sessionVariables = {
+          EDITOR = "nvim";
+          VISUAL = "nvim";
         };
       };
-    };
-
-    programs.git = {
-      enable = true;
-      package = pkgs.gitAndTools.gitFull;
-      delta.enable = true;
-      userName = username;
-      userEmail = "nyadiia@pm.me";
-      extraConfig = {
-        core.editor = "nvim";
-        init.defaultBranch = "main";
-      };
-      signing = {
-        signByDefault = true;
-        key = "C8DC17070AC33338193F9723229718FDC160E880";
+      programs.git = {
+        enable = true;
+        package = pkgs.gitAndTools.gitFull;
+        delta.enable = true;
+        userName = config.custom.user.name;
+        userEmail = "nyadiia@pm.me";
+        extraConfig = {
+          core.editor = "nvim";
+          init.defaultBranch = "main";
+        };
+        signing = {
+          signByDefault = true;
+          key = "C8DC17070AC33338193F9723229718FDC160E880";
+        };
       };
     };
   };
