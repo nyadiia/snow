@@ -9,14 +9,14 @@
   ];
   services.cliphist.enable = true;
 
-  options.hyprland = {
+  options.hm.hyprland = {
     enable = lib.mkOption {
       type = lib.types.bool;
-      defaults = config.
+      defaults = true;
     };
   };
 
-  wayland.windowManager.hyprland = {
+  config.wayland.windowManager.hyprland = lib.mkIf inputs.hyprland.enable {
     enable = true;
     package = inputs.hyprland.packages.${pkgs.system}.hyprland;
     settings = {

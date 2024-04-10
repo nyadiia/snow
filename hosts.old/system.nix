@@ -2,80 +2,9 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, lib, pkgs, ... }:
+{ pkgs, ... }:
 
 {
-  options.system = {
-    podman.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-    };
-
-    # forces you to set a username (i think)
-    user = {
-      name = lib.mkOption {
-        type = lib.types.nonEmptyStr;
-        default = "";
-      };
-
-      ssh-keys = lib.mkOption {
-        type = lib.types.listOf.str;
-        default = [];
-      };
-
-      groups = lib.mkOption {
-        type = lib.type.listOf.nonEmptyStr;
-        default = [];
-      };
-    };
-
-    nix-index.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-    };
-  };
-
-  config = {
-    home-manager.sharedModules = [{
-      options.system.nix-index = {
-        enable = lib.mkOption {
-          type = lib.types.bool;
-          default = true;
-        };
-        database.enable = lib.mkOption {
-          type = lib.types.bool;
-          default = true;
-        };
-      };
-
-      config = {
-        nix-index = lib.mkIf config.system.nix-index.enable {
-          enable = true;
-          enableFishIntegration = true;
-        };
-      };
-    }];
-
-    users.users.${config.system.user.name} = {
-      isNormalUser = true;
-      shell = pkgs.fish;
-      openssh.authorizedKeys.keys = config.system.ssh-keys;
-      extraGroups = lib.mkAfter config.system.user.groups;
-    };
-
-    programs.command-not-found.enable = lib.mkIf config.system.nix-index.enable false;
-    programs.nix-index = lib.mkIf config.system.nix-index.enable {
-      enable = true;
-      enableFishIntegration = true;
-    };
-
-    virtualisation.podman = lib.mkIf config.system.podman.enable {
-      enable = true;
-      enableOnBoot = true;
-    };
-
-  };
-
   networking.networkmanager.enable = true;
   systemd.services.NetworkManager-wait-online.enable = false;
 
@@ -89,6 +18,19 @@
     };
     gnupg.agent.enable = true;
     dconf.enable = true;
+    command-not-found.enable = false;
+    nix-index = {
+      enable = true;
+      enableFishIntegration = true;
+      enableZshIntegration = false;
+      enableBashIntegration = false;
+    };
+  };
+
+
+  virtualisation.docker = {
+    enable = true;
+    enableOnBoot = true;
   };
 
   environment.systemPackages = with pkgs; [
@@ -118,15 +60,15 @@
     zip unzip
   ];
 
+  hardware.opentabletdriver.enable = true;
+
   services = {
     # TODO: remember to login to tailscale!!
     # sorry this isn't declaritive but i'm not putting api keys on github :)
     tailscale.enable = true;
     # iphone stuff
-    usbmuxd = {
-      enable = true;
-      package = pkgs.usbmuxd2;
-    };
+    usbmuxd.enable = true;
+    usbmuxd.package = pkgs.usbmuxd2;
 
     udisks2.enable = true;
 
@@ -135,24 +77,24 @@
       packages = [ pkgs.dconf ];
     };
 
-    # syncthing = {
-    #   enable = true;
-    #   user = "nyadiia";
-    #   dataDir = "/home/nyadiia/Documents";    # Default folder for new synced folders
-    #   configDir = "/home/nyadiia/Documents/.config/syncthing";   # Folder for Syncthing's settings and keys
-    # };
+    syncthing = {
+      enable = true;
+      user = "nyadiia";
+      dataDir = "/home/nyadiia/Documents";    # Default folder for new synced folders
+      configDir = "/home/nyadiia/Documents/.config/syncthing";   # Folder for Syncthing's settings and keys
+    };
   };
 
-  # users.users.nyadiia = {
-  #   isNormalUser = true;
-  #   home = "/home/nyadiia";
-  #   # for systems that don't use home-manager ( like servers )
-  #   shell = pkgs.fish;
-  #   # !! please use home-manager if you can !!
-  #   openssh.authorizedKeys.keys = [
-  #     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIUjzKy5ccDe6Ij8zQG3/zqIjoKwo3kfU/0Ui50hZs+r"
-  #   ];
-  # };
+  users.users.nyadiia = {
+    isNormalUser = true;
+    home = "/home/nyadiia";
+    # for systems that don't use home-manager ( like servers )
+    shell = pkgs.fish;
+    # !! please use home-manager if you can !!
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIUjzKy5ccDe6Ij8zQG3/zqIjoKwo3kfU/0Ui50hZs+r"
+    ];
+  };
 
   # Fonts config
   fonts = {

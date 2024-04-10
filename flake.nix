@@ -57,90 +57,90 @@
 
   outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, nixos-hardware, nix-index-database, ... }:
 
-    let
-      system = "x86_64-linux";
-      # pkgs = import nixpkgs { inherit system; config = { allowUnfree = true; }; };
-      unstable = import nixpkgs-unstable { inherit system; config = { allowUnfree = true; }; };
-      flake-overlays = [
-        inputs.nix-matlab.overlay
-      ];
+    # let
+    #   system = "x86_64-linux";
+    #   # pkgs = import nixpkgs { inherit system; config = { allowUnfree = true; }; };
+    #   unstable = import nixpkgs-unstable { inherit system; config = { allowUnfree = true; }; };
+    #   flake-overlays = [
+    #     inputs.nix-matlab.overlay
+    #   ];
 
-    in
+    # in
     {
       nixosConfigurations = {
         hyprdash = nixpkgs.lib.nixosSystem {
-          specialArgs = {
-            inherit inputs unstable flake-overlays;
-          };
+          # specialArgs = {
+          #   inherit inputs unstable flake-overlays;
+          # };
           modules = [
-            ./hosts/hyprdash
             nix-index-database.nixosModules.nix-index
             nixos-hardware.nixosModules.framework-11th-gen-intel
             home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.nyadiia.imports = [
-                ./home-manager/laptop.nix
-                inputs.nixvim.homeManagerModules.nixvim
-                inputs.nix-index-database.hmModules.nix-index
-                inputs.ironbar.homeManagerModules.default
-              ];
-              home-manager.extraSpecialArgs = { inherit inputs unstable; };
-            }
+            ./hosts/hyprdash
+            # {
+            #   home-manager.useGlobalPkgs = true;
+            #   home-manager.useUserPackages = true;
+            #   home-manager.users.nyadiia.imports = [
+            #     ./home-manager/laptop.nix
+            #     inputs.nixvim.homeManagerModules.nixvim
+            #     inputs.nix-index-database.hmModules.nix-index
+            #     inputs.ironbar.homeManagerModules.default
+            #   ];
+            #   home-manager.extraSpecialArgs = { inherit inputs unstable; };
+            # }
           ];
         };
-        wavedash = nixpkgs.lib.nixosSystem {
-          specialArgs = {
-            inherit inputs unstable;
-          };
-          modules = [
-            ./hosts/wavedash
-            nix-index-database.nixosModules.nix-index
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.nyadiia = import ./home-manager/desktop.nix;
-              home-manager.extraSpecialArgs = { inherit inputs unstable; };
-            }
-          ];
-        };
-        demodash = nixpkgs.lib.nixosSystem {
-          specialArgs = {
-            inherit inputs unstable;
-          };
-          modules = [
-            ./hosts/demodash
-            nix-index-database.nixosModules.nix-index
-            nixos-hardware.nixosModules.common-cpu-intel-sandy-bridge
-            nixos-hardware.nixosModules.common-gpu-amd
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.nyadiia = import ./home-manager/server.nix;
-              home-manager.extraSpecialArgs = { inherit inputs unstable; };
-            }
-          ];
-        };
-        farewell = nixpkgs.lib.nixosSystem {
-          specialArgs = {
-            inherit inputs unstable;
-          };
-          modules = [
-            ./hosts/farewell
-            nix-index-database.nixosModules.nix-index
-            nixos-hardware.nixosModules.common-cpu-intel
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.nyadiia = import ./home-manager/server.nix;
-              home-manager.extraSpecialArgs = { inherit inputs unstable; };
-            }
-          ];
-        };
+        # wavedash = nixpkgs.lib.nixosSystem {
+        #   specialArgs = {
+        #     inherit inputs unstable;
+        #   };
+        #   modules = [
+        #     ./hosts/wavedash
+        #     nix-index-database.nixosModules.nix-index
+        #     home-manager.nixosModules.home-manager
+        #     {
+        #       home-manager.useGlobalPkgs = true;
+        #       home-manager.useUserPackages = true;
+        #       home-manager.users.nyadiia = import ./home-manager/desktop.nix;
+        #       home-manager.extraSpecialArgs = { inherit inputs unstable; };
+        #     }
+        #   ];
+        # };
+        # demodash = nixpkgs.lib.nixosSystem {
+        #   specialArgs = {
+        #     inherit inputs unstable;
+        #   };
+        #   modules = [
+        #     ./hosts/demodash
+        #     nix-index-database.nixosModules.nix-index
+        #     nixos-hardware.nixosModules.common-cpu-intel-sandy-bridge
+        #     nixos-hardware.nixosModules.common-gpu-amd
+        #     home-manager.nixosModules.home-manager
+        #     {
+        #       home-manager.useGlobalPkgs = true;
+        #       home-manager.useUserPackages = true;
+        #       home-manager.users.nyadiia = import ./home-manager/server.nix;
+        #       home-manager.extraSpecialArgs = { inherit inputs unstable; };
+        #     }
+        #   ];
+        # };
+        # farewell = nixpkgs.lib.nixosSystem {
+        #   specialArgs = {
+        #     inherit inputs unstable;
+        #   };
+        #   modules = [
+        #     ./hosts/farewell
+        #     nix-index-database.nixosModules.nix-index
+        #     nixos-hardware.nixosModules.common-cpu-intel
+        #     home-manager.nixosModules.home-manager
+        #     {
+        #       home-manager.useGlobalPkgs = true;
+        #       home-manager.useUserPackages = true;
+        #       home-manager.users.nyadiia = import ./home-manager/server.nix;
+        #       home-manager.extraSpecialArgs = { inherit inputs unstable; };
+        #     }
+        #   ];
+        # };
       };
     };
 }
