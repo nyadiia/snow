@@ -3,9 +3,7 @@
 
   inputs = {
     # nixpkgs
-    # nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    # nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     # Home Manager
     home-manager.url = "github:nix-community/home-manager";
@@ -16,33 +14,22 @@
 
     # hyprland
     hyprland.url = "github:hyprwm/Hyprland";
-    # hyprland-plugins = {
-    #   url = "github:hyprwm/hyprland-plugins";
-    #   inputs.hyprland.follows = "hyprland";
-    # };
-    # hyprland-contrib = {
-    #   url = "github:hyprwm/contrib";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
 
+    # nix-index
     nix-index-database = {
       url = "github:Mic92/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # ironbar
     ironbar = {
       url = "github:JakeStanger/ironbar";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nixvim = {
-      url = "github:nix-community/nixvim";
-      # If you are not running an unstable channel of nixpkgs, select the corresponding branch of nixvim.
-      # url = "github:nix-community/nixvim/nixos-23.05";
-
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # nixvim = {
+    #   url = "github:nix-community/nixvim";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
 
     # matlab
     nix-matlab = {
@@ -51,22 +38,22 @@
       inputs.nixpkgs.follows = "nixpkgs";
       url = "gitlab:doronbehar/nix-matlab";
     };
+
+    ssh-keys = {
+      url = "https://github.com/nyadiia.keys";
+      flake = false;
+    };
   };
 
-  nixConfig = { };
 
   outputs = inputs@{ self, nixpkgs, home-manager, nixos-hardware, nix-index-database, ... }:
 
-    # let
-    #   system = "x86_64-linux";
-    #   # pkgs = import nixpkgs { inherit system; config = { allowUnfree = true; }; };
-    #   unstable = import nixpkgs-unstable { inherit system; config = { allowUnfree = true; }; };
-    #   flake-overlays = [
-    #     inputs.nix-matlab.overlay
-    #   ];
-
-    # in
-    {
+    let
+      flake-overlays = [
+        inputs.nix-matlab.overlay
+      ];
+      flake-keys = inputs.ssh-keys.outPath;
+    in {
       nixosConfigurations = {
         hyprdash = nixpkgs.lib.nixosSystem {
           # specialArgs = {
@@ -78,6 +65,8 @@
             home-manager.nixosModules.home-manager
             ./hosts/system.nix
             ./hosts/home.nix
+            ./hosts/hyprdash/hardware-configuration.nix
+            # /etc/nixos/hardware-configuration.nix
             {
               nixpkgs.overlays = [
                 (self: super: {
@@ -89,18 +78,31 @@
                     lapackProvider = self.mkl;
                   };
                 })
-              ];
+              ] ++ flake-overlays;
+
               networking.hostName = "hyprdash";
               custom = {
                 user = {
                   name = "nyadiia";
-                  ssh-keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIUjzKy5ccDe6Ij8zQG3/zqIjoKwo3kfU/0Ui50hZs+r" ];
+                  ssh-keys = [ flake-keys ];
                 };
                 podman.enable = true;
                 nix-index.enable = true;
-                # syncthing.enable = true;
+                syncthing.enable = true;
                 laptop = true;
               };
+
+              hm.imports = [
+                ./hm-modules/gtk.nix
+                ./hm-modules/mako.nix
+                ./hm-modules/kitty.nix
+                ./hm-modules/fuzzel.nix
+                ./hm-modules/vscode.nix
+                ./hm-modules/firefox.nix
+                ./hm-modules/ironbar.nix
+                ./hm-modules/hyprland.nix
+                ./hm-modules/shell
+              ];
             }
             # {
             #   home-manager.useGlobalPkgs = true;

@@ -1,6 +1,8 @@
 { config, lib, pkgs, inputs, ... }:
 
-{
+let
+  username = config.custom.user.name;
+in {
   options.hm = {
     imports = lib.mkOption {
       type = lib.types.listOf lib.types.nonEmptyStr;
@@ -12,12 +14,11 @@
     useGlobalPkgs = true;
     useUserPackages = true;
 
-    users.${config.custom.user.name} = {
-      imports = inputs.home-manager.nixosModules.home-manager
-        ++ config.hm.imports;
+    users.${username} = {
+      imports = config.hm.imports;
       home = {
-        username = config.system.user.name;
-        homeDirectory = "/home/${config.custom.user.name}";
+        username = username;
+        homeDirectory = "/home/${username}";
         stateVersion = config.system.stateVersion;
         sessionVariables = {
           EDITOR = "nvim";
@@ -28,7 +29,7 @@
         enable = true;
         package = pkgs.gitAndTools.gitFull;
         delta.enable = true;
-        userName = config.custom.user.name;
+        userName = username;
         userEmail = "nyadiia@pm.me";
         extraConfig = {
           core.editor = "nvim";

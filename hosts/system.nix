@@ -69,7 +69,7 @@
       };
 
       config = {
-        nix-index = lib.mkIf config.custom.nix-index.enable {
+        programs.nix-index = lib.mkIf config.custom.nix-index.enable {
           enable = true;
           enableFishIntegration = true;
         };
