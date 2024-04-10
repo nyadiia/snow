@@ -1,4 +1,4 @@
-{ config, pkgs, unstable, inputs, flake-overlays, ... }:
+{ pkgs, flake-overlays, ... }:
 {
   nix.buildMachines = [ {
     hostName = "farewell";
@@ -39,7 +39,18 @@
   networking.networkmanager.enable = true;
   networking.hostName = "hyprdash";
 
-  nixpkgs.overlays = flake-overlays;
+
+  nixpkgs.overlays = [
+    (self: super: {
+      blas = super.blas.override {
+        blasProvider = self.mkl;
+      };
+
+      lapack = super.lapack.override {
+        lapackProvider = self.mkl;
+      };
+    })
+  ] ++ flake-overlays;
 
   # User info
   nixpkgs.config.permittedInsecurePackages = [
