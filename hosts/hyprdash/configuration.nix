@@ -8,23 +8,35 @@
       # if the builder supports building for multiple architectures,
       # replace the previous line by, e.g.
       # systems = ["x86_64-linux" "aarch64-linux"];
-      maxJobs = 8;
-      speedFactor = 2;
+      maxJobs = 6;
+      speedFactor = 1;
       supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-x86_64-v3" ];
       mandatoryFeatures = [ ];
     }
-    # {
-    #   hostName = "vm";
-    #   system = "x86_64-linux";
-    #   protocol = "ssh-ng";
-    #   # if the builder supports building for multiple architectures,
-    #   # replace the previous line by, e.g.
-    #   # systems = ["x86_64-linux" "aarch64-linux"];
-    #   maxJobs = 8;
-    #   speedFactor = 5;
-    #   supportedFeatures = [ "x86_64-linux" "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-x86_64-v3" ];
-    #   mandatoryFeatures = [ ];
-    # }
+    {
+      hostName = "vm";
+      system = "x86_64-linux";
+      protocol = "ssh-ng";
+      # if the builder supports building for multiple architectures,
+      # replace the previous line by, e.g.
+      # systems = ["x86_64-linux" "aarch64-linux"];
+      maxJobs = 16;
+      speedFactor = 3;
+      supportedFeatures = [ "x86_64-linux" "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-x86_64-v3" ];
+      mandatoryFeatures = [ ];
+    }
+    {
+      hostName = "garlic";
+      system = "x86_64-linux";
+      protocol = "ssh-ng";
+      # if the builder supports building for multiple architectures,
+      # replace the previous line by, e.g.
+      # systems = ["x86_64-linux" "aarch64-linux"];
+      maxJobs = 16;
+      speedFactor = 3;
+      supportedFeatures = [ "x86_64-linux" "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-x86_64-v3" ];
+      mandatoryFeatures = [ ];
+    }
   ];
   nix.distributedBuilds = true;
   # optional, useful when the builder has a faster internet connection than yours
@@ -60,6 +72,7 @@
   environment.systemPackages = with pkgs; lib.mkAfter [
     bluetuith
     framework-tool
+    wineWowPackages.waylandFull
   ];
 
   programs = {

@@ -32,7 +32,7 @@
     SDL_VIDEODRIVER = "wayland";
   };
 
-  home.packages = (with pkgs; [
+  home.packages = with pkgs; [
     mpv
     (stable.obsidian)
     spotify
@@ -66,15 +66,5 @@
       fuzzy-logic-toolkit
       control
     ]))
-  ]) ++ (with pkgs.octavePackages; [
-    symbolic
-    io
-    ocl
-    linear-algebra
-    matgeom
-    general
-    audio
-    fuzzy-logic-toolkit
-    control
-  ]);
+  ];
 }
