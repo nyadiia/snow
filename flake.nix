@@ -5,7 +5,7 @@
     # nixpkgs
     # nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/release-23.11";
 
     # Home Manager
     home-manager.url = "github:nix-community/home-manager";
@@ -33,7 +33,7 @@
     # ironbar
     ironbar = {
       url = "github:JakeStanger/ironbar";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     nixvim = {
@@ -55,12 +55,18 @@
 
   nixConfig = { };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, nixos-hardware, nix-index-database, ... }:
+  outputs = inputs@{ self, nixpkgs, nixpkgs-stable, home-manager, nixos-hardware, nix-index-database, ... }:
 
     let
       system = "x86_64-linux";
       # pkgs = import nixpkgs { inherit system; config = { allowUnfree = true; }; };
-      unstable = import nixpkgs-unstable { inherit system; config = { allowUnfree = true; }; };
+      stable = import nixpkgs-stable {
+        inherit system;
+        config = {
+          permittedInsecurePackages = [ "electron-25.9.0" ];
+          allowUnfree = true;
+        };
+      };
       flake-overlays = [
         inputs.nix-matlab.overlay
       ];
@@ -70,7 +76,7 @@
       nixosConfigurations = {
         hyprdash = nixpkgs.lib.nixosSystem {
           specialArgs = {
-            inherit inputs unstable flake-overlays;
+            inherit inputs stable flake-overlays;
           };
           modules = [
             ./hosts/hyprdash
@@ -86,7 +92,7 @@
                 inputs.nix-index-database.hmModules.nix-index
                 inputs.ironbar.homeManagerModules.default
               ];
-              home-manager.extraSpecialArgs = { inherit inputs unstable; };
+              home-manager.extraSpecialArgs = { inherit inputs stable; };
             }
           ];
         };

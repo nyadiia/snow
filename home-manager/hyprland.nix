@@ -52,7 +52,6 @@
       dwindle = {
         pseudotile = true;
       	preserve_split = true;
-      	# no_gaps_when_only = 1;
       };
 
       workspace = "w[t1], bordersize:0, rounding:0, gapsout:0";
@@ -141,8 +140,8 @@
       # works while locked and repeats when held
       bindel = [
 	      # audio
-	      ",XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"
-	      ",XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+	      ",XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ --limit 1.25"
+	      ",XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- --limit 1.25"
 
 	      # brightness
 	      ",XF86MonBrightnessUp, exec, light -A 5"

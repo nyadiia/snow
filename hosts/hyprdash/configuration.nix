@@ -1,30 +1,30 @@
-{ pkgs, flake-overlays, ... }:
+{ pkgs, nixpkgs-stable, flake-overlays, ... }:
 {
   nix.buildMachines = [
-    # {
-    #   hostName = "farewell";
-    #   system = "x86_64-linux";
-    #   protocol = "ssh-ng";
-    #   # if the builder supports building for multiple architectures,
-    #   # replace the previous line by, e.g.
-    #   # systems = ["x86_64-linux" "aarch64-linux"];
-    #   maxJobs = 8;
-    #   speedFactor = 2;
-    #   supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-x86_64-v3" ];
-    #   mandatoryFeatures = [ ];
-    # }
     {
-      hostName = "vm";
+      hostName = "farewell";
       system = "x86_64-linux";
       protocol = "ssh-ng";
       # if the builder supports building for multiple architectures,
       # replace the previous line by, e.g.
       # systems = ["x86_64-linux" "aarch64-linux"];
       maxJobs = 8;
-      speedFactor = 5;
+      speedFactor = 2;
       supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-x86_64-v3" ];
       mandatoryFeatures = [ ];
     }
+    # {
+    #   hostName = "vm";
+    #   system = "x86_64-linux";
+    #   protocol = "ssh-ng";
+    #   # if the builder supports building for multiple architectures,
+    #   # replace the previous line by, e.g.
+    #   # systems = ["x86_64-linux" "aarch64-linux"];
+    #   maxJobs = 8;
+    #   speedFactor = 5;
+    #   supportedFeatures = [ "x86_64-linux" "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-x86_64-v3" ];
+    #   mandatoryFeatures = [ ];
+    # }
   ];
   nix.distributedBuilds = true;
   # optional, useful when the builder has a faster internet connection than yours
@@ -40,18 +40,17 @@
   networking.networkmanager.enable = true;
   networking.hostName = "hyprdash";
 
+  nixpkgs.overlays = [
+    (self: super: {
+      blas = super.blas.override {
+        blasProvider = self.mkl;
+      };
 
-  # nixpkgs.overlays = [
-  #   (self: super: {
-  #     blas = super.blas.override {
-  #       blasProvider = self.mkl;
-  #     };
-  #
-  #     lapack = super.lapack.override {
-  #       lapackProvider = self.mkl;
-  #     };
-  #   })
-  # ] ++ flake-overlays;
+       lapack = super.lapack.override {
+         lapackProvider = self.mkl;
+       };
+     })
+   ] ++ flake-overlays;
 
   # User info
   nixpkgs.config.permittedInsecurePackages = [

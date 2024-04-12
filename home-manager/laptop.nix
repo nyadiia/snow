@@ -1,4 +1,4 @@
-{ pkgs, unstable, inputs, ... }:
+{ pkgs, stable, ... }:
 
 {
   imports = [
@@ -34,7 +34,7 @@
 
   home.packages = (with pkgs; [
     mpv
-    obsidian
+    (stable.obsidian)
     spotify
     nixpkgs-fmt
     vesktop
@@ -53,6 +53,7 @@
     signal-desktop
     hyprlock
     rustup
+    glib
 
     (octaveFull.withPackages (opkgs: with opkgs; [
       symbolic
