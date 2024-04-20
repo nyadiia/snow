@@ -3,11 +3,6 @@
 
   inputs = {
     # nixpkgs
-    # nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
-    # nixpkgs = {
-    #   url = "github:numtide/nixpkgs-unfree";
-    #   inputs.nixpkgs.follows = "nixpkgs-unstable";
-    # };
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:NixOS/nixpkgs/release-23.11";
 
@@ -64,8 +59,14 @@
   outputs = inputs@{ self, nixpkgs, nixpkgs-stable, home-manager, nixos-hardware, nix-index-database, ... }:
 
     let
+      username = "nyadiia";
       system = "x86_64-linux";
-      # pkgs = import nixpkgs { inherit system; config = { allowUnfree = true; }; };
+      pkgs = import nixpkgs {
+        inherit system;
+        config = {
+          allowUnfree = true;
+        };
+      };
       stable = import nixpkgs-stable {
         inherit system;
         config = {
@@ -73,6 +74,7 @@
           allowUnfree = true;
         };
       };
+
       flake-overlays = [
         inputs.nix-matlab.overlay
       ];
@@ -82,7 +84,7 @@
       nixosConfigurations = {
         hyprdash = nixpkgs.lib.nixosSystem {
           specialArgs = {
-            inherit inputs stable flake-overlays;
+            inherit inputs pkgs stable flake-overlays;
           };
           modules = [
             ./hosts/hyprdash
@@ -153,6 +155,14 @@
         #     }
         #   ];
         # };
+      };
+
+      homeConfigurations."${username}" = home-manager.lib.homeManagerConfiguration {
+        # pass inputs as specialArgs
+        extraSpecialArgs = { inherit inputs pkgs stable; };
+
+        # import your home.nix
+        modules = [ ./home-manager/laptop.nix ];
       };
     };
 }
