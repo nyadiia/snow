@@ -104,6 +104,24 @@
             }
           ];
         };
+        crystal-heart = nixpkgs.lib.nixosSystem {
+          specialArgs = {
+            inherit inputs pkgs stable flake-overlays;
+          };
+          modules = [
+            ./hosts/crystal-heart
+            nix-index-database.nixosModules.nix-index
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.nyadiia.imports = [
+                ./home-manager/server.nix
+              ];
+              home-manager.extraSpecialArgs = { inherit inputs stable; };
+            }
+          ];
+        };
         # wavedash = nixpkgs.lib.nixosSystem {
         #   specialArgs = {
         #     inherit inputs unstable;
