@@ -7,6 +7,7 @@
     ./vscode.nix
     # ./nvim.nix
     ./hyprland.nix
+    ./fcitx.nix
   ];
 
   home.pointerCursor = {
