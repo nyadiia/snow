@@ -141,7 +141,10 @@
     # framework specific services
     fwupd.enable = true;
     blueman.enable = true;
-    # thermald.enable = true;
+    thermald = {
+      enable = true;
+      configFile = ./thermal-conf.xml;
+    };
     tlp = {
       enable = true;
       settings = {
