@@ -5,7 +5,7 @@
     config = {
       anchor_to_edges = true;
       position = "top";
-      height = 14;
+      height = 20;
       icon_theme = "oomox-gruvbox-dark";
       start = [
         { type = "workspaces"; }
@@ -71,8 +71,8 @@
 
       button, label {
           color: @color_text;
-          padding-left: 0.3rem;
-          padding-right: 0.3rem;
+          padding-left: 0.5rem;
+          padding-right: 0.5rem;
       }
 
       button:hover {
