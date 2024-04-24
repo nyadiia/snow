@@ -25,6 +25,12 @@
       enableZshIntegration = false;
       enableBashIntegration = false;
     };
+    nh = {
+      enable = true;
+      clean.enable = true;
+      clean.extraArgs = "--keep-since 4d --keep 3";
+      flake = "/home/nyadiia/snow/";
+    };
   };
 
 
@@ -34,6 +40,7 @@
   };
 
   environment.systemPackages = with pkgs; [
+    nh
     tmux
     neovim
     wget
@@ -138,11 +145,11 @@
         "walker.cachix.org-1:fG8q+uAaMqhsMxWjwvk0IMb4mFPFLqHjuvfwQxE4oJM="
       ];
     };
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 30d";
-    };
+    # gc = {
+    #   automatic = true;
+    #   dates = "weekly";
+    #   options = "--delete-older-than 30d";
+    # };
   };
 
   nixpkgs.config.allowUnfree = true;

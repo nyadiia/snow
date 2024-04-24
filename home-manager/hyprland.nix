@@ -76,7 +76,7 @@
       	  #   "windowsOut,1,3,ease-out"
       	  # ];
       };
-
+      windowrulev2 = "bordercolor rgb(100,100,100), xwayland: 1";
       decoration = {
         rounding = "3";
 	      blur.enabled = false;
