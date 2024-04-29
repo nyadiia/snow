@@ -20,6 +20,8 @@
     "electron-25.9.0"
   ];
 
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
+
   environment.systemPackages = with pkgs; lib.mkAfter [
     bluetuith
     framework-tool
