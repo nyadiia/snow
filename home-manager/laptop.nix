@@ -36,6 +36,7 @@
 
   home.packages = with pkgs; [
     mpv
+    nil
     (stable.obsidian)
     spotify
     nixpkgs-fmt

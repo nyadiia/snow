@@ -16,15 +16,7 @@
 
 
     # hyprland
-    hyprland.url = "github:hyprwm/Hyprland";
-    # hyprland-plugins = {
-    #   url = "github:hyprwm/hyprland-plugins";
-    #   inputs.hyprland.follows = "hyprland";
-    # };
-    # hyprland-contrib = {
-    #   url = "github:hyprwm/contrib";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
+    hyprland.url = "github:hyprwm/Hyprland/d20ee312108d0e7879011cfffa3a83d06e48d29e";
 
     nix-index-database = {
       url = "github:Mic92/nix-index-database";

@@ -49,7 +49,7 @@
     links2
     ripgrep
     any-nix-shell
-    neofetch
+    fastfetch
     yazi
     profile-sync-daemon
     glib

@@ -8,7 +8,13 @@
       height = 20;
       icon_theme = "oomox-gruvbox-dark";
       start = [
-        { type = "workspaces"; }
+        {
+          type = "workspaces";
+          name_map = {
+            "9" = "";
+            "10" = "󰙯";
+          };
+        }
         {
           type = "focused";
           show_icon = false;
