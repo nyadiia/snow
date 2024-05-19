@@ -11,6 +11,9 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+
+    # nur
+    nur.url = "github:nix-community/NUR";
     # hardware goofyness
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
@@ -48,7 +51,7 @@
 
   nixConfig = { };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-stable, home-manager, nixos-hardware, nix-index-database, ... }:
+  outputs = inputs@{ self, nixpkgs, nixpkgs-stable, home-manager, nixos-hardware, nix-index-database, nur, ... }:
 
     let
       username = "nyadiia";
@@ -83,6 +86,7 @@
             nix-index-database.nixosModules.nix-index
             nixos-hardware.nixosModules.framework-11th-gen-intel
             home-manager.nixosModules.home-manager
+	    nur.nixosModules.nur
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;

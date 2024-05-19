@@ -564,6 +564,21 @@
         "type": "github"
       }
     },
+    "nur": {
+      "locked": {
+        "lastModified": 1716155250,
+        "narHash": "sha256-hyjUJFrCxYJOIK2xM4IZCnW97HJpnUtv2NyykjoF5tE=",
+        "owner": "nix-community",
+        "repo": "NUR",
+        "rev": "434a49f8736ccc9d108a6d3c34f2650bf15a3fe0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "NUR",
+        "type": "github"
+      }
+    },
     "pre-commit-hooks": {
       "inputs": {
         "flake-compat": "flake-compat_3",
@@ -601,7 +616,8 @@
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-stable": "nixpkgs-stable",
-        "nixvim": "nixvim"
+        "nixvim": "nixvim",
+        "nur": "nur"
       }
     },
     "rust-overlay": {
