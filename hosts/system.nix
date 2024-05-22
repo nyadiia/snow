@@ -39,6 +39,8 @@
     enableOnBoot = true;
   };
 
+  home-manager.backupFileExtension = "bak";
+
   environment.systemPackages = with pkgs; [
     nh
     tmux

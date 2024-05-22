@@ -1,5 +1,9 @@
-{ pkgs, ... }:
-
+{ pkgs, nur, ... }:
+let 
+  nur-no-pkgs = import nur {
+    nurpkgs = import pkgs { system = "x86_64-linux"; };
+  };
+in
 {
   imports = [
     ./shell

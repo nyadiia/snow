@@ -12,8 +12,11 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
 
-    # nur
-    nur.url = "github:nix-community/NUR";
+    firefox-addons = {
+      url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # hardware goofyness
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
@@ -82,6 +85,7 @@
             inherit inputs pkgs stable flake-overlays;
           };
           modules = [
+	    { nixpkgs.overlays = [ nur.overlay ]; }
             ./hosts/hyprdash
             nix-index-database.nixosModules.nix-index
             nixos-hardware.nixosModules.framework-11th-gen-intel
@@ -96,7 +100,7 @@
                 inputs.nix-index-database.hmModules.nix-index
                 inputs.ironbar.homeManagerModules.default
               ];
-              home-manager.extraSpecialArgs = { inherit inputs stable; };
+              home-manager.extraSpecialArgs = { inherit inputs stable nur; };
             }
           ];
         };
