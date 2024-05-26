@@ -81,8 +81,10 @@
   security.pam.services = {
     "sudo".fprintAuth = true;
     "su".fprintAuth = true;
+    greetd.enableGnomeKeyring = true;
   };
   services = {
+    gnome.gnome-keyring.enable = true;
     greetd = {
       enable = true;
       settings.default_session = {

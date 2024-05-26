@@ -16,6 +16,8 @@
         ${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right | source
       '';
     };
+    ssh.askPassword = "${pkgs.gnome.seahorse}/libexec/seahorse/ssh-askpass";
+    ssh.startAgent = true;
     gnupg.agent.enable = true;
     dconf.enable = true;
     command-not-found.enable = false;

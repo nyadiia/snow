@@ -17,6 +17,8 @@
       marp-team.marp-vscode
       yzhang.markdown-all-in-one
       tamasfe.even-better-toml
+      dbaeumer.vscode-eslint
+      esbenp.prettier-vscode
 
       ms-vscode-remote.remote-ssh
       ms-vscode-remote.remote-containers

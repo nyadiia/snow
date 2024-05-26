@@ -39,10 +39,13 @@
 
       input = {
         kb_layout = "us";
-	      repeat_rate  = 50;
-	      repeat_delay = 250;
-	      touchpad.natural_scroll = true;
-	      sensitivity = 0;
+	repeat_rate  = 50;
+	repeat_delay = 250;
+	touchpad = {
+	  natural_scroll = true;
+	  disable_while_typing = false;
+	};
+	sensitivity = 0;
       };
       gestures = {
         workspace_swipe = true;

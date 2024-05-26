@@ -79,6 +79,8 @@
           color: @color_text;
           padding-left: 0.5rem;
           padding-right: 0.5rem;
+	  padding-top: 0.25rem;
+	  padding-bottom: 0.25rem;
       }
 
       button:hover {
