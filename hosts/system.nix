@@ -82,7 +82,9 @@
     usbmuxd.enable = true;
     usbmuxd.package = pkgs.usbmuxd2;
 
+    gvfs.enable = true;
     udisks2.enable = true;
+    devmon.enable = true;
 
     dbus = {
       enable = true;

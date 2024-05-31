@@ -26,6 +26,8 @@
     bluetuith
     framework-tool
     wineWowPackages.waylandFull
+    polkit_gnome
+    gparted
   ];
 
   programs = {
@@ -38,6 +40,7 @@
       plugins = with pkgs.xfce; [
         thunar-archive-plugin
         thunar-volman
+	thunar-media-tags-plugin
       ];
     };
     steam.enable = true;
@@ -50,15 +53,30 @@
     extraGroups = ["networkmanager" "video" "wheel" "libvirtd" "docker" ];
   };
 
-  systemd.services.greetd.serviceConfig = {
-    Type = "idle";
-    StandardInput = "tty";
-    StandardOutput = "tty";
-    StandardError = "journal"; # Without this errors will spam on screen
-    # Without these bootlogs will spam on screen
-    TTYReset = true;
-    TTYVHangup = true;
-    TTYVTDisallocate = true;
+  systemd = {
+    user.services.polkit-gnome-authentication-agent-1 = {
+      description = "polkit-gnome-authentication-agent-1";
+      wantedBy = [ "graphical-session.target" ];
+      wants = [ "graphical-session.target" ];
+      after = [ "graphical-session.target" ];
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+        Restart = "on-failure";
+        RestartSec = 1;
+        TimeoutStopSec = 10;
+      };
+    };
+    services.greetd.serviceConfig = {
+      Type = "idle";
+      StandardInput = "tty";
+      StandardOutput = "tty";
+      StandardError = "journal"; # Without this errors will spam on screen
+      # Without these bootlogs will spam on screen
+      TTYReset = true;
+      TTYVHangup = true;
+      TTYVTDisallocate = true;
+    };
   };
 
   # powerManagement.powertop.enable = true;
@@ -87,9 +105,20 @@
     gnome.gnome-keyring.enable = true;
     greetd = {
       enable = true;
-      settings.default_session = {
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --asterisks -r --cmd Hyprland";
-        user = "greeter";
+#      settings.default_session = {
+#        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --asterisks -r --cmd Hyprland";
+#        user = "greeter";
+#      };
+      settings = {
+        default_session = {
+          # command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --greeting 'Welcome to PwNixOS!' --cmd Hyprland";
+	  command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --asterisks -r --cmd Hyprland";
+          user = "nyadiia";
+        };
+        initial_session = {
+          command = "${pkgs.hyprland}/bin/Hyprland";
+          user = "nyadiia";
+        };
       };
     };
 
@@ -148,13 +177,24 @@
       alsa.support32Bit = true;
       pulse.enable = true;
     };
-    gvfs.enable = true; # Mount, trash, and other functionalities
     tumbler.enable = true; # Thumbnail support for images
     psd.enable = true;
   };
 
-  boot.kernelParams = [
-    "mem_sleep_default=deep"
-    "nowatchdog"
-  ];
+  boot = {
+    initrd.systemd.enable = true;
+    plymouth = {
+      enable = true;
+      theme = "signalis";
+      themePackages = with pkgs; [ 
+        (pkgs.callPackage ./plymouth-signalis-theme {})
+	plymouth-matrix-theme
+      ];
+    };
+    kernelParams = [
+      "quiet"
+      "mem_sleep_default=deep"
+      "nowatchdog"
+    ];
+  };
 }

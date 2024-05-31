@@ -29,4 +29,9 @@
     enable = true;
     enableFishIntegration = true;
   };
+
+  programs.eza = {
+    enable = true;
+    icons = true;
+  };
 }

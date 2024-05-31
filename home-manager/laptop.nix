@@ -37,7 +37,7 @@
   home.packages = with pkgs; [
     mpv
     nil
-    (stable.obsidian)
+    obsidian
     spotify
     nixpkgs-fmt
     vesktop
