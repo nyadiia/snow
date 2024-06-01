@@ -12,19 +12,25 @@ in
   home.username = "nyadiia";
   home.homeDirectory = "/home/nyadiia";
 
-  programs.git = {
-    enable = true;
-    package = pkgs.gitAndTools.gitFull;
-    delta.enable = true;
-    userName = "nyadiia";
-    userEmail = "nyadiia@pm.me";
-    extraConfig = {
-      core.editor = "nvim";
-      init.defaultBranch = "main";
+  programs = {
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
     };
-    signing = {
-      signByDefault = true;
-      key = "C8DC17070AC33338193F9723229718FDC160E880";
+    git = {
+      enable = true;
+      package = pkgs.gitAndTools.gitFull;
+      delta.enable = true;
+      userName = "nyadiia";
+      userEmail = "nyadiia@pm.me";
+      extraConfig = {
+        core.editor = "nvim";
+        init.defaultBranch = "main";
+      };
+      signing = {
+        signByDefault = true;
+        key = "C8DC17070AC33338193F9723229718FDC160E880";
+      };
     };
   };
 
