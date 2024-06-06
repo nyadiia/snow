@@ -28,6 +28,7 @@
     wineWowPackages.waylandFull
     polkit_gnome
     gparted
+    # (pkgs.callPackage ./pentablet.nix {})
   ];
 
   programs = {
