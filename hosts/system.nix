@@ -72,7 +72,7 @@
     zip unzip
   ];
 
-  hardware.opentabletdriver.enable = true;
+  # hardware.opentabletdriver.enable = true;
 
   services = {
     # TODO: remember to login to tailscale!!

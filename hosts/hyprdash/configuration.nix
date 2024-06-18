@@ -1,4 +1,4 @@
-{ pkgs, flake-overlays, ... }:
+{ pkgs, flake-overlays, qcma-pkgs, ... }:
 {
   networking.networkmanager.enable = true;
   networking.hostName = "hyprdash";
@@ -51,8 +51,12 @@
   security.polkit.enable = true;
 
   users.users.nyadiia = {
-    extraGroups = ["networkmanager" "video" "wheel" "libvirtd" "docker" ];
+    extraGroups = ["networkmanager" "video" "wheel" "libvirtd" "docker" "vitamtp" ];
   };
+
+  services.udev.packages = [
+    qcma-pkgs.qcma
+  ];
 
   systemd = {
     user.services.polkit-gnome-authentication-agent-1 = {
@@ -185,7 +189,7 @@
   boot = {
     initrd.systemd.enable = true;
     plymouth = {
-      enable = true;
+      enable = false;
       theme = "signalis";
       themePackages = with pkgs; [ 
         (pkgs.callPackage ./plymouth-signalis-theme {})

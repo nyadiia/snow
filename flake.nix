@@ -4,13 +4,14 @@
   inputs = {
     # nixpkgs
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/release-23.11";
-
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/release-24.05";
+    qcma.url = "github:nyadiia/nixpkgs/qcma";
 
     # Home Manager
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
-
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     firefox-addons = {
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
@@ -19,7 +20,6 @@
 
     # hardware goofyness
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-
 
     # hyprland
     hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
@@ -50,11 +50,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
       url = "gitlab:doronbehar/nix-matlab";
     };
+
+    stylix.url = "github:danth/stylix";
   };
 
   nixConfig = { };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-stable, home-manager, nixos-hardware, nix-index-database, nur, ... }:
+  outputs = inputs@{ self, nixpkgs, nixpkgs-stable, home-manager, nixos-hardware, nix-index-database, nur, stylix, qcma, ... }:
 
     let
       username = "nyadiia";
@@ -72,6 +74,12 @@
           allowUnfree = true;
         };
       };
+      qcma-pkgs = import qcma {
+        inherit system;
+        config = {
+          allowUnfree = true;
+        };
+      };
 
       flake-overlays = [
         inputs.nix-matlab.overlay
@@ -82,15 +90,16 @@
       nixosConfigurations = {
         hyprdash = nixpkgs.lib.nixosSystem {
           specialArgs = {
-            inherit inputs pkgs stable flake-overlays;
+            inherit inputs pkgs stable flake-overlays qcma-pkgs;
           };
           modules = [
 	    { nixpkgs.overlays = [ nur.overlay ]; }
             ./hosts/hyprdash
             nix-index-database.nixosModules.nix-index
             nixos-hardware.nixosModules.framework-11th-gen-intel
-            home-manager.nixosModules.home-manager
+	    # stylix.nixosModules.stylix ./hosts/stylix.nix
 	    nur.nixosModules.nur
+            home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
@@ -100,7 +109,7 @@
                 inputs.nix-index-database.hmModules.nix-index
                 inputs.ironbar.homeManagerModules.default
               ];
-              home-manager.extraSpecialArgs = { inherit inputs stable nur; };
+              home-manager.extraSpecialArgs = { inherit inputs stable nur qcma-pkgs; };
             }
           ];
         };

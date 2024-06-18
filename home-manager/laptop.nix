@@ -1,4 +1,4 @@
-{ pkgs, stable, ... }:
+{ pkgs, stable, qcma-pkgs, ... }:
 
 {
   imports = [
@@ -57,6 +57,8 @@
     hyprlock
     rustup
     glib
+
+    (qcma-pkgs.qcma)
 
     (octaveFull.withPackages (opkgs: with opkgs; [
       symbolic
