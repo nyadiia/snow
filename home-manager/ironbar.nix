@@ -77,10 +77,10 @@
 
       button, label {
           color: @color_text;
-          padding-left: 0.5rem;
-          padding-right: 0.5rem;
-	  padding-top: 0.25rem;
-	  padding-bottom: 0.25rem;
+          padding-left: 0.6rem;
+          padding-right: 0.6rem;
+	  padding-top: 6px;
+	  padding-bottom: 6px;
       }
 
       button:hover {
