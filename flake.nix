@@ -6,14 +6,13 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     # Home Manager
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # hardware goofyness
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-
-    # hyprland
-    hyprland.url = "github:hyprwm/Hyprland";
 
     # nix-index
     nix-index-database = {
@@ -45,65 +44,83 @@
     };
   };
 
-
-  outputs = inputs@{ self, nixpkgs, home-manager, nixos-hardware, nix-index-database, ... }:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      nixos-hardware,
+      nix-index-database,
+      ironbar,
+      ...
+    }@inputs:
 
     let
-      flake-overlays = [
-        inputs.nix-matlab.overlay
-      ];
-      flake-keys = inputs.ssh-keys.outPath;
-    in {
+      flake-overlays = [ inputs.nix-matlab.overlay ];
+      username = "nyadiia";
+      email = "nyadiia@pm.me";
+      signingKey = "C8DC17070AC33338193F9723229718FDC160E880";
+    in
+    {
       nixosConfigurations = {
         hyprdash = nixpkgs.lib.nixosSystem {
-          # specialArgs = {
-          #   inherit inputs unstable flake-overlays;
-          # };
+          specialArgs.inputs = inputs;
           modules = [
             nix-index-database.nixosModules.nix-index
             nixos-hardware.nixosModules.framework-11th-gen-intel
             home-manager.nixosModules.home-manager
             ./hosts/system.nix
-            ./hosts/home.nix
-            ./hosts/hyprdash/hardware-configuration.nix
-            # /etc/nixos/hardware-configuration.nix
             {
               nixpkgs.overlays = [
-                (self: super: {
-                  blas = super.blas.override {
-                    blasProvider = self.mkl;
-                  };
-
-                  lapack = super.lapack.override {
-                    lapackProvider = self.mkl;
-                  };
-                })
+#                (self: super: {
+#                  blas = super.blas.override { blasProvider = self.mkl; };
+#                  lapack = super.lapack.override { lapackProvider = self.mkl; };
+#                })
               ] ++ flake-overlays;
 
-              networking.hostName = "hyprdash";
-              custom = {
-                user = {
-                  name = "nyadiia";
-                  ssh-keys = [ flake-keys ];
+              custom =
+                let
+                  inherit username;
+                in
+                {
+                  user = {
+                    name = username;
+                    sshKeys = [ inputs.ssh-keys.outPath ];
+                  };
+                  podman.enable = true;
+                  nix-index.enable = true;
+                  syncthing.enable = true;
+                  laptop = true;
                 };
-                podman.enable = true;
-                nix-index.enable = true;
-                syncthing.enable = true;
-                laptop = true;
-              };
 
-              hm.imports = [
-                ./hm-modules/gtk.nix
-                ./hm-modules/mako.nix
-                ./hm-modules/kitty.nix
-                ./hm-modules/fuzzel.nix
-                ./hm-modules/vscode.nix
-                ./hm-modules/firefox.nix
-                ./hm-modules/ironbar.nix
-                ./hm-modules/hyprland.nix
-                ./hm-modules/shell
-              ];
+              hm.git =
+                let
+                  inherit email signingKey;
+                in
+                {
+                  email = email;
+                  signingKey = signingKey;
+                };
+
+              home-manager.users.nyadiia = {
+                imports = [
+                  ./hm-modules/shell
+                  ./hm-modules/gtk.nix
+                  ./hm-modules/mako.nix
+                  ./hm-modules/fcitx.nix
+                  ./hm-modules/kitty.nix
+                  ./hm-modules/fuzzel.nix
+                  ./hm-modules/vscode.nix
+                  ./hm-modules/firefox.nix
+                  ./hm-modules/ironbar.nix
+                  ./hm-modules/hyprland.nix
+                  ironbar.homeManagerModules.default
+                ];
+              };
             }
+            ./hosts/hyprdash/hardware-configuration.nix
+            ./hosts/home.nix
+            # /etc/nixos/hardware-configuration.nix
             # {
             #   home-manager.useGlobalPkgs = true;
             #   home-manager.useUserPackages = true;

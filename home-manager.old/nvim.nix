@@ -1,4 +1,4 @@
-{ pkgs, ...}:
+{ pkgs, ... }:
 {
   programs.nixvim = {
     enable = true;
@@ -11,8 +11,8 @@
       };
       neocord.enable = true;
       alpha = {
-      	enable = true;
-	theme = "dashboard";
+        enable = true;
+        theme = "dashboard";
       };
     };
   };

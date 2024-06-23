@@ -1,12 +1,24 @@
-{ config, lib, pkgs, inputs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   username = config.custom.user.name;
-in {
+in
+{
   options.hm = {
-    imports = lib.mkOption {
-      type = lib.types.listOf lib.types.nonEmptyStr;
-      default = [];
+    git = {
+      email = lib.mkOption {
+        type = lib.types.nonEmptyStr;
+        default = "";
+      };
+      signingKey = lib.mkOption {
+        type = lib.types.str;
+        default = "";
+      };
     };
   };
 
@@ -15,7 +27,6 @@ in {
     useUserPackages = true;
 
     users.${username} = {
-      imports = config.hm.imports;
       home = {
         username = username;
         homeDirectory = "/home/${username}";
@@ -30,14 +41,14 @@ in {
         package = pkgs.gitAndTools.gitFull;
         delta.enable = true;
         userName = username;
-        userEmail = "nyadiia@pm.me";
+        userEmail = config.hm.git.email;
         extraConfig = {
           core.editor = "nvim";
           init.defaultBranch = "main";
         };
-        signing = {
+        signing = lib.mkIf (config.hm.git.signingKey != "") {
           signByDefault = true;
-          key = "C8DC17070AC33338193F9723229718FDC160E880";
+          key = config.hm.git.signingKey;
         };
       };
     };

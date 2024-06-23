@@ -1,29 +1,49 @@
-{ config, pkgs, unstable, inputs, flake-overlays, ... }:
 {
-  nix.buildMachines = [ {
-    hostName = "farewell";
-    system = "x86_64-linux";
-    protocol = "ssh-ng";
-    # if the builder supports building for multiple architectures,
-    # replace the previous line by, e.g.
-    # systems = ["x86_64-linux" "aarch64-linux"];
-    maxJobs = 8;
-    speedFactor = 2;
-    supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-x86_64-v3" ];
-    mandatoryFeatures = [ ];
-  }
-  {
-    hostName = "vm";
-    system = "x86_64-linux";
-    protocol = "ssh-ng";
-    # if the builder supports building for multiple architectures,
-    # replace the previous line by, e.g.
-    # systems = ["x86_64-linux" "aarch64-linux"];
-    maxJobs = 16;
-    speedFactor = 5;
-    supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-x86_64-v3" ];
-    mandatoryFeatures = [ ];
-  }
+  config,
+  pkgs,
+  unstable,
+  inputs,
+  flake-overlays,
+  ...
+}:
+{
+  nix.buildMachines = [
+    {
+      hostName = "farewell";
+      system = "x86_64-linux";
+      protocol = "ssh-ng";
+      # if the builder supports building for multiple architectures,
+      # replace the previous line by, e.g.
+      # systems = ["x86_64-linux" "aarch64-linux"];
+      maxJobs = 8;
+      speedFactor = 2;
+      supportedFeatures = [
+        "nixos-test"
+        "benchmark"
+        "big-parallel"
+        "kvm"
+        "gccarch-x86_64-v3"
+      ];
+      mandatoryFeatures = [ ];
+    }
+    {
+      hostName = "vm";
+      system = "x86_64-linux";
+      protocol = "ssh-ng";
+      # if the builder supports building for multiple architectures,
+      # replace the previous line by, e.g.
+      # systems = ["x86_64-linux" "aarch64-linux"];
+      maxJobs = 16;
+      speedFactor = 5;
+      supportedFeatures = [
+        "nixos-test"
+        "benchmark"
+        "big-parallel"
+        "kvm"
+        "gccarch-x86_64-v3"
+      ];
+      mandatoryFeatures = [ ];
+    }
   ];
   nix.distributedBuilds = false;
   # optional, useful when the builder has a faster internet connection than yours
@@ -31,24 +51,28 @@
     builders-use-substitutes = true
   '';
 
-  nix.settings.system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-x86-64-v3" "gccarch-x86-64-v4" "gccarch-tigerlake" ];
-#  nixpkgs.hostPlatform = {
-#    gcc.arch = "x86-64-v3";
-#    system = "x86_64-linux";
-#  };
+  nix.settings.system-features = [
+    "nixos-test"
+    "benchmark"
+    "big-parallel"
+    "kvm"
+    "gccarch-x86-64-v3"
+    "gccarch-x86-64-v4"
+    "gccarch-tigerlake"
+  ];
+  #  nixpkgs.hostPlatform = {
+  #    gcc.arch = "x86-64-v3";
+  #    system = "x86_64-linux";
+  #  };
   networking.networkmanager.enable = true;
   networking.hostName = "hyprdash";
 
   nixpkgs.overlays = flake-overlays;
 
   # User info
-  nixpkgs.config.permittedInsecurePackages = [
-    "electron-25.9.0"
-  ];
+  nixpkgs.config.permittedInsecurePackages = [ "electron-25.9.0" ];
 
-  environment.systemPackages = with pkgs; lib.mkAfter [
-    bluetuith
-  ];
+  environment.systemPackages = with pkgs; lib.mkAfter [ bluetuith ];
 
   programs = {
     hyprland.enable = true;
@@ -69,7 +93,13 @@
   security.polkit.enable = true;
 
   users.users.nyadiia = {
-    extraGroups = ["networkmanager" "video" "wheel" "libvirtd" "docker" ];
+    extraGroups = [
+      "networkmanager"
+      "video"
+      "wheel"
+      "libvirtd"
+      "docker"
+    ];
   };
 
   systemd.services.greetd.serviceConfig = {
@@ -96,7 +126,7 @@
           Experimental = true;
         };
       };
-  };
+    };
   };
 
   security.rtkit.enable = true;

@@ -1,21 +1,12 @@
-{ config, lib }:
+{ config, lib, ... }:
 {
-  options.hm.ironbar = {
-    enable = lib.mkEnableOption {
-      defaults = true;
-    };
-    icon_theme = lib.mkOption {
-      type = lib.types.nonEmptyStr;
-      defaults = config.home-manager.users.${config.custom.user.name}.gtk.theme.iconTheme;
-  };
-
-  config.programs.ironbar = lib.mkIf config.hm.ironbar.enable {
+  programs.ironbar = {
     enable = true;
     config = {
       anchor_to_edges = true;
       position = "top";
       height = 14;
-      icon_theme = config.hm.ironbar.icon_theme;
+      icon_theme = config.gtk.iconTheme.name;
       start = [
         { type = "workspaces"; }
         {
@@ -37,9 +28,7 @@
         { type = "volume"; }
         {
           type = "sys_info";
-          format = [
-            " {cpu_percent}% | {temp_c:coretemp-Package-id-0}°C"
-          ];
+          format = [ " {cpu_percent}% | {temp_c:coretemp-Package-id-0}°C" ];
           interval = {
             cpu = 1;
           };
@@ -54,7 +43,7 @@
         }
       ];
     };
-    style = "
+    style = ''
       @define-color color_bg #282828;
       @define-color color_bg_dark #1d2021;
       /* @define-color color_border #d65d0e; */
@@ -193,6 +182,6 @@
       .upower {
           padding-right: 1em;
       }
-    ";
+    '';
   };
 }

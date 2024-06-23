@@ -1,4 +1,9 @@
-{ pkgs, unstable, inputs, ... }:
+{
+  pkgs,
+  unstable,
+  inputs,
+  ...
+}:
 
 {
   imports = [
@@ -32,29 +37,44 @@
     SDL_VIDEODRIVER = "wayland";
   };
 
-  home.packages = (with pkgs; [
-    mpv
-    obsidian
-    spotify
-    nixpkgs-fmt
-    vesktop
-    tigervnc
-    prismlauncher
-    swww
-    playerctl
-    tofi
-    wl-clipboard
-    libnotify
-    pavucontrol
-    qalculate-gtk
-    gnome.file-roller
-    grimblast
-    ffmpeg
-    signal-desktop
-    hyprlock
-    rustup
+  home.packages =
+    (with pkgs; [
+      mpv
+      obsidian
+      spotify
+      nixpkgs-fmt
+      vesktop
+      tigervnc
+      prismlauncher
+      swww
+      playerctl
+      tofi
+      wl-clipboard
+      libnotify
+      pavucontrol
+      qalculate-gtk
+      gnome.file-roller
+      grimblast
+      ffmpeg
+      signal-desktop
+      hyprlock
+      rustup
 
-    (octaveFull.withPackages (opkgs: with opkgs; [
+      (octaveFull.withPackages (
+        opkgs: with opkgs; [
+          symbolic
+          io
+          ocl
+          linear-algebra
+          matgeom
+          general
+          audio
+          fuzzy-logic-toolkit
+          control
+        ]
+      ))
+    ])
+    ++ (with pkgs.octavePackages; [
       symbolic
       io
       ocl
@@ -64,16 +84,5 @@
       audio
       fuzzy-logic-toolkit
       control
-    ]))
-  ]) ++ (with pkgs.octavePackages; [
-    symbolic
-    io
-    ocl
-    linear-algebra
-    matgeom
-    general
-    audio
-    fuzzy-logic-toolkit
-    control
-  ]);
+    ]);
 }

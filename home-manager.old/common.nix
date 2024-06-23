@@ -1,9 +1,7 @@
 { pkgs, ... }:
 
 {
-  imports = [
-    ./shell
-  ];
+  imports = [ ./shell ];
 
   home.username = "nyadiia";
   home.homeDirectory = "/home/nyadiia";
@@ -26,8 +24,16 @@
 
   dconf.settings = {
     "org/virt-manager/virt-manager/connections" = {
-      autoconnect = ["qemu:///system" "qemu+ssh://root@vm/system" "qemu+ssh://root@argo/system"];
-      uris = ["qemu:///system" "qemu+ssh://root@vm/system" "qemu+ssh://root@argo/system"];
+      autoconnect = [
+        "qemu:///system"
+        "qemu+ssh://root@vm/system"
+        "qemu+ssh://root@argo/system"
+      ];
+      uris = [
+        "qemu:///system"
+        "qemu+ssh://root@vm/system"
+        "qemu+ssh://root@argo/system"
+      ];
     };
   };
 

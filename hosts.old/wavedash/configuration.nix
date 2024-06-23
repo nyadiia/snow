@@ -1,17 +1,30 @@
-{ config, pkgs, unstable, inputs, ... }:
 {
-  nix.buildMachines = [{
-    hostName = "farewell";
-    system = "x86_64-linux";
-    protocol = "ssh-ng";
-    # if the builder supports building for multiple architectures, 
-    # replace the previous line by, e.g.
-    # systems = ["x86_64-linux" "aarch64-linux"];
-    maxJobs = 8;
-    speedFactor = 2;
-    supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-x86_64-v3" ];
-    mandatoryFeatures = [ ];
-  }
+  config,
+  pkgs,
+  unstable,
+  inputs,
+  ...
+}:
+{
+  nix.buildMachines = [
+    {
+      hostName = "farewell";
+      system = "x86_64-linux";
+      protocol = "ssh-ng";
+      # if the builder supports building for multiple architectures, 
+      # replace the previous line by, e.g.
+      # systems = ["x86_64-linux" "aarch64-linux"];
+      maxJobs = 8;
+      speedFactor = 2;
+      supportedFeatures = [
+        "nixos-test"
+        "benchmark"
+        "big-parallel"
+        "kvm"
+        "gccarch-x86_64-v3"
+      ];
+      mandatoryFeatures = [ ];
+    }
     {
       hostName = "vm";
       system = "x86_64-linux";
@@ -21,16 +34,31 @@
       # systems = ["x86_64-linux" "aarch64-linux"];
       maxJobs = 16;
       speedFactor = 5;
-      supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-x86_64-v3" ];
+      supportedFeatures = [
+        "nixos-test"
+        "benchmark"
+        "big-parallel"
+        "kvm"
+        "gccarch-x86_64-v3"
+      ];
       mandatoryFeatures = [ ];
-    }];
+    }
+  ];
   nix.distributedBuilds = false;
   # optional, useful when the builder has a faster internet connection than yours
   nix.extraOptions = ''
     builders-use-substitutes = true
   '';
 
-  nix.settings.system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-x86-64-v3" "gccarch-x86-64-v4" "gccarch-tigerlake" ];
+  nix.settings.system-features = [
+    "nixos-test"
+    "benchmark"
+    "big-parallel"
+    "kvm"
+    "gccarch-x86-64-v3"
+    "gccarch-x86-64-v4"
+    "gccarch-tigerlake"
+  ];
   #  nixpkgs.hostPlatform = {
   #    gcc.arch = "x86-64-v4";
   #    system = "x86_64-linux";
@@ -39,9 +67,7 @@
   networking.hostName = "wavedash";
 
   # User info
-  nixpkgs.config.permittedInsecurePackages = [
-    "electron-25.9.0"
-  ];
+  nixpkgs.config.permittedInsecurePackages = [ "electron-25.9.0" ];
 
   programs = {
     virt-manager.enable = true;
@@ -61,7 +87,13 @@
   security.polkit.enable = true;
 
   users.users.nyadiia = {
-    extraGroups = [ "networkmanager" "video" "wheel" "libvirtd" "docker" ];
+    extraGroups = [
+      "networkmanager"
+      "video"
+      "wheel"
+      "libvirtd"
+      "docker"
+    ];
   };
 
   systemd.services.greetd.serviceConfig = {
@@ -83,7 +115,7 @@
   };
 
   # Load nvidia driver for Xorg and Wayland
-  services.xserver.videoDrivers = ["nvidia"]; # or "nvidiaLegacy470 etc.
+  services.xserver.videoDrivers = [ "nvidia" ]; # or "nvidiaLegacy470 etc.
 
   hardware.nvidia = {
     package = config.boot.kernelPackages.nvidiaPackages.stable;
@@ -125,7 +157,5 @@
     tumbler.enable = true; # Thumbnail support for images
   };
 
-  boot.kernelParams = [
-    "mem_sleep_default=deep"
-  ];
+  boot.kernelParams = [ "mem_sleep_default=deep" ];
 }

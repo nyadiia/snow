@@ -27,7 +27,6 @@
     };
   };
 
-
   virtualisation.docker = {
     enable = true;
     enableOnBoot = true;
@@ -57,7 +56,8 @@
 
     # fs
     ntfs3g
-    zip unzip
+    zip
+    unzip
   ];
 
   hardware.opentabletdriver.enable = true;
@@ -80,8 +80,8 @@
     syncthing = {
       enable = true;
       user = "nyadiia";
-      dataDir = "/home/nyadiia/Documents";    # Default folder for new synced folders
-      configDir = "/home/nyadiia/Documents/.config/syncthing";   # Folder for Syncthing's settings and keys
+      dataDir = "/home/nyadiia/Documents"; # Default folder for new synced folders
+      configDir = "/home/nyadiia/Documents/.config/syncthing"; # Folder for Syncthing's settings and keys
     };
   };
 
@@ -99,7 +99,7 @@
   # Fonts config
   fonts = {
     enableDefaultPackages = true;
-    packages = with pkgs;  [
+    packages = with pkgs; [
       noto-fonts
       noto-fonts-cjk
       twitter-color-emoji
@@ -120,8 +120,14 @@
     package = pkgs.nixFlakes;
     settings = {
       auto-optimise-store = true;
-      experimental-features = [ "nix-command" "flakes" ];
-      trusted-users = [ "root" "@wheel" ];
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+      trusted-users = [
+        "root"
+        "@wheel"
+      ];
       substituters = [
         "https://cache.garnix.io"
         "https://hyprland.cachix.org"

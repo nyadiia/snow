@@ -2,7 +2,12 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.custom = {
@@ -13,28 +18,28 @@
         default = "";
       };
 
-      ssh-keys = lib.mkOption {
+      sshKeys = lib.mkOption {
         type = lib.types.listOf lib.types.nonEmpty.str;
-        default = [];
+        default = [ ];
       };
 
       groups = lib.mkOption {
         type = lib.types.listOf lib.types.nonEmptyStr;
-        default = [];
+        default = [ ];
       };
     };
 
-    podman.enable = lib.mkEnableOption  {
+    podman.enable = lib.mkEnableOption {
       type = lib.types.bool;
       default = false;
     };
 
-    nix-index.enable = lib.mkEnableOption  {
+    nix-index.enable = lib.mkEnableOption {
       type = lib.types.bool;
       default = true;
     };
 
-    syncthing.enable = lib.mkEnableOption  {
+    syncthing.enable = lib.mkEnableOption {
       type = lib.types.bool;
       default = true;
     };
@@ -53,36 +58,42 @@
       type = lib.types.bool;
       default = false;
     };
+
   };
 
   config = {
-    home-manager.sharedModules = [{
-      options.custom.nix-index = {
-        enable = lib.mkOption {
-          type = lib.types.bool;
-          default = true;
+    home-manager.sharedModules = [
+      {
+        options.custom.nix-index = {
+          enable = lib.mkOption {
+            type = lib.types.bool;
+            default = true;
+          };
+          database.enable = lib.mkOption {
+            type = lib.types.bool;
+            default = true;
+          };
         };
-        database.enable = lib.mkOption {
-          type = lib.types.bool;
-          default = true;
-        };
-      };
 
-      config = {
-        programs.nix-index = lib.mkIf config.custom.nix-index.enable {
-          enable = true;
-          enableFishIntegration = true;
+        config = {
+          programs.nix-index = lib.mkIf config.custom.nix-index.enable {
+            enable = true;
+            enableFishIntegration = true;
+          };
         };
-      };
-    }];
+      }
+    ];
 
     users.users.${config.custom.user.name} = {
       isNormalUser = true;
+      # group = config.custom.user.name;
       shell = pkgs.fish;
-      openssh.authorizedKeys.keys = config.custom.ssh-keys;
-      extraGroups = [ "networkmanager" "wheel" ]
-        ++ (lib.optionals config.custom.laptop) ["video"]
-        ++ config.custom.user.groups;
+      openssh.authorizedKeys.keys = config.custom.sshKeys;
+      extraGroups = [
+        "input"
+        "networkmanager"
+        "wheel"
+      ] ++ (lib.optionals config.custom.laptop) [ "video" ] ++ config.custom.user.groups;
     };
 
     programs.command-not-found.enable = lib.mkIf config.custom.nix-index.enable false;
@@ -99,8 +110,8 @@
     services.syncthing = lib.mkIf config.custom.syncthing.enable {
       enable = true;
       user = config.custom.user.name;
-      dataDir = "/home/${config.custom.user.name}/Documents";    # Default folder for new synced folders
-      configDir = "/home/${config.custom.user.name}/Documents/.config/syncthing";   # Folder for Syncthing's settings and keys
+      dataDir = "/home/${config.custom.user.name}/Documents"; # Default folder for new synced folders
+      configDir = "/home/${config.custom.user.name}/Documents/.config/syncthing"; # Folder for Syncthing's settings and keys
     };
 
     services.dbus = lib.mkIf (!config.custom.server) {
@@ -111,9 +122,9 @@
     # Use the systemd-boot EFI boot loader.
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
-    boot.kernelPackages = pkgs.linuxPackages_latest;
+    boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
 
-     networking.networkmanager.enable = true;
+    networking.networkmanager.enable = true;
     # if your config errors, uncomment this
     # systemd.services.NetworkManager-wait-online.enable = false;
 
@@ -124,6 +135,11 @@
       fish.enable = true;
       gnupg.agent.enable = true;
       dconf.enable = true;
+      nh = {
+        enable = true;
+        clean.enable = true;
+        clean.extraArgs = "--keep-since 14d --keep 10";
+      };
     };
 
     environment.systemPackages = with pkgs; [
@@ -138,10 +154,6 @@
       yazi
       profile-sync-daemon
 
-      # not really needed on desktop (home-manager handles it) but nice for servers
-      git
-      delta
-
       # iphone bs
       libimobiledevice
       idevicerestore
@@ -149,7 +161,9 @@
 
       # fs
       ntfs3g
-      zip unzip
+      zip
+      unzip
+      lz4
     ];
 
     services = {
@@ -168,7 +182,7 @@
     # Fonts config
     fonts = {
       enableDefaultPackages = true;
-      packages = with pkgs;  [
+      packages = with pkgs; [
         noto-fonts
         noto-fonts-cjk
         twitter-color-emoji
@@ -189,8 +203,14 @@
       package = pkgs.nixFlakes;
       settings = {
         auto-optimise-store = true;
-        experimental-features = [ "nix-command" "flakes" ];
-        trusted-users = [ "root" "@wheel" ];
+        experimental-features = [
+          "nix-command"
+          "flakes"
+        ];
+        trusted-users = [
+          "root"
+          "@wheel"
+        ];
         substituters = [
           "https://cache.garnix.io"
           "https://hyprland.cachix.org"
@@ -201,11 +221,6 @@
           "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
           "nixpkgs-unfree.cachix.org-1:hqvoInulhbV4nJ9yJOEr+4wxhDV4xq2d1DK7S6Nj6rs="
         ];
-      };
-      gc = {
-        automatic = true;
-        dates = "weekly";
-        options = "--delete-older-than 30d";
       };
     };
 
