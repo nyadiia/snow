@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   networking.networkmanager.enable = true;
@@ -70,6 +70,7 @@
     # fs
     ntfs3g
     zip unzip
+    lz4
   ];
 
   # hardware.opentabletdriver.enable = true;
@@ -161,8 +162,13 @@
   nixpkgs.config.allowUnfree = true;
 
   # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
+  #boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.grub = {
+    enable = true;
+    device = "nodev";
+    efiSupport = true;
+  };
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   time.timeZone = "America/Chicago";

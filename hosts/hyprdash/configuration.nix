@@ -1,4 +1,4 @@
-{ pkgs, flake-overlays, qcma-pkgs, ... }:
+{ pkgs, flake-overlays, qcma-pkgs, config, lib, ... }:
 {
   networking.networkmanager.enable = true;
   networking.hostName = "hyprdash";
@@ -184,10 +184,24 @@
     };
     tumbler.enable = true; # Thumbnail support for images
     psd.enable = true;
+    zfs = {
+      autoScrub.enable = true;
+      trim.enable = true;
+    };
+    sanoid = {
+      enable = true;
+
+    };
   };
 
   boot = {
-    initrd.systemd.enable = true;
+    initrd = {
+      availableKernelModules = [
+        "aesni_intel"
+        "cryptd"
+      ];
+    };
+    kernelPackages = lib.mkForce config.boot.zfs.package.latestCompatibleLinuxPackages;
     plymouth = {
       enable = false;
       theme = "signalis";
@@ -197,6 +211,7 @@
       ];
     };
     kernelParams = [
+      "nohibernate"
       "quiet"
       "mem_sleep_default=deep"
       "nowatchdog"

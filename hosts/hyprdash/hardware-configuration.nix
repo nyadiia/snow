@@ -8,26 +8,44 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" ];
+  networking.hostId = "215f7219";
+  zramSwap.enable = true;
+
+  boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
+  boot.initrd.luks.devices = {
+   "luks-rpool-nvme-Samsung_SSD_970_EVO_Plus_1TB_S59ANMFNB34408L-part2".device = "/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_1TB_S59ANMFNB34408L-part2";
+  };
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/46c29583-63b5-41c2-9002-45c0c4566d41";
-      fsType = "ext4";
+    { device = "rpool/root";
+      fsType = "zfs";
     };
 
-  boot.initrd.luks.devices."luks-7575dd14-5a34-4696-aed8-f417b99127a2".device = "/dev/disk/by-uuid/7575dd14-5a34-4696-aed8-f417b99127a2";
+  fileSystems."/home" =
+    { device = "rpool/home";
+      fsType = "zfs";
+    };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/36AB-C03E";
+    { device = "/dev/disk/by-uuid/5B33-A077";
       fsType = "vfat";
+      options = [ "fmask=0077" "dmask=0077" ];
     };
 
-  swapDevices =
-    [ { device = "/dev/disk/by-uuid/e67a1cf4-bf0d-4ea6-a923-3fec8a1e86d2"; }
-    ];
+  fileSystems."/var" =
+    { device = "rpool/var";
+      fsType = "zfs";
+    };
+
+  fileSystems."/nix" =
+    { device = "rpool/nix";
+      fsType = "zfs";
+    };
+
+  swapDevices = [ ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
