@@ -32,9 +32,12 @@
     GDK_BACKEND = "wayland";
     CLUTTER_BACKEND = "wayland";
     SDL_VIDEODRIVER = "wayland";
+    ANKI_WAYLAND = "1";
   };
 
   home.packages = with pkgs; [
+    anki
+    imv 
     mpv
     nil
     obsidian

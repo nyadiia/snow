@@ -86,6 +86,7 @@
 
   # powerManagement.powertop.enable = true;
   # disable pulseaudio and enable pipewire
+  sound.enable = false;
   hardware = {
     pulseaudio.enable = false;
     bluetooth = {
@@ -183,7 +184,7 @@
       pulse.enable = true;
     };
     tumbler.enable = true; # Thumbnail support for images
-    psd.enable = true;
+    psd.enable = false;
     zfs = {
       autoScrub.enable = true;
       trim.enable = true;
