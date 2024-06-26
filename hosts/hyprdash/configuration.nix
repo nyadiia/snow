@@ -1,35 +1,38 @@
-{ pkgs, flake-overlays, qcma-pkgs, config, lib, ... }:
+{
+  pkgs,
+  flake-overlays,
+  qcma-pkgs,
+  config,
+  lib,
+  ...
+}:
 {
   networking.networkmanager.enable = true;
   networking.hostName = "hyprdash";
 
   nixpkgs.overlays = [
     (self: super: {
-      blas = super.blas.override {
-        blasProvider = self.mkl;
-      };
+      blas = super.blas.override { blasProvider = self.mkl; };
 
-       lapack = super.lapack.override {
-         lapackProvider = self.mkl;
-       };
-     })
-   ] ++ flake-overlays;
+      lapack = super.lapack.override { lapackProvider = self.mkl; };
+    })
+  ] ++ flake-overlays;
 
   # User info
-  nixpkgs.config.permittedInsecurePackages = [
-    "electron-25.9.0"
-  ];
+  nixpkgs.config.permittedInsecurePackages = [ "electron-25.9.0" ];
 
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
-  environment.systemPackages = with pkgs; lib.mkAfter [
-    bluetuith
-    framework-tool
-    wineWowPackages.waylandFull
-    polkit_gnome
-    gparted
-    # (pkgs.callPackage ./pentablet.nix {})
-  ];
+  environment.systemPackages =
+    with pkgs;
+    lib.mkAfter [
+      bluetuith
+      framework-tool
+      wineWowPackages.waylandFull
+      polkit_gnome
+      gparted
+      # (pkgs.callPackage ./pentablet.nix {})
+    ];
 
   programs = {
     hyprland.enable = true;
@@ -41,7 +44,7 @@
       plugins = with pkgs.xfce; [
         thunar-archive-plugin
         thunar-volman
-	thunar-media-tags-plugin
+        thunar-media-tags-plugin
       ];
     };
     steam.enable = true;
@@ -51,12 +54,17 @@
   security.polkit.enable = true;
 
   users.users.nyadiia = {
-    extraGroups = ["networkmanager" "video" "wheel" "libvirtd" "docker" "vitamtp" ];
+    extraGroups = [
+      "networkmanager"
+      "video"
+      "wheel"
+      "libvirtd"
+      "docker"
+      "vitamtp"
+    ];
   };
 
-  services.udev.packages = [
-    qcma-pkgs.qcma
-  ];
+  services.udev.packages = [ qcma-pkgs.qcma ];
 
   systemd = {
     user.services.polkit-gnome-authentication-agent-1 = {
@@ -98,7 +106,7 @@
           Experimental = true;
         };
       };
-  };
+    };
   };
 
   security.rtkit.enable = true;
@@ -111,14 +119,14 @@
     gnome.gnome-keyring.enable = true;
     greetd = {
       enable = true;
-#      settings.default_session = {
-#        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --asterisks -r --cmd Hyprland";
-#        user = "greeter";
-#      };
+      #      settings.default_session = {
+      #        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --asterisks -r --cmd Hyprland";
+      #        user = "greeter";
+      #      };
       settings = {
         default_session = {
           # command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --greeting 'Welcome to PwNixOS!' --cmd Hyprland";
-	  command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --asterisks -r --cmd Hyprland";
+          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --asterisks -r --cmd Hyprland";
           user = "nyadiia";
         };
         initial_session = {
@@ -206,9 +214,9 @@
     plymouth = {
       enable = false;
       theme = "signalis";
-      themePackages = with pkgs; [ 
-        (pkgs.callPackage ./plymouth-signalis-theme {})
-	plymouth-matrix-theme
+      themePackages = with pkgs; [
+        (pkgs.callPackage ./plymouth-signalis-theme { })
+        plymouth-matrix-theme
       ];
     };
     kernelParams = [

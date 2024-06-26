@@ -8,7 +8,9 @@
         inputs.anyrun.packages.${pkgs.system}.applications
         inputs.anyrun.packages.${pkgs.system}.dictionary
       ];
-      width = { fraction = 0.3; };
+      width = {
+        fraction = 0.3;
+      };
     };
   };
 }

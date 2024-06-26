@@ -56,7 +56,19 @@
 
   nixConfig = { };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-stable, home-manager, nixos-hardware, nix-index-database, nur, stylix, qcma, ... }:
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      nixpkgs-stable,
+      home-manager,
+      nixos-hardware,
+      nix-index-database,
+      nur,
+      stylix,
+      qcma,
+      ...
+    }:
 
     let
       username = "nyadiia";
@@ -81,24 +93,29 @@
         };
       };
 
-      flake-overlays = [
-        inputs.nix-matlab.overlay
-      ];
+      flake-overlays = [ inputs.nix-matlab.overlay ];
 
     in
     {
       nixosConfigurations = {
         hyprdash = nixpkgs.lib.nixosSystem {
           specialArgs = {
-            inherit inputs pkgs stable flake-overlays qcma-pkgs;
+            inherit
+              inputs
+              pkgs
+              stable
+              flake-overlays
+              qcma-pkgs
+              ;
           };
           modules = [
-	    { nixpkgs.overlays = [ nur.overlay ]; }
+            { nixpkgs.overlays = [ nur.overlay ]; }
             ./hosts/hyprdash
             nix-index-database.nixosModules.nix-index
             nixos-hardware.nixosModules.framework-11th-gen-intel
-	    # stylix.nixosModules.stylix ./hosts/stylix.nix
-	    nur.nixosModules.nur
+            stylix.nixosModules.stylix
+            ./hosts/stylix.nix
+            nur.nixosModules.nur
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
@@ -109,13 +126,25 @@
                 inputs.nix-index-database.hmModules.nix-index
                 inputs.ironbar.homeManagerModules.default
               ];
-              home-manager.extraSpecialArgs = { inherit inputs stable nur qcma-pkgs; };
+              home-manager.extraSpecialArgs = {
+                inherit
+                  inputs
+                  stable
+                  nur
+                  qcma-pkgs
+                  ;
+              };
             }
           ];
         };
         crystal-heart = nixpkgs.lib.nixosSystem {
           specialArgs = {
-            inherit inputs pkgs stable flake-overlays;
+            inherit
+              inputs
+              pkgs
+              stable
+              flake-overlays
+              ;
           };
           modules = [
             ./hosts/crystal-heart
@@ -124,10 +153,10 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.users.nyadiia.imports = [
-                ./home-manager/server.nix
-              ];
-              home-manager.extraSpecialArgs = { inherit inputs stable; };
+              home-manager.users.nyadiia.imports = [ ./home-manager/server.nix ];
+              home-manager.extraSpecialArgs = {
+                inherit inputs stable;
+              };
             }
           ];
         };
@@ -186,7 +215,9 @@
 
       homeConfigurations."${username}" = home-manager.lib.homeManagerConfiguration {
         # pass inputs as specialArgs
-        extraSpecialArgs = { inherit inputs pkgs stable; };
+        extraSpecialArgs = {
+          inherit inputs pkgs stable;
+        };
 
         # import your home.nix
         modules = [ ./home-manager/laptop.nix ];

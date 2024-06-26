@@ -1,13 +1,9 @@
 { pkgs, nur, ... }:
-let 
-  nur-no-pkgs = import nur {
-    nurpkgs = import pkgs { system = "x86_64-linux"; };
-  };
+let
+  nur-no-pkgs = import nur { nurpkgs = import pkgs { system = "x86_64-linux"; }; };
 in
 {
-  imports = [
-    ./shell
-  ];
+  imports = [ ./shell ];
 
   home.username = "nyadiia";
   home.homeDirectory = "/home/nyadiia";
@@ -36,8 +32,16 @@ in
 
   dconf.settings = {
     "org/virt-manager/virt-manager/connections" = {
-      autoconnect = ["qemu:///system" "qemu+ssh://root@vm/system" "qemu+ssh://root@argo/system"];
-      uris = ["qemu:///system" "qemu+ssh://root@vm/system" "qemu+ssh://root@argo/system"];
+      autoconnect = [
+        "qemu:///system"
+        "qemu+ssh://root@vm/system"
+        "qemu+ssh://root@argo/system"
+      ];
+      uris = [
+        "qemu:///system"
+        "qemu+ssh://root@vm/system"
+        "qemu+ssh://root@argo/system"
+      ];
     };
   };
 

@@ -1,4 +1,9 @@
-{ inputs, pkgs, lib, ... }:
+{
+  inputs,
+  pkgs,
+  lib,
+  ...
+}:
 {
   programs.ironbar = {
     enable = true;
@@ -34,9 +39,7 @@
         { type = "volume"; }
         {
           type = "sys_info";
-          format = [
-            " {cpu_percent}% | {temp_c:coretemp-Package-id-0}°C"
-          ];
+          format = [ " {cpu_percent}% | {temp_c:coretemp-Package-id-0}°C" ];
           interval = {
             cpu = 1;
           };

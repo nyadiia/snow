@@ -1,4 +1,9 @@
-{ pkgs, stable, qcma-pkgs, ... }:
+{
+  pkgs,
+  stable,
+  qcma-pkgs,
+  ...
+}:
 
 {
   imports = [
@@ -10,13 +15,13 @@
     ./fcitx.nix
   ];
 
-  home.pointerCursor = {
-    name = "BreezeX-RosePine-Linux";
-    package = pkgs.rose-pine-cursor;
-    size = 20;
-    x11.enable = true;
-    gtk.enable = true;
-  };
+  # home.pointerCursor = {
+  #   name = "BreezeX-RosePine-Linux";
+  #   package = pkgs.rose-pine-cursor;
+  #   size = 20;
+  #   x11.enable = true;
+  #   gtk.enable = true;
+  # };
 
   home.sessionVariables = {
     XDG_SESSION_DESKTOP = "Hyprland";
@@ -37,7 +42,7 @@
 
   home.packages = with pkgs; [
     anki
-    imv 
+    imv
     mpv
     nil
     obsidian
@@ -63,16 +68,18 @@
 
     (qcma-pkgs.qcma)
 
-    (octaveFull.withPackages (opkgs: with opkgs; [
-      symbolic
-      io
-      ocl
-      linear-algebra
-      matgeom
-      general
-      audio
-      fuzzy-logic-toolkit
-      control
-    ]))
+    (octaveFull.withPackages (
+      opkgs: with opkgs; [
+        symbolic
+        io
+        ocl
+        linear-algebra
+        matgeom
+        general
+        audio
+        fuzzy-logic-toolkit
+        control
+      ]
+    ))
   ];
 }
