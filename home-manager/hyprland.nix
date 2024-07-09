@@ -3,7 +3,8 @@
   imports = [
     ./mako.nix
     ./ironbar.nix
-    ./kitty.nix
+    # ./kitty.nix
+    ./alacritty.nix
     ./gtk.nix
     ./fuzzel.nix
   ];
@@ -14,8 +15,9 @@
     package = inputs.hyprland.packages.${pkgs.system}.hyprland;
     settings = {
       "$mod" = "SUPER";
-      "$term" = "kitty";
+      "$term" = "alacritty";
       "$runner" = "fuzzel";
+      "$files" = "nautilus";
       "$browser" = "firefox";
 
       exec-once = [
@@ -23,10 +25,8 @@
         "ironbar &"
         "wl-paste --type text --watch cliphist store" # Stores only text data
         "wl-paste --type image --watch cliphist store" # Stores only image data
-        # "swww init"
         "mako &"
       ];
-      exec = [ "swww img ~/Pictures/nge.jpg" ];
 
       monitor = [
         "eDP-1,preferred,auto,1.175"
@@ -87,7 +87,7 @@
       bind =
         [
           "$mod, W, exec, $browser"
-          "$mod, N, exec, thunar"
+          "$mod, N, exec, $files"
           "$mod, D, exec, $runner"
           ", Print, exec, grimblast copy area"
           "$mod, Print, exec, grimblast copy screen"

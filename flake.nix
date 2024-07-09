@@ -6,6 +6,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:NixOS/nixpkgs/release-24.05";
     qcma.url = "github:nyadiia/nixpkgs/qcma";
+    azuki.url = "github:nyadiia/nixpkgs/azuki";
 
     # Home Manager
     home-manager = {
@@ -67,6 +68,7 @@
       nur,
       stylix,
       qcma,
+      azuki,
       ...
     }:
 
@@ -92,6 +94,12 @@
           allowUnfree = true;
         };
       };
+      azuki-pkgs = import azuki {
+        inherit system;
+        config = {
+          allowUnfree = true;
+        };
+      };
 
       flake-overlays = [ inputs.nix-matlab.overlay ];
 
@@ -106,6 +114,7 @@
               stable
               flake-overlays
               qcma-pkgs
+	      azuki-pkgs
               ;
           };
           modules = [
@@ -132,6 +141,7 @@
                   stable
                   nur
                   qcma-pkgs
+		  azuki-pkgs
                   ;
               };
             }

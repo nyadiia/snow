@@ -2,18 +2,15 @@
 {
   programs.nixvim = {
     enable = true;
-    # defaultEditor = true;
-    colorschemes.gruvbox.enable = true;
+    defaultEditor = true;
+    opts = {
+      number = true;
+      relativenumber = true;
+      shiftwidth = 2;
+    };
     plugins = {
       lazy.enable = true;
-      neo-tree = {
-        enable = true;
-      };
-      neocord.enable = true;
-      alpha = {
-        enable = true;
-        theme = "dashboard";
-      };
+      neo-tree.enable = true;
     };
   };
 }

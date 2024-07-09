@@ -4,7 +4,7 @@
     enable = true;
     settings = {
       main = {
-        terminal = "${pkgs.kitty}/bin/kitty";
+        terminal = "${pkgs.kitty}/bin/alacirtty";
         layer = "overlay";
         width = 45;
         lines = 15;

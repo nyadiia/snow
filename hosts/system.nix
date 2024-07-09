@@ -43,6 +43,7 @@
   home-manager.backupFileExtension = "bak";
 
   environment.systemPackages = with pkgs; [
+    btop
     nh
     tmux
     neovim

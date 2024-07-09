@@ -2,6 +2,7 @@
   inputs,
   pkgs,
   lib,
+  config,
   ...
 }:
 {
@@ -16,6 +17,14 @@
         {
           type = "workspaces";
           name_map = {
+	    "1" = "一";
+	    "2" = "ニ";
+	    "3" = "三";
+	    "4" = "四";
+	    "5" = "五";
+	    "6" = "六";
+	    "7" = "七";
+	    "8" = "八";
             "9" = "";
             "10" = "󰙯";
           };
@@ -55,33 +64,32 @@
       ];
     };
     style = "
-      @define-color color_bg #282828;
-      @define-color color_bg_dark #1d2021;
-      /* @define-color color_border #d65d0e; */
-      @define-color color_border #ebdbb2;
-      @define-color color_border_active #fe8019;
-      @define-color color_text #ebdbb2;
-      @define-color color_urgent #fb4934;
+      @define-color color_bg #${config.lib.stylix.colors.base01};
+      @define-color color_bg_dark #${config.lib.stylix.colors.base00};
+      @define-color color_border #${config.lib.stylix.colors.base05};
+      @define-color color_border_active #${config.lib.stylix.colors.base0A};
+      @define-color color_text #${config.lib.stylix.colors.base05};
+      @define-color color_urgent #${config.lib.stylix.colors.base08};
       /* -- base styles -- */
 
       * {
-          font-family: FiraCode Nerd Font, sans-serif;
-          font-size: 12px;
+          font-family: azukifontP, FiraCode Nerd Font, sans-serif;
+	  font-size: 14px;
           border: none;
           border-radius: 0;
           min-width: 1rem;
       }
 
       box, menubar, button {
-          background-color: @color_bg;
+          background-color: @color_bg_dark;
           background-image: none;
           box-shadow: none;
       }
 
       button, label {
           color: @color_text;
-          padding-left: 0.6rem;
-          padding-right: 0.6rem;
+          padding-left: 0.4rem;
+          padding-right: 0.4rem;
 	  padding-top: 6px;
 	  padding-bottom: 6px;
       }

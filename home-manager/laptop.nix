@@ -10,18 +10,10 @@
     ./common.nix
     ./firefox.nix
     ./vscode.nix
-    # ./nvim.nix
+    ./nvim.nix
     ./hyprland.nix
     ./fcitx.nix
   ];
-
-  # home.pointerCursor = {
-  #   name = "BreezeX-RosePine-Linux";
-  #   package = pkgs.rose-pine-cursor;
-  #   size = 20;
-  #   x11.enable = true;
-  #   gtk.enable = true;
-  # };
 
   home.sessionVariables = {
     XDG_SESSION_DESKTOP = "Hyprland";
@@ -39,6 +31,11 @@
     SDL_VIDEODRIVER = "wayland";
     ANKI_WAYLAND = "1";
   };
+  
+  programs.chromium = {
+    enable = true;
+    package = pkgs.brave;
+  };
 
   home.packages = with pkgs; [
     anki
@@ -51,7 +48,7 @@
     vesktop
     tigervnc
     prismlauncher
-    swww
+    # swww
     playerctl
     tofi
     wl-clipboard

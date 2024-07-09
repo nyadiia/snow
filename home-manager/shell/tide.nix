@@ -21,7 +21,7 @@
       set -U tide_bun_icon \U000f0cd3
       set -U tide_character_color 5FD700
       set -U tide_character_color_failure FF0000
-      set -U tide_character_icon \u276f
+      set -U tide_character_icon :
       set -U tide_character_vi_icon_default \u276e
       set -U tide_character_vi_icon_replace \u25b6
       set -U tide_character_vi_icon_visual V

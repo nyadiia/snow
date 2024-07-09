@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "azuki": {
+      "locked": {
+        "lastModified": 1720461251,
+        "narHash": "sha256-oN1wPSiBM8tXYs16GMi969x0ss0gKT/5xKO9K61Arck=",
+        "owner": "nyadiia",
+        "repo": "nixpkgs",
+        "rev": "6698edaff60bf92d8b18c933924bd7a78ea475bf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nyadiia",
+        "ref": "azuki",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "base16": {
       "inputs": {
         "fromYaml": "fromYaml"
@@ -875,6 +891,7 @@
     },
     "root": {
       "inputs": {
+        "azuki": "azuki",
         "firefox-addons": "firefox-addons",
         "home-manager": "home-manager",
         "hyprland": "hyprland",

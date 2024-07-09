@@ -31,6 +31,7 @@
       wineWowPackages.waylandFull
       polkit_gnome
       gparted
+      gnome.nautilus
       # (pkgs.callPackage ./pentablet.nix {})
     ];
 
@@ -39,14 +40,6 @@
     virt-manager.enable = true;
     seahorse.enable = true;
     light.enable = true;
-    thunar = {
-      enable = true;
-      plugins = with pkgs.xfce; [
-        thunar-archive-plugin
-        thunar-volman
-        thunar-media-tags-plugin
-      ];
-    };
     steam.enable = true;
     steam.gamescopeSession.enable = true;
   };
@@ -116,6 +109,15 @@
     greetd.enableGnomeKeyring = true;
   };
   services = {
+    pipewire.extraConfig.pipewire."92-low-latency" = {
+      context.properties = {
+        default.clock.rate = 48000;
+        default.clock.quantum = 32;
+        default.clock.min-quantum = 32;
+        default.clock.max-quantum = 32;
+      };
+    };
+    gnome.sushi.enable = true;
     gnome.gnome-keyring.enable = true;
     greetd = {
       enable = true;

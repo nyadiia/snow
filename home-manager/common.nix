@@ -28,6 +28,7 @@ in
         key = "C8DC17070AC33338193F9723229718FDC160E880";
       };
     };
+    btop.enable = true;
   };
 
   dconf.settings = {
