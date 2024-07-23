@@ -25,7 +25,7 @@ in
       };
       signing = {
         signByDefault = true;
-        key = "C8DC17070AC33338193F9723229718FDC160E880";
+        key = "178B4B1243860873";
       };
     };
     btop.enable = true;

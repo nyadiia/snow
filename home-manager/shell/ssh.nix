@@ -3,7 +3,6 @@
 {
   programs.ssh = {
     enable = true;
-    addKeysToAgent = "yes";
     matchBlocks = {
       # my tailnet
       "hyprdash" = {

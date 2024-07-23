@@ -10,6 +10,7 @@
 
   # User info
   programs = {
+    nix-ld.enable = true;
     fish = {
       enable = true;
       promptInit = ''
@@ -17,7 +18,7 @@
       '';
     };
     ssh.askPassword = "${pkgs.gnome.seahorse}/libexec/seahorse/ssh-askpass";
-    ssh.startAgent = true;
+    ssh.startAgent = false;
     gnupg.agent.enable = true;
     dconf.enable = true;
     command-not-found.enable = false;
@@ -116,12 +117,13 @@
   fonts = {
     enableDefaultPackages = true;
     packages = with pkgs; [
+      corefonts
+      vistafonts
       noto-fonts
       noto-fonts-cjk
       twitter-color-emoji
       (nerdfonts.override { fonts = [ "FiraCode" ]; })
       cozette
-      corefonts
     ];
     fontconfig = {
       defaultFonts = {

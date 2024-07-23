@@ -18,7 +18,7 @@
       "$term" = "alacritty";
       "$runner" = "fuzzel";
       "$files" = "nautilus";
-      "$browser" = "firefox";
+      "$browser" = "brave";
 
       exec-once = [
         "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"

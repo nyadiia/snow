@@ -26,12 +26,18 @@
   environment.systemPackages =
     with pkgs;
     lib.mkAfter [
+      yubikey-manager-qt
+      yubikey-personalization-gui
+      yubikey-personalization
+      
+      pavucontrol
       bluetuith
       framework-tool
       wineWowPackages.waylandFull
       polkit_gnome
       gparted
-      gnome.nautilus
+      nautilus
+      fprintd
       # (pkgs.callPackage ./pentablet.nix {})
     ];
 
@@ -42,6 +48,9 @@
     light.enable = true;
     steam.enable = true;
     steam.gamescopeSession.enable = true;
+    gnupg = {
+      agent.enableSSHSupport = true;
+    };
   };
 
   security.polkit.enable = true;
@@ -57,7 +66,12 @@
     ];
   };
 
-  services.udev.packages = [ qcma-pkgs.qcma ];
+  services.udev.packages = [ 
+    qcma-pkgs.qcma
+    pkgs.yubikey-manager-qt
+    pkgs.yubikey-personalization-gui
+    pkgs.yubikey-personalization
+  ];
 
   systemd = {
     user.services.polkit-gnome-authentication-agent-1 = {
@@ -87,7 +101,6 @@
 
   # powerManagement.powertop.enable = true;
   # disable pulseaudio and enable pipewire
-  sound.enable = false;
   hardware = {
     pulseaudio.enable = false;
     bluetooth = {
@@ -139,6 +152,9 @@
     };
 
     # framework specific services
+    fprintd = {
+      enable = true;
+    };
     fwupd.enable = true;
     blueman.enable = true;
     thermald = {

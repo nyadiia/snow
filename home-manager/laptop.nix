@@ -37,7 +37,14 @@
     package = pkgs.brave;
   };
 
+  programs.gpg.enable = true;
+  services.gpg-agent = {
+    enable = true;
+    enableSshSupport = true;
+  };
+
   home.packages = with pkgs; [
+    proton-pass
     anki
     imv
     mpv
@@ -55,7 +62,7 @@
     libnotify
     pavucontrol
     qalculate-gtk
-    gnome.file-roller
+    file-roller
     grimblast
     ffmpeg
     signal-desktop
