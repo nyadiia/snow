@@ -1,5 +1,4 @@
 {
-  inputs,
   config,
   lib,
   pkgs,
@@ -10,7 +9,6 @@
     ./mako.nix
     ./ironbar.nix
     ./kitty.nix
-    ./gtk.nix
     ./fuzzel.nix
   ];
 
@@ -83,8 +81,8 @@
         gaps_out = 3;
         border_size = 2;
 
-        "col.active_border" = "rgb(ebdbb2)";
-        "col.inactive_border" = "rgb(1d2021)";
+        "col.active_border" = lib.mkDefault "rgb(ebdbb2)";
+        "col.inactive_border" = lib.mkDefault "rgb(1d2021)";
       };
 
       # bezier = "ease-out,0.165,0.84,0.44,1";

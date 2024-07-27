@@ -4,6 +4,8 @@
   inputs = {
     # nixpkgs
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-small.url = "github:NixOS/nixpkgs/nixos-unstable-small";
+    nixpkgs-azuki.url = "github:nyadiia/nixpkgs/azuki";
 
     # Home Manager
     home-manager = {
@@ -11,7 +13,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # hardware goofyness
+    # hardware support
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     # nix-index
@@ -20,10 +22,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # wayland bar
     ironbar = {
       url = "github:JakeStanger/ironbar";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    stylix.url = "github:danth/stylix";
 
     # nixvim = {
     #   url = "github:nix-community/nixvim";
@@ -45,42 +50,42 @@
   };
 
   outputs =
-    {
-      self,
+    inputs@{
       nixpkgs,
+      nixpkgs-small,
+      nixpkgs-azuki,
       home-manager,
       nixos-hardware,
       nix-index-database,
       ironbar,
+      stylix,
       ...
-    }@inputs:
-
+    }:
     let
       flake-overlays = [ inputs.nix-matlab.overlay ];
       username = "nyadiia";
       email = "nyadiia@pm.me";
-      signingKey = "C8DC17070AC33338193F9723229718FDC160E880";
+      signingKey = "9330C73893C84271F2EC";
       flake = "/home/nyadiia/snow";
+
+      config.allowUnfree = true;
     in
     {
       nixosConfigurations = {
-        hyprdash = nixpkgs.lib.nixosSystem {
+        hyprdash = nixpkgs.lib.nixosSystem rec {
+          system = "x86_64-linux";
           specialArgs = {
+            pkgs-azuki = import nixpkgs-azuki { inherit system config; };
             inherit
               inputs
               flake-overlays
               username
               email
               signingKey
-	      flake
+              flake
               ;
           };
           modules = [
-            nix-index-database.nixosModules.nix-index
-            nixos-hardware.nixosModules.framework-11th-gen-intel
-            home-manager.nixosModules.home-manager
-            ./hosts/system.nix
-            ./hosts/hyprdash/configuration.nix
             {
               home-manager.users.${username}.imports = [
                 ./hm-modules/shell
@@ -96,73 +101,17 @@
                 ironbar.homeManagerModules.default
               ];
             }
+            nix-index-database.nixosModules.nix-index
+            nixos-hardware.nixosModules.framework-11th-gen-intel
+            home-manager.nixosModules.home-manager
+            stylix.nixosModules.stylix
+            ./hosts/system.nix
+            ./hosts/hyprdash/configuration.nix
             ./hosts/hyprdash/hardware-configuration.nix
             ./hosts/home.nix
-            # /etc/nixos/hardware-configuration.nix
-            # {
-            #   home-manager.useGlobalPkgs = true;
-            #   home-manager.useUserPackages = true;
-            #   home-manager.users.nyadiia.imports = [
-            #     ./home-manager/laptop.nix
-            #     inputs.nixvim.homeManagerModules.nixvim
-            #     inputs.nix-index-database.hmModules.nix-index
-            #     inputs.ironbar.homeManagerModules.default
-            #   ];
-            #   home-manager.extraSpecialArgs = { inherit inputs unstable; };
-            # }
+            ./modules/stylix.nix
           ];
         };
-        # wavedash = nixpkgs.lib.nixosSystem {
-        #   specialArgs = {
-        #     inherit inputs unstable;
-        #   };
-        #   modules = [
-        #     ./hosts/wavedash
-        #     nix-index-database.nixosModules.nix-index
-        #     home-manager.nixosModules.home-manager
-        #     {
-        #       home-manager.useGlobalPkgs = true;
-        #       home-manager.useUserPackages = true;
-        #       home-manager.users.nyadiia = import ./home-manager/desktop.nix;
-        #       home-manager.extraSpecialArgs = { inherit inputs unstable; };
-        #     }
-        #   ];
-        # };
-        # demodash = nixpkgs.lib.nixosSystem {
-        #   specialArgs = {
-        #     inherit inputs unstable;
-        #   };
-        #   modules = [
-        #     ./hosts/demodash
-        #     nix-index-database.nixosModules.nix-index
-        #     nixos-hardware.nixosModules.common-cpu-intel-sandy-bridge
-        #     nixos-hardware.nixosModules.common-gpu-amd
-        #     home-manager.nixosModules.home-manager
-        #     {
-        #       home-manager.useGlobalPkgs = true;
-        #       home-manager.useUserPackages = true;
-        #       home-manager.users.nyadiia = import ./home-manager/server.nix;
-        #       home-manager.extraSpecialArgs = { inherit inputs unstable; };
-        #     }
-        #   ];
-        # };
-        # farewell = nixpkgs.lib.nixosSystem {
-        #   specialArgs = {
-        #     inherit inputs unstable;
-        #   };
-        #   modules = [
-        #     ./hosts/farewell
-        #     nix-index-database.nixosModules.nix-index
-        #     nixos-hardware.nixosModules.common-cpu-intel
-        #     home-manager.nixosModules.home-manager
-        #     {
-        #       home-manager.useGlobalPkgs = true;
-        #       home-manager.useUserPackages = true;
-        #       home-manager.users.nyadiia = import ./home-manager/server.nix;
-        #       home-manager.extraSpecialArgs = { inherit inputs unstable; };
-        #     }
-        #   ];
-        # };
       };
     };
 }

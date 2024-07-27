@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   programs.fuzzel = {
     enable = true;
@@ -10,13 +10,13 @@
         lines = 15;
       };
       colors = {
-        background = "282828ff";
-        text = "ebdbb2ff";
-        match = "d65d0eff";
-        selection-match = "1d2021ff";
-        selection = "d65d0eff";
-        selection-text = "ebdbb2ff";
-        border = "ebdbb2ff";
+        background = lib.mkDefault "282828ff";
+        text = lib.mkDefault "ebdbb2ff";
+        match = lib.mkDefault "d65d0eff";
+        selection-match = lib.mkDefault "1d2021ff";
+        selection = lib.mkDefault "d65d0eff";
+        selection-text = lib.mkDefault "ebdbb2ff";
+        border = lib.mkDefault "ebdbb2ff";
       };
       border = {
         width = 1;

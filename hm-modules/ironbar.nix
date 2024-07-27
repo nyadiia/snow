@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, ... }:
 {
   programs.ironbar = {
     enable = true;
@@ -7,7 +7,7 @@
       anchor_to_edges = true;
       position = "top";
       height = 14;
-      icon_theme = config.gtk.iconTheme.name;
+      # icon_theme = config.gtk.iconTheme.name;
       start = [
         { type = "workspaces"; }
         {

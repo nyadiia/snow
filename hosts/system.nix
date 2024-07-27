@@ -77,13 +77,35 @@
         };
 
         config = {
-          programs.nix-index = lib.mkIf config.custom.nix-index.enable {
-            enable = true;
-            enableFishIntegration = true;
-          };
+          programs.nix-index = lib.mkIf config.custom.nix-index.enable { enable = true; };
         };
       }
     ];
+
+    nix = {
+      package = pkgs.nixFlakes;
+      settings = {
+        auto-optimise-store = true;
+        experimental-features = [
+          "nix-command"
+          "flakes"
+        ];
+        trusted-users = [
+          "root"
+          "@wheel"
+        ];
+        substituters = [
+          "https://cache.garnix.io"
+          "https://hyprland.cachix.org"
+          "https://nixpkgs-unfree.cachix.org"
+        ];
+        trusted-public-keys = [
+          "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
+          "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+          "nixpkgs-unfree.cachix.org-1:hqvoInulhbV4nJ9yJOEr+4wxhDV4xq2d1DK7S6Nj6rs="
+        ];
+      };
+    };
 
     users.users.${config.custom.user.name} = {
       isNormalUser = true;
@@ -137,7 +159,7 @@
       gnupg.agent.enable = true;
       dconf.enable = true;
       nh = {
-	inherit flake;
+        inherit flake;
         enable = true;
         clean.enable = true;
         clean.extraArgs = "--keep-since 30d --keep 10";
@@ -154,7 +176,7 @@
       ripgrep
       neofetch
       yazi
-      profile-sync-daemon
+      btop
 
       # iphone bs
       libimobiledevice
@@ -170,8 +192,9 @@
 
     services = {
       # TODO: remember to login to tailscale!!
-      # sorry this isn't declaritive but i'm not putting api keys on github :)
       tailscale.enable = true;
+      chrony.enable = true;
+
       # iphone stuff
       usbmuxd = {
         enable = true;
@@ -179,6 +202,8 @@
       };
 
       udisks2.enable = true;
+      gvfs.enable = true;
+      devmon.enable = true;
     };
 
     # Fonts config
@@ -198,31 +223,6 @@
           sansSerif = [ "Noto Sans" ];
           monospace = [ "FiraCode Nerd Font" ];
         };
-      };
-    };
-
-    nix = {
-      package = pkgs.nixFlakes;
-      settings = {
-        auto-optimise-store = true;
-        experimental-features = [
-          "nix-command"
-          "flakes"
-        ];
-        trusted-users = [
-          "root"
-          "@wheel"
-        ];
-        substituters = [
-          "https://cache.garnix.io"
-          "https://hyprland.cachix.org"
-          "https://nixpkgs-unfree.cachix.org"
-        ];
-        trusted-public-keys = [
-          "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
-          "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
-          "nixpkgs-unfree.cachix.org-1:hqvoInulhbV4nJ9yJOEr+4wxhDV4xq2d1DK7S6Nj6rs="
-        ];
       };
     };
 
