@@ -75,31 +75,13 @@
     let
       username = "nyadiia";
       system = "x86_64-linux";
-      pkgs = import nixpkgs {
-        inherit system;
-        config = {
-          allowUnfree = true;
-        };
+      config = {
+        allowUnfree = true;
       };
-      stable = import nixpkgs-stable {
-        inherit system;
-        config = {
-          permittedInsecurePackages = [ "electron-25.9.0" ];
-          allowUnfree = true;
-        };
-      };
-      qcma-pkgs = import qcma {
-        inherit system;
-        config = {
-          allowUnfree = true;
-        };
-      };
-      azuki-pkgs = import azuki {
-        inherit system;
-        config = {
-          allowUnfree = true;
-        };
-      };
+      pkgs = import nixpkgs { inherit system config; };
+      stable = import nixpkgs-stable { inherit system config; };
+      qcma-pkgs = import qcma { inherit system config; };
+      azuki-pkgs = import azuki { inherit system config; };
 
       flake-overlays = [ inputs.nix-matlab.overlay ];
 
@@ -114,7 +96,7 @@
               stable
               flake-overlays
               qcma-pkgs
-	      azuki-pkgs
+              azuki-pkgs
               ;
           };
           modules = [
@@ -141,7 +123,7 @@
                   stable
                   nur
                   qcma-pkgs
-		  azuki-pkgs
+                  azuki-pkgs
                   ;
               };
             }

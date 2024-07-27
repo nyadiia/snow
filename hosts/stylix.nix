@@ -1,4 +1,9 @@
-{ pkgs, azuki-pkgs, config, ... }:
+{
+  pkgs,
+  azuki-pkgs,
+  config,
+  ...
+}:
 {
   stylix = {
     enable = true;

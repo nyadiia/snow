@@ -10,13 +10,7 @@
   networking.networkmanager.enable = true;
   networking.hostName = "hyprdash";
 
-  nixpkgs.overlays = [
-    (self: super: {
-      blas = super.blas.override { blasProvider = self.mkl; };
-
-      lapack = super.lapack.override { lapackProvider = self.mkl; };
-    })
-  ] ++ flake-overlays;
+  nixpkgs.overlays = [ ] ++ flake-overlays;
 
   # User info
   nixpkgs.config.permittedInsecurePackages = [ "electron-25.9.0" ];
@@ -29,7 +23,7 @@
       yubikey-manager-qt
       yubikey-personalization-gui
       yubikey-personalization
-      
+
       pavucontrol
       bluetuith
       framework-tool
@@ -66,7 +60,7 @@
     ];
   };
 
-  services.udev.packages = [ 
+  services.udev.packages = [
     qcma-pkgs.qcma
     pkgs.yubikey-manager-qt
     pkgs.yubikey-personalization-gui

@@ -31,7 +31,7 @@
     SDL_VIDEODRIVER = "wayland";
     ANKI_WAYLAND = "1";
   };
-  
+
   programs.chromium = {
     enable = true;
     package = pkgs.brave;
@@ -82,7 +82,6 @@
         matgeom
         general
         audio
-        fuzzy-logic-toolkit
         control
       ]
     ))
