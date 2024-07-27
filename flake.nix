@@ -60,63 +60,41 @@
       username = "nyadiia";
       email = "nyadiia@pm.me";
       signingKey = "C8DC17070AC33338193F9723229718FDC160E880";
+      flake = "/home/nyadiia/snow";
     in
     {
       nixosConfigurations = {
         hyprdash = nixpkgs.lib.nixosSystem {
-          specialArgs.inputs = inputs;
+          specialArgs = {
+            inherit
+              inputs
+              flake-overlays
+              username
+              email
+              signingKey
+	      flake
+              ;
+          };
           modules = [
             nix-index-database.nixosModules.nix-index
             nixos-hardware.nixosModules.framework-11th-gen-intel
             home-manager.nixosModules.home-manager
             ./hosts/system.nix
+            ./hosts/hyprdash/configuration.nix
             {
-              nixpkgs.overlays = [
-#                (self: super: {
-#                  blas = super.blas.override { blasProvider = self.mkl; };
-#                  lapack = super.lapack.override { lapackProvider = self.mkl; };
-#                })
-              ] ++ flake-overlays;
-
-              custom =
-                let
-                  inherit username;
-                in
-                {
-                  user = {
-                    name = username;
-                    sshKeys = [ inputs.ssh-keys.outPath ];
-                  };
-                  podman.enable = true;
-                  nix-index.enable = true;
-                  syncthing.enable = true;
-                  laptop = true;
-                };
-
-              hm.git =
-                let
-                  inherit email signingKey;
-                in
-                {
-                  email = email;
-                  signingKey = signingKey;
-                };
-
-              home-manager.users.nyadiia = {
-                imports = [
-                  ./hm-modules/shell
-                  ./hm-modules/gtk.nix
-                  ./hm-modules/mako.nix
-                  ./hm-modules/fcitx.nix
-                  ./hm-modules/kitty.nix
-                  ./hm-modules/fuzzel.nix
-                  ./hm-modules/vscode.nix
-                  ./hm-modules/firefox.nix
-                  ./hm-modules/ironbar.nix
-                  ./hm-modules/hyprland.nix
-                  ironbar.homeManagerModules.default
-                ];
-              };
+              home-manager.users.${username}.imports = [
+                ./hm-modules/shell
+                ./hm-modules/gtk.nix
+                ./hm-modules/mako.nix
+                ./hm-modules/fcitx.nix
+                ./hm-modules/kitty.nix
+                ./hm-modules/fuzzel.nix
+                ./hm-modules/vscode.nix
+                ./hm-modules/firefox.nix
+                ./hm-modules/ironbar.nix
+                ./hm-modules/hyprland.nix
+                ironbar.homeManagerModules.default
+              ];
             }
             ./hosts/hyprdash/hardware-configuration.nix
             ./hosts/home.nix

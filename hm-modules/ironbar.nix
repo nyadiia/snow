@@ -1,7 +1,8 @@
-{ config, lib, ... }:
+{ config, pkgs, lib, ... }:
 {
   programs.ironbar = {
     enable = true;
+    package = pkgs.ironbar;
     config = {
       anchor_to_edges = true;
       position = "top";

@@ -6,6 +6,7 @@
   config,
   lib,
   pkgs,
+  flake,
   ...
 }:
 
@@ -136,9 +137,10 @@
       gnupg.agent.enable = true;
       dconf.enable = true;
       nh = {
+	inherit flake;
         enable = true;
         clean.enable = true;
-        clean.extraArgs = "--keep-since 14d --keep 10";
+        clean.extraArgs = "--keep-since 30d --keep 10";
       };
     };
 
