@@ -78,8 +78,8 @@
   # hardware.opentabletdriver.enable = true;
 
   services = {
+    chrony.enable = true;
     # TODO: remember to login to tailscale!!
-    # sorry this isn't declaritive but i'm not putting api keys on github :)
     tailscale.enable = true;
     # iphone stuff
     usbmuxd.enable = true;

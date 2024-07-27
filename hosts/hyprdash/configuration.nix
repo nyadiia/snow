@@ -122,6 +122,7 @@
     greetd.enableGnomeKeyring = true;
   };
   services = {
+    pcscd.enable = true;
     pipewire.extraConfig.pipewire."92-low-latency" = {
       context.properties = {
         default.clock.rate = 48000;

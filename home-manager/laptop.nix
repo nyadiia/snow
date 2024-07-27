@@ -44,6 +44,7 @@
   };
 
   home.packages = with pkgs; [
+    yubioath-flutter
     proton-pass
     anki
     imv
