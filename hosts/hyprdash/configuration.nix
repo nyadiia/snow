@@ -94,6 +94,7 @@
   };
 
   # powerManagement.powertop.enable = true;
+  powerManagement.enable = true;
   # disable pulseaudio and enable pipewire
   hardware = {
     pulseaudio.enable = false;
@@ -115,6 +116,8 @@
     "su".fprintAuth = true;
     greetd.enableGnomeKeyring = true;
   };
+
+  systemd.sleep.extraConfig = "HibernateDelaySec=1h";
   services = {
     pcscd.enable = true;
     pipewire.extraConfig.pipewire."92-low-latency" = {
@@ -147,9 +150,15 @@
     };
 
     # framework specific services
-    fprintd = {
-      enable = true;
+    logind = {
+      lidSwitch = "suspend-then-hibernate";
+      extraConfig = ''
+        HandlePowerKey=suspend-then-hibernate
+        IdleAction=suspend-then-hibernate
+        IdleActionSec=2m
+      '';
     };
+    fprintd.enable = true;
     fwupd.enable = true;
     blueman.enable = true;
     thermald = {
@@ -212,17 +221,13 @@
     };
     sanoid = {
       enable = true;
-
     };
   };
 
   boot = {
-    initrd = {
-      availableKernelModules = [
-        "aesni_intel"
-        "cryptd"
-      ];
-    };
+    extraModulePackages = with config.boot.kernelPackages; [
+      # (pkgs.callPackage ./sriov-dkms.nix {})
+    ];
     kernelPackages = lib.mkForce config.boot.zfs.package.latestCompatibleLinuxPackages;
     plymouth = {
       enable = false;
@@ -232,11 +237,5 @@
         plymouth-matrix-theme
       ];
     };
-    kernelParams = [
-      "nohibernate"
-      "quiet"
-      "mem_sleep_default=deep"
-      "nowatchdog"
-    ];
   };
 }

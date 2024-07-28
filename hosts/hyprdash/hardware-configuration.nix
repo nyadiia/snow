@@ -15,12 +15,21 @@
   networking.hostId = "215f7219";
   zramSwap.enable = true;
 
+  boot.kernelParams = [
+    "nohibernate"
+    "quiet"
+    "mem_sleep_default=deep"
+    "nowatchdog"
+    "resume=UUID=4b07b1e0-bc31-438c-9adc-4cf15bb48245"
+  ];
   boot.initrd.availableKernelModules = [
     "xhci_pci"
     "thunderbolt"
     "nvme"
     "usb_storage"
     "sd_mod"
+    "aesni_intel"
+    "cryptd"
   ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
@@ -58,7 +67,8 @@
     fsType = "zfs";
   };
 
-  swapDevices = [ ];
+  boot.resumeDevice = "/dev/disk/by-uuid/4b07b1e0-bc31-438c-9adc-4cf15bb48245";
+  swapDevices = [ { device = "/dev/disk/by-uuid/4b07b1e0-bc31-438c-9adc-4cf15bb48245"; } ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
