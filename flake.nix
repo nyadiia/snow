@@ -110,6 +110,7 @@
             ./hosts/hyprdash/hardware-configuration.nix
             ./hosts/home.nix
             ./modules/stylix.nix
+	    ./modules/suspend-then-hibernate.nix
           ];
         };
       };
