@@ -34,6 +34,7 @@ in
         sessionVariables = {
           EDITOR = "nvim";
           VISUAL = "nvim";
+	  SSH_ASKPASS = "${pkgs.gnome.seahorse}/libexec/seahorse/ssh-askpass";
         };
       };
       programs.git = {
@@ -51,6 +52,16 @@ in
           key = config.hm.git.signingKey;
         };
       };
+      programs.direnv = {
+	enable = true;
+	nix-direnv.enable = true;
+      };
+      programs.btop.enable = true;
+      
+      # these are for home-manager functionality
+      # don't edit these lines
+      systemd.user.startServices = "sd-switch";
+      programs.home-manager.enable = true;
     };
   };
 }

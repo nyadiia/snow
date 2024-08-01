@@ -8,7 +8,7 @@
   imports = [
     ./mako.nix
     ./ironbar.nix
-    ./kitty.nix
+    ./alacritty.nix
     ./fuzzel.nix
   ];
 
@@ -33,19 +33,18 @@
     # package = inputs.hyprland.package.${pkgs.system}.hyprland;
     settings = {
       "$mod" = "SUPER";
-      "$term" = "kitty";
+      "$term" = "alacritty";
       "$runner" = "fuzzel";
-      "$browser" = "firefox";
+      "$browser" = "brave";
 
       exec-once = [
         #  "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
         "ironbar &"
+	"cliphist wipe"
         "wl-paste --type text --watch cliphist store" # Stores only text data
         "wl-paste --type image --watch cliphist store" # Stores only image data
-        "swww init"
         "mako &"
       ];
-      exec = [ "swww img ~/Pictures/nge.jpg" ];
 
       monitor = [
         "eDP-1,preferred,auto,1.175"
@@ -69,7 +68,6 @@
       dwindle = {
         pseudotile = true;
         preserve_split = true;
-        # no_gaps_when_only = 1;
       };
 
       workspace = "w[t1], bordersize:0, rounding:0, gapsout:0";
@@ -110,7 +108,6 @@
           "$mod, Print, exec, grimblast copy screen"
           "$mod, Return, exec, $term"
           "$mod, Q, killactive"
-          "$mod Shift, R, exec, hyprctl reload && pkill -USR2 waybar"
           "$mod, P, pseudo" # dwindle
           "$mod, E, togglesplit" # dwindle
           "$mod Shift, Space, togglefloating"

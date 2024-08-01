@@ -62,7 +62,7 @@
       ...
     }:
     let
-      flake-overlays = [ inputs.nix-matlab.overlay ];
+      overlays = [ inputs.nix-matlab.overlay ];
       username = "nyadiia";
       email = "nyadiia@pm.me";
       signingKey = "9330C73893C84271F2EC";
@@ -92,7 +92,7 @@
                 ./hm-modules/gtk.nix
                 ./hm-modules/mako.nix
                 ./hm-modules/fcitx.nix
-                ./hm-modules/kitty.nix
+                ./hm-modules/alacritty.nix
                 ./hm-modules/fuzzel.nix
                 ./hm-modules/vscode.nix
                 ./hm-modules/firefox.nix

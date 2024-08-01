@@ -122,7 +122,6 @@
     programs.command-not-found.enable = lib.mkIf config.custom.nix-index.enable false;
     programs.nix-index = lib.mkIf config.custom.nix-index.enable {
       enable = true;
-      enableFishIntegration = true;
     };
 
     virtualisation.podman = lib.mkIf config.custom.podman.enable {
@@ -174,7 +173,7 @@
       usbutils
       links2
       ripgrep
-      neofetch
+      fastfetch
       yazi
       btop
 
@@ -196,10 +195,8 @@
       chrony.enable = true;
 
       # iphone stuff
-      usbmuxd = {
-        enable = true;
-        package = pkgs.usbmuxd2;
-      };
+      usbmuxd.enable = true;
+      usbmuxd.package = pkgs.usbmuxd2;
 
       udisks2.enable = true;
       gvfs.enable = true;
@@ -216,18 +213,19 @@
         (nerdfonts.override { fonts = [ "FiraCode" ]; })
         cozette
         corefonts
+	vistafonts
       ];
-      fontconfig = {
-        defaultFonts = {
-          serif = [ "Noto Serif" ];
-          sansSerif = [ "Noto Sans" ];
-          monospace = [ "FiraCode Nerd Font" ];
-        };
-      };
+      # stylix handles it
+#      fontconfig = {
+#        defaultFonts = {
+#          serif = [ "Noto Serif" ];
+#          sansSerif = [ "Noto Sans" ];
+#          monospace = [ "FiraCode Nerd Font" ];
+#        };
+#      };
     };
 
     nixpkgs.config.allowUnfree = true;
-    nixpkgs.hostPlatform = "x86_64-linux";
 
     time.timeZone = "America/Chicago";
     i18n = {
