@@ -17,10 +17,20 @@
       };
 
       serif = config.stylix.fonts.sansSerif;
+      #
+      # monospace = {
+      #   package = azuki-pkgs.azuki;
+      #   name = "azuki_font";
+      # };
+
+      # sansSerif = {
+      #   package = pkgs.roboto;
+      #   name = "Roboto";
+      # };
 
       monospace = {
-        package = azuki-pkgs.azuki;
-        name = "azuki_font";
+        package = pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; };
+        name = "FiraCode Nerd Font";
       };
 
       emoji = {
@@ -32,7 +42,7 @@
         applications = 14;
         desktop = 14;
         popups = 14;
-        terminal = 14;
+        terminal = 12;
       };
     };
     cursor = {

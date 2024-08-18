@@ -1,16 +1,8 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 {
-  programs.nixvim = {
+  programs.neovim = {
     enable = true;
+    package = inputs.nadiavim.packages.${pkgs.system}.default;
     defaultEditor = true;
-    opts = {
-      number = true;
-      relativenumber = true;
-      shiftwidth = 2;
-    };
-    plugins = {
-      lazy.enable = true;
-      neo-tree.enable = true;
-    };
   };
 }

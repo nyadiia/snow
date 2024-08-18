@@ -1,16 +1,15 @@
 {
   pkgs,
-  flake-overlays,
-  qcma-pkgs,
+  hyprland,
   config,
   lib,
   ...
 }:
 {
-  networking.networkmanager.enable = true;
-  networking.hostName = "hyprdash";
-
-  nixpkgs.overlays = [ ] ++ flake-overlays;
+  networking = {
+    networkmanager.enable = true;
+    hostName = "hyprdash";
+  };
 
   # User info
   nixpkgs.config.permittedInsecurePackages = [ "electron-25.9.0" ];
@@ -23,7 +22,9 @@
       yubikey-manager-qt
       yubikey-personalization-gui
       yubikey-personalization
+      yubikey-manager
 
+      matlab
       pavucontrol
       bluetuith
       framework-tool
@@ -37,6 +38,7 @@
 
   programs = {
     hyprland.enable = true;
+    hyprland.package = hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     virt-manager.enable = true;
     seahorse.enable = true;
     light.enable = true;
@@ -61,7 +63,6 @@
   };
 
   services.udev.packages = [
-    qcma-pkgs.qcma
     pkgs.yubikey-manager-qt
     pkgs.yubikey-personalization-gui
     pkgs.yubikey-personalization
@@ -159,7 +160,13 @@
       '';
     };
     fprintd.enable = true;
-    fwupd.enable = true;
+    fwupd = {
+      enable = true;
+      extraRemotes = [ "lvfs-testing" ];
+      uefiCapsuleSettings = {
+        DisableCapsuleUpdateOnDisk = true;
+      };
+    };
     blueman.enable = true;
     thermald = {
       enable = true;

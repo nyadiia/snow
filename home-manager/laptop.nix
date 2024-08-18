@@ -1,7 +1,6 @@
 {
   pkgs,
   stable,
-  qcma-pkgs,
   ...
 }:
 
@@ -10,7 +9,7 @@
     ./common.nix
     ./firefox.nix
     ./vscode.nix
-    ./nvim.nix
+    # ./nvim.nix
     ./hyprland.nix
     ./fcitx.nix
   ];
@@ -32,18 +31,21 @@
     ANKI_WAYLAND = "1";
   };
 
-  programs.chromium = {
-    enable = true;
-    package = pkgs.brave;
+  programs = {
+    chromium = {
+      enable = true;
+      package = pkgs.brave;
+    };
+    gpg.enable = true;
   };
 
-  programs.gpg.enable = true;
   services.gpg-agent = {
     enable = true;
     enableSshSupport = true;
   };
 
   home.packages = with pkgs; [
+    neovim
     yubioath-flutter
     proton-pass
     anki
@@ -71,7 +73,6 @@
     rustup
     glib
 
-    (qcma-pkgs.qcma)
 
     (octaveFull.withPackages (
       opkgs: with opkgs; [

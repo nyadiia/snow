@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 
 {
   networking.networkmanager.enable = true;
@@ -17,7 +17,7 @@
         ${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right | source
       '';
     };
-    ssh.askPassword = "${pkgs.gnome.seahorse}/libexec/seahorse/ssh-askpass";
+    ssh.askPassword = "${pkgs.seahorse}/libexec/seahorse/ssh-askpass";
     ssh.startAgent = false;
     gnupg.agent.enable = true;
     dconf.enable = true;
@@ -147,18 +147,16 @@
         "@wheel"
       ];
       substituters = [
+        # ironbar
         "https://cache.garnix.io"
+        # hyprland
         "https://hyprland.cachix.org"
-        "https://nixpkgs-unfree.cachix.org"
         "https://numtide.cachix.org"
-        "https://walker.cachix.org"
       ];
       trusted-public-keys = [
         "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
         "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
-        "nixpkgs-unfree.cachix.org-1:hqvoInulhbV4nJ9yJOEr+4wxhDV4xq2d1DK7S6Nj6rs="
         "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE="
-        "walker.cachix.org-1:fG8q+uAaMqhsMxWjwvk0IMb4mFPFLqHjuvfwQxE4oJM="
       ];
     };
     # gc = {

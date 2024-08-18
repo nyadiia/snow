@@ -5,8 +5,10 @@ in
 {
   imports = [ ./shell ];
 
-  home.username = "nyadiia";
-  home.homeDirectory = "/home/nyadiia";
+  home = {
+    username = "nyadiia";
+    homeDirectory = "/home/nyadiia";
+  };
 
   programs = {
     direnv = {
@@ -63,7 +65,7 @@ in
       EDITOR = "nvim";
       VISUAL = "nvim";
       NIXOS_OZONE_WL = "1";
-      SSH_ASKPASS = "${pkgs.gnome.seahorse}/libexec/seahorse/ssh-askpass";
+      SSH_ASKPASS = "${pkgs.seahorse}/libexec/seahorse/ssh-askpass";
     };
   };
 

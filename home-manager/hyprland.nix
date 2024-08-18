@@ -1,10 +1,9 @@
-{ inputs, pkgs, ... }:
+{ hyprland, pkgs, ... }:
 {
   imports = [
     ./mako.nix
     ./ironbar.nix
-    # ./kitty.nix
-    ./alacritty.nix
+    ./kitty.nix
     ./gtk.nix
     ./fuzzel.nix
   ];
@@ -12,16 +11,16 @@
 
   wayland.windowManager.hyprland = {
     enable = true;
-    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+    package = hyprland.packages.${pkgs.system}.hyprland;
+    systemd.enableXdgAutostart = true;
     settings = {
       "$mod" = "SUPER";
-      "$term" = "alacritty";
+      "$term" = "kitty";
       "$runner" = "fuzzel";
       "$files" = "nautilus";
-      "$browser" = "brave";
+      "$browser" = "floorp";
 
       exec-once = [
-        "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
         "ironbar &"
         "wl-paste --type text --watch cliphist store" # Stores only text data
         "wl-paste --type image --watch cliphist store" # Stores only image data
@@ -29,7 +28,7 @@
       ];
 
       monitor = [
-        "eDP-1,preferred,auto,1.175"
+        "eDP-1,preferred,auto,1.333333"
         ",preferred,auto,auto"
       ];
       xwayland.force_zero_scaling = true;
@@ -78,10 +77,26 @@
         # ];
       };
       # windowrulev2 = "bordercolor rgb(fabd2f),xwayland:1";
+      windowrulev2 = [
+        "workspace 10 silent, title:vesktop"
+        "workspace 9 silent, class:signal"
+      ];
       decoration = {
-        rounding = "3";
-        blur.enabled = false;
+        rounding = 3;
+        blur = {
+          enabled = true;
+          xray = false;
+          passes = 3;
+          size = 9;
+          noise = 8.0e-2;
+          brightness = 0.6;
+          contrast = 1.4;
+          vibrancy = 0.3;
+          vibrancy_darkness = 0.5;
+        };
         drop_shadow = false;
+        dim_inactive = true;
+        dim_strength = 0.2;
       };
 
       bind =
