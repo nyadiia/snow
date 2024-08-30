@@ -24,6 +24,10 @@
       yubikey-personalization
       yubikey-manager
 
+      libvirt
+      python3
+      dnsmasq
+      qemu_full
       matlab
       pavucontrol
       bluetuith
@@ -151,14 +155,14 @@
     };
 
     # framework specific services
-    logind = {
-      lidSwitch = "suspend-then-hibernate";
-      extraConfig = ''
-        HandlePowerKey=suspend-then-hibernate
-        IdleAction=suspend-then-hibernate
-        IdleActionSec=2m
-      '';
-    };
+    # logind = {
+    #   lidSwitch = "suspend-then-hibernate";
+    #   extraConfig = ''
+    #     HandlePowerKey=suspend-then-hibernate
+    #     IdleAction=suspend-then-hibernate
+    #     IdleActionSec=2m
+    #   '';
+    # };
     fprintd.enable = true;
     fwupd = {
       enable = true;

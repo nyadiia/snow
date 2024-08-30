@@ -1,7 +1,4 @@
-{ pkgs, nur, ... }:
-let
-  nur-no-pkgs = import nur { nurpkgs = import pkgs { system = "x86_64-linux"; }; };
-in
+{ pkgs, small, ... }:
 {
   imports = [ ./shell ];
 
@@ -19,6 +16,7 @@ in
       enable = true;
       package = pkgs.gitAndTools.gitFull;
       delta.enable = true;
+      delta.package = small.delta;
       userName = "nyadiia";
       userEmail = "nyadiia@pm.me";
       extraConfig = {

@@ -54,42 +54,40 @@
         preserve_split = true;
       };
 
-      workspace = "w[t1], bordersize:0, rounding:0, gapsout:0";
+      workspace = "w[t1], gapsout:3";
 
       general = {
         layout = "dwindle";
 
-        gaps_in = 3;
-        gaps_out = 3;
-        border_size = 2;
-
-        # "col.active_border"   = "rgb(ebdbb2)";
-        # "col.inactive_border" = "rgb(1d2021)";
+        gaps_in = 7;
+        gaps_out = 7;
+        border_size = 0;
+        resize_on_border = true;
       };
 
-      # bezier = "ease-out,0.165,0.84,0.44,1";
+      bezier = "ease-out,0.165,0.84,0.44,1";
       animations = {
-        enabled = false;
-        #  animation = [
-        #   "workspaces,1,3,ease-out"
-        #   "windows,1,3,ease-out"
-        #   "windowsOut,1,3,ease-out"
-        # ];
+        enabled = true;
+        animation = [
+          "workspaces,1,3,ease-out"
+          "windows,1,3,ease-out"
+          "windowsOut,1,3,ease-out"
+        ];
       };
       # windowrulev2 = "bordercolor rgb(fabd2f),xwayland:1";
       windowrulev2 = [
-        "workspace 10 silent, title:vesktop"
+        "workspace 10 silent, title:[Vv]esktop"
         "workspace 9 silent, class:signal"
       ];
       decoration = {
-        rounding = 3;
+        rounding = 10;
         blur = {
           enabled = true;
           xray = false;
           passes = 3;
           size = 9;
           noise = 8.0e-2;
-          brightness = 0.6;
+          brightness = 0.8;
           contrast = 1.4;
           vibrancy = 0.3;
           vibrancy_darkness = 0.5;

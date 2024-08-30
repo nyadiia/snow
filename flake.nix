@@ -11,9 +11,6 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    firefox-addons.url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
-    firefox-addons.inputs.nixpkgs.follows = "nixpkgs";
-
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
@@ -46,6 +43,9 @@
     };
 
     stylix.url = "github:danth/stylix";
+
+    zen-browser.url = "github:MarceColl/zen-browser-flake";
+    zen-browser.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   nixConfig = { };
@@ -60,7 +60,6 @@
       nixos-hardware,
       nix-index-database,
       hyprland,
-      nur,
       stylix,
       azuki,
       ...
@@ -95,13 +94,12 @@
               ;
           };
           modules = [
-            { nixpkgs.overlays = [ nur.overlay ]; }
+            { environment.systemPackages = [ inputs.zen-browser.packages."${system}".specific ]; }
             ./hosts/hyprdash
             nix-index-database.nixosModules.nix-index
             nixos-hardware.nixosModules.framework-11th-gen-intel
             stylix.nixosModules.stylix
             ./hosts/stylix.nix
-            nur.nixosModules.nur
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
@@ -118,7 +116,6 @@
                   stable
                   hyprland
                   small
-                  nur
                   azuki-pkgs
                   ;
               };

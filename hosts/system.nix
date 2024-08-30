@@ -61,7 +61,6 @@
 
     # not really needed on desktop (home-manager handles it) but nice for servers
     git
-    delta
 
     # iphone bs
     libimobiledevice
