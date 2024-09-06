@@ -44,6 +44,7 @@
   home-manager.backupFileExtension = "bak";
 
   environment.systemPackages = with pkgs; [
+    fd
     btop
     nh
     tmux

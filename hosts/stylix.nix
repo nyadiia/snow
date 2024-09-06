@@ -1,6 +1,6 @@
 {
   pkgs,
-  azuki-pkgs,
+  self,
   config,
   ...
 }:
@@ -12,7 +12,7 @@
     base16Scheme = "${pkgs.base16-schemes}/share/themes/oxocarbon-dark.yaml";
     fonts = {
       sansSerif = {
-        package = azuki-pkgs.azuki;
+        package = self.packages.${pkgs.system}.azuki;
         name = "azukifontP";
       };
 

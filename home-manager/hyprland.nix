@@ -1,4 +1,9 @@
-{ hyprland, pkgs, ... }:
+{
+  hyprpaper,
+  hyprland,
+  pkgs,
+  ...
+}:
 {
   imports = [
     ./mako.nix
@@ -8,6 +13,7 @@
     ./fuzzel.nix
   ];
   services.cliphist.enable = true;
+  services.hyprpaper.package = hyprpaper.packages.${pkgs.system}.hyprpaper;
 
   wayland.windowManager.hyprland = {
     enable = true;
@@ -59,7 +65,7 @@
       general = {
         layout = "dwindle";
 
-        gaps_in = 7;
+        gaps_in = 3.5;
         gaps_out = 7;
         border_size = 0;
         resize_on_border = true;

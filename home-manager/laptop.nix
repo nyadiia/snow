@@ -1,6 +1,5 @@
 {
   pkgs,
-  stable,
   ...
 }:
 
@@ -72,7 +71,6 @@
     hyprlock
     rustup
     glib
-
 
     (octaveFull.withPackages (
       opkgs: with opkgs; [

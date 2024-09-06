@@ -5,8 +5,6 @@
     # nixpkgs
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-small.url = "github:NixOS/nixpkgs/nixos-unstable-small";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/release-24.05";
-    azuki.url = "github:nyadiia/nixpkgs/azuki";
 
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -14,6 +12,8 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
+    hyprpaper.url = "github:hyprwm/hyprpaper";
+    # hyprpaper.inputs.nixpkgs.follows = "hyprland";
 
     nix-index-database = {
       url = "github:Mic92/nix-index-database";
@@ -43,9 +43,7 @@
     };
 
     stylix.url = "github:danth/stylix";
-
-    zen-browser.url = "github:MarceColl/zen-browser-flake";
-    zen-browser.inputs.nixpkgs.follows = "nixpkgs";
+    stylix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   nixConfig = { };
@@ -55,18 +53,16 @@
       self,
       nixpkgs,
       nixpkgs-small,
-      nixpkgs-stable,
       home-manager,
       nixos-hardware,
       nix-index-database,
       hyprland,
+      hyprpaper,
       stylix,
-      azuki,
       ...
     }:
 
     let
-      username = "nyadiia";
       system = "x86_64-linux";
       config = {
         allowUnfree = true;
@@ -77,24 +73,34 @@
       ];
       pkgs = import nixpkgs { inherit overlays system config; };
       small = import nixpkgs-small { inherit system config; };
-      stable = import nixpkgs-stable { inherit system config; };
-      azuki-pkgs = import azuki { inherit system config; };
+
+      eachSystem =
+        function:
+        nixpkgs.lib.genAttrs [
+          "aarch64-darwin"
+          "aarch64-linux"
+          "x86_64-darwin"
+          "x86_64-linux"
+        ] (system: function (import nixpkgs { inherit config system; }));
+
     in
     {
+      packages = eachSystem (pkgs: {
+        azuki = pkgs.callPackage ./packages/azuki.nix { };
+      });
       nixosConfigurations = {
         hyprdash = nixpkgs.lib.nixosSystem {
           specialArgs = {
             inherit
               inputs
+              self
               pkgs
               hyprland
+              hyprpaper
               small
-              stable
-              azuki-pkgs
               ;
           };
           modules = [
-            { environment.systemPackages = [ inputs.zen-browser.packages."${system}".specific ]; }
             ./hosts/hyprdash
             nix-index-database.nixosModules.nix-index
             nixos-hardware.nixosModules.framework-11th-gen-intel
@@ -113,10 +119,10 @@
               home-manager.extraSpecialArgs = {
                 inherit
                   inputs
-                  stable
+                  self
+                  hyprpaper
                   hyprland
                   small
-                  azuki-pkgs
                   ;
               };
             }
@@ -124,7 +130,7 @@
         };
         crystal-heart = nixpkgs.lib.nixosSystem {
           specialArgs = {
-            inherit inputs pkgs stable;
+            inherit inputs pkgs;
           };
           modules = [
             ./hosts/crystal-heart
@@ -135,72 +141,11 @@
               home-manager.useUserPackages = true;
               home-manager.users.nyadiia.imports = [ ./home-manager/server.nix ];
               home-manager.extraSpecialArgs = {
-                inherit inputs stable;
+                inherit inputs;
               };
             }
           ];
         };
-        # wavedash = nixpkgs.lib.nixosSystem {
-        #   specialArgs = {
-        #     inherit inputs unstable;
-        #   };
-        #   modules = [
-        #     ./hosts/wavedash
-        #     nix-index-database.nixosModules.nix-index
-        #     home-manager.nixosModules.home-manager
-        #     {
-        #       home-manager.useGlobalPkgs = true;
-        #       home-manager.useUserPackages = true;
-        #       home-manager.users.nyadiia = import ./home-manager/desktop.nix;
-        #       home-manager.extraSpecialArgs = { inherit inputs unstable; };
-        #     }
-        #   ];
-        # };
-        # demodash = nixpkgs.lib.nixosSystem {
-        #   specialArgs = {
-        #     inherit inputs unstable;
-        #   };
-        #   modules = [
-        #     ./hosts/demodash
-        #     nix-index-database.nixosModules.nix-index
-        #     nixos-hardware.nixosModules.common-cpu-intel-sandy-bridge
-        #     nixos-hardware.nixosModules.common-gpu-amd
-        #     home-manager.nixosModules.home-manager
-        #     {
-        #       home-manager.useGlobalPkgs = true;
-        #       home-manager.useUserPackages = true;
-        #       home-manager.users.nyadiia = import ./home-manager/server.nix;
-        #       home-manager.extraSpecialArgs = { inherit inputs unstable; };
-        #     }
-        #   ];
-        # };
-        # farewell = nixpkgs.lib.nixosSystem {
-        #   specialArgs = {
-        #     inherit inputs unstable;
-        #   };
-        #   modules = [
-        #     ./hosts/farewell
-        #     nix-index-database.nixosModules.nix-index
-        #     nixos-hardware.nixosModules.common-cpu-intel
-        #     home-manager.nixosModules.home-manager
-        #     {
-        #       home-manager.useGlobalPkgs = true;
-        #       home-manager.useUserPackages = true;
-        #       home-manager.users.nyadiia = import ./home-manager/server.nix;
-        #       home-manager.extraSpecialArgs = { inherit inputs unstable; };
-        #     }
-        #   ];
-        # };
-      };
-
-      homeConfigurations."${username}" = home-manager.lib.homeManagerConfiguration {
-        # pass inputs as specialArgs
-        extraSpecialArgs = {
-          inherit inputs pkgs stable;
-        };
-
-        # import your home.nix
-        modules = [ ./home-manager/laptop.nix ];
       };
     };
 }

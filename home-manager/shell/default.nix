@@ -16,7 +16,7 @@
         set --universal zoxide_cmd cd
       '';
       shellAliases = {
-        s = "ssh";
+        s = "kitten ssh";
         cl = "clear";
         l = "ls";
         la = "ls -al";

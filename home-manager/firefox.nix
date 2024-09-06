@@ -1,8 +1,8 @@
-{ pkgs, small, ... }:
+{ pkgs, ... }:
 {
   programs.firefox = {
     enable = true;
-    package = small.floorp;
+    package = pkgs.floorp;
     #    profiles."default" = {
     #      isDefault = true;
     #
