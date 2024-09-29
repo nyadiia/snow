@@ -42,6 +42,12 @@
           version = "0.3.1";
           hash = "sha256-C0dzedKMH2tgospzS+o1eqBmNYEKurEOTPbt0t+22t8=";
         }
+        {
+          name = "gruvbox-material";
+          publisher = "sainnhe";
+          version = "6.5.2";
+          hash = "sha256-D+SZEQQwjZeuyENOYBJGn8tqS3cJiWbEkmEqhNRY/i4=";
+        }
       ];
   };
 }

@@ -3,10 +3,10 @@
 
   inputs = {
     # nixpkgs
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     nixpkgs-small.url = "github:NixOS/nixpkgs/nixos-unstable-small";
 
-    home-manager.url = "github:nix-community/home-manager";
+    home-manager.url = "github:nix-community/home-manager/release-24.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
@@ -105,25 +105,27 @@
             nix-index-database.nixosModules.nix-index
             nixos-hardware.nixosModules.framework-11th-gen-intel
             stylix.nixosModules.stylix
-            ./hosts/stylix.nix
+            ./modules/stylix.nix
             home-manager.nixosModules.home-manager
             {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.nyadiia.imports = [
-                ./home-manager/laptop.nix
-                # inputs.nixvim.homeManagerModules.nixvim
-                inputs.nix-index-database.hmModules.nix-index
-                inputs.ironbar.homeManagerModules.default
-              ];
-              home-manager.extraSpecialArgs = {
-                inherit
-                  inputs
-                  self
-                  hyprpaper
-                  hyprland
-                  small
-                  ;
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                users.nyadiia.imports = [
+                  ./home-manager/laptop.nix
+                  # inputs.nixvim.homeManagerModules.nixvim
+                  inputs.nix-index-database.hmModules.nix-index
+                  inputs.ironbar.homeManagerModules.default
+                ];
+                extraSpecialArgs = {
+                  inherit
+                    inputs
+                    self
+                    hyprpaper
+                    hyprland
+                    small
+                    ;
+                };
               };
             }
           ];

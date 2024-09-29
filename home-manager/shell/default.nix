@@ -10,13 +10,25 @@
       enable = true;
       interactiveShellInit = ''
         set fish_greeting
+        function mkdir -d "Create a directory and set CWD"
+          command mkdir $argv
+          if test $status = 0
+            switch $argv[(count $argv)]
+              case '-*'
+              case '*'
+                cd $argv[(count $argv)]
+                return
+            end
+          end
+        end
       '';
       shellInit = ''
         any-nix-shell fish --info-right | source
         set --universal zoxide_cmd cd
       '';
       shellAliases = {
-        s = "kitten ssh";
+        # s = "kitten ssh";
+        s = "ssh";
         cl = "clear";
         l = "ls";
         la = "ls -al";

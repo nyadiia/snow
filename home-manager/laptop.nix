@@ -1,16 +1,15 @@
-{
-  pkgs,
-  ...
-}:
+{ pkgs, small, ... }:
 
 {
   imports = [
     ./common.nix
     ./firefox.nix
+    # ./chrome.nix
     ./vscode.nix
     # ./nvim.nix
     ./hyprland.nix
     ./fcitx.nix
+    ./alacritty.nix
   ];
 
   home.sessionVariables = {
@@ -25,16 +24,13 @@
     QT_AUTO_SCREEN_SCALE_FACTOR = "1";
     QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
     GDK_BACKEND = "wayland";
+    GDK_SCALE = "2";
     CLUTTER_BACKEND = "wayland";
     SDL_VIDEODRIVER = "wayland";
     ANKI_WAYLAND = "1";
   };
 
   programs = {
-    chromium = {
-      enable = true;
-      package = pkgs.brave;
-    };
     gpg.enable = true;
   };
 
@@ -44,9 +40,12 @@
   };
 
   home.packages = with pkgs; [
+    zathura
+    brave
+    libreoffice-fresh
     neovim
     yubioath-flutter
-    proton-pass
+    small.proton-pass
     anki
     imv
     mpv
@@ -57,14 +56,13 @@
     vesktop
     tigervnc
     prismlauncher
-    # swww
     playerctl
     tofi
     wl-clipboard
     libnotify
     pavucontrol
     qalculate-gtk
-    file-roller
+    gnome.file-roller
     grimblast
     ffmpeg
     signal-desktop

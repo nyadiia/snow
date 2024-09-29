@@ -9,8 +9,10 @@
     ./mako.nix
     ./ironbar.nix
     ./kitty.nix
+    ./alacritty.nix
     ./gtk.nix
     ./fuzzel.nix
+    ./hyprlock.nix
   ];
   services.cliphist.enable = true;
   services.hyprpaper.package = hyprpaper.packages.${pkgs.system}.hyprpaper;
@@ -21,12 +23,13 @@
     systemd.enableXdgAutostart = true;
     settings = {
       "$mod" = "SUPER";
-      "$term" = "kitty";
+      "$term" = "alacritty";
       "$runner" = "fuzzel";
       "$files" = "nautilus";
-      "$browser" = "floorp";
+      "$browser" = "brave --enable-features=TouchpadOverscrollHistoryNavigation";
 
       exec-once = [
+        "cliphist wipe"
         "ironbar &"
         "wl-paste --type text --watch cliphist store" # Stores only text data
         "wl-paste --type image --watch cliphist store" # Stores only image data
@@ -34,10 +37,9 @@
       ];
 
       monitor = [
-        "eDP-1,preferred,auto,1.333333"
+        "eDP-1,prefferd,auto,2"
         ",preferred,auto,auto"
       ];
-      xwayland.force_zero_scaling = true;
       misc.vfr = true;
 
       input = {
@@ -99,7 +101,6 @@
           vibrancy_darkness = 0.5;
         };
         drop_shadow = false;
-        dim_inactive = true;
         dim_strength = 0.2;
       };
 

@@ -24,6 +24,8 @@
       yubikey-personalization
       yubikey-manager
 
+      powertop
+      swtpm
       libvirt
       python3
       dnsmasq
@@ -35,7 +37,7 @@
       wineWowPackages.waylandFull
       polkit_gnome
       gparted
-      nautilus
+      gnome.nautilus
       fprintd
       # (pkgs.callPackage ./pentablet.nix {})
     ];
@@ -53,8 +55,6 @@
     };
   };
 
-  security.polkit.enable = true;
-
   users.users.nyadiia = {
     extraGroups = [
       "networkmanager"
@@ -63,6 +63,7 @@
       "libvirtd"
       "docker"
       "vitamtp"
+      "tss"
     ];
   };
 
@@ -99,7 +100,10 @@
   };
 
   # powerManagement.powertop.enable = true;
-  powerManagement.enable = true;
+  powerManagement = {
+    enable = true;
+    powertop.enable = true;
+  };
   # disable pulseaudio and enable pipewire
   hardware = {
     pulseaudio.enable = false;
@@ -115,24 +119,24 @@
     };
   };
 
-  security.rtkit.enable = true;
-  security.pam.services = {
-    "sudo".fprintAuth = true;
-    "su".fprintAuth = true;
-    greetd.enableGnomeKeyring = true;
+  security = {
+    polkit.enable = true;
+    rtkit.enable = true;
+    pam.services = {
+      "sudo".fprintAuth = true;
+      "su".fprintAuth = true;
+      greetd.enableGnomeKeyring = true;
+    };
+    tpm2 = {
+      enable = true;
+      pkcs11.enable = true;
+      tctiEnvironment.enable = true;
+    };
   };
 
   systemd.sleep.extraConfig = "HibernateDelaySec=1h";
   services = {
     pcscd.enable = true;
-    pipewire.extraConfig.pipewire."92-low-latency" = {
-      context.properties = {
-        default.clock.rate = 48000;
-        default.clock.quantum = 32;
-        default.clock.min-quantum = 32;
-        default.clock.max-quantum = 32;
-      };
-    };
     gnome.sushi.enable = true;
     gnome.gnome-keyring.enable = true;
     greetd = {
@@ -163,13 +167,15 @@
     #     IdleActionSec=2m
     #   '';
     # };
+    logind.extraConfig = ''
+      # don’t shutdown when power button is short-pressed
+        HandlePowerKey=poweroff
+    '';
     fprintd.enable = true;
     fwupd = {
       enable = true;
       extraRemotes = [ "lvfs-testing" ];
-      uefiCapsuleSettings = {
-        DisableCapsuleUpdateOnDisk = true;
-      };
+      uefiCapsuleSettings.DisableCapsuleUpdateOnDisk = true;
     };
     blueman.enable = true;
     thermald = {
@@ -230,16 +236,9 @@
       autoScrub.enable = true;
       trim.enable = true;
     };
-    sanoid = {
-      enable = true;
-    };
   };
 
   boot = {
-    extraModulePackages = with config.boot.kernelPackages; [
-      # (pkgs.callPackage ./sriov-dkms.nix {})
-    ];
-    kernelPackages = lib.mkForce config.boot.zfs.package.latestCompatibleLinuxPackages;
     plymouth = {
       enable = false;
       theme = "signalis";

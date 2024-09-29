@@ -5,7 +5,7 @@
     config = {
       anchor_to_edges = true;
       position = "top";
-      height = 20;
+      height = 12;
       icon_theme = "oomox-gruvbox-dark";
       start = [
         {
@@ -67,8 +67,8 @@
       /* -- base styles -- */
 
       * {
-        font-family: azukifontP, FiraCode Nerd Font, sans-serif;
-	      font-size: 14px;
+        font-family: FiraCode Nerd Font, sans-serif;
+	      font-size: 10px;
         border: none;
         border-radius: 0;
         min-width: 1rem;
