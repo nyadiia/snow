@@ -1,8 +1,4 @@
-{
-  pkgs,
-  config,
-  ...
-}:
+{ pkgs, config, ... }:
 {
   stylix = {
     enable = true;
@@ -53,6 +49,11 @@
       name = "BreezeX-RosePine-Linux";
       package = pkgs.rose-pine-cursor;
       size = 20;
+    };
+    targets = {
+      regreet.enable = false;
+      console.enable = false;
+      grub.enable = false;
     };
   };
 }

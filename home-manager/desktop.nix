@@ -59,7 +59,7 @@
         libnotify
         pavucontrol
         qalculate-gtk
-        gnome.file-roller
+        file-roller
         inputs.hyprland-contrib.packages.${pkgs.system}.grimblast
         ffmpeg
 

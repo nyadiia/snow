@@ -40,6 +40,8 @@
   };
 
   home.packages = with pkgs; [
+    kdePackages.dolphin
+    vlc
     zathura
     brave
     libreoffice-fresh
@@ -61,8 +63,9 @@
     wl-clipboard
     libnotify
     pavucontrol
+    libqalculate
     qalculate-gtk
-    gnome.file-roller
+    file-roller
     grimblast
     ffmpeg
     signal-desktop

@@ -60,7 +60,10 @@
       enable = true;
       enableFishIntegration = false; # we're using zoxide.fish for faster init and slightly nicer results so we don't want this doing anything
     };
-    fzf.enable = true;
+    fzf = {
+      enable = true;
+      fileWidgetOptions = [ "--preview 'bat {}'" ];
+    };
     nix-index = {
       enable = true;
       enableFishIntegration = true;

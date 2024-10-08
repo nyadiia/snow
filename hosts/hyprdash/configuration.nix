@@ -14,11 +14,12 @@
   # User info
   nixpkgs.config.permittedInsecurePackages = [ "electron-25.9.0" ];
 
+  # programs.hyprlock.enable = true;
+
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
   environment.systemPackages =
-    with pkgs;
-    lib.mkAfter [
+    (with pkgs; [
       yubikey-manager-qt
       yubikey-personalization-gui
       yubikey-personalization
@@ -37,10 +38,23 @@
       wineWowPackages.waylandFull
       polkit_gnome
       gparted
-      gnome.nautilus
+      nautilus
       fprintd
       # (pkgs.callPackage ./pentablet.nix {})
-    ];
+    ])
+    ++ (with pkgs.gst_all_1; [
+      gstreamer
+      # Common plugins like "filesrc" to combine within e.g. gst-launch
+      gst-plugins-base
+      # Specialized plugins separated by quality
+      gst-plugins-good
+      gst-plugins-bad
+      gst-plugins-ugly
+      # Plugins to reuse ffmpeg to play almost every video format
+      gst-libav
+      # Support the Video Audio (Hardware) Acceleration API
+      gst-vaapi
+    ]);
 
   programs = {
     hyprland.enable = true;
@@ -125,6 +139,7 @@
     pam.services = {
       "sudo".fprintAuth = true;
       "su".fprintAuth = true;
+      hyprlock.fprintAuth = false;
       greetd.enableGnomeKeyring = true;
     };
     tpm2 = {
@@ -235,17 +250,6 @@
     zfs = {
       autoScrub.enable = true;
       trim.enable = true;
-    };
-  };
-
-  boot = {
-    plymouth = {
-      enable = false;
-      theme = "signalis";
-      themePackages = with pkgs; [
-        (pkgs.callPackage ./plymouth-signalis-theme { })
-        plymouth-matrix-theme
-      ];
     };
   };
 }

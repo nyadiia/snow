@@ -15,6 +15,14 @@
   networking.hostId = "215f7219";
   zramSwap.enable = true;
 
+  boot.plymouth.enable = true;
+  boot.plymouth.theme = lib.mkForce "bgrt";
+  boot.loader.grub.gfxmodeEfi = "1440x960";
+
+  boot.initrd.systemd.enable = true;
+  boot.initrd.services.lvm.enable = true;
+  # boot.initrd.preLVMCommands = ''alias lvm=echo $@'';
+
   boot.kernelParams = [
     "nohibernate"
     "quiet"

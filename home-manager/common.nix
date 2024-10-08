@@ -29,6 +29,20 @@
       };
     };
     btop.enable = true;
+    bat = {
+      enable = true;
+      themes = {
+        gruvbox-material = {
+          src = pkgs.fetchFromGitHub {
+            owner = "karimlevallois";
+            repo = "gruvbox-material-sublime-text";
+            rev = "f37e5b0b89c78d2121daff6f82e6a244a25b7e84";
+            hash = "sha256-PU483frm8O9Z2xHddzdbt6SAg80TZkv1JYfe9A+UoIA=";
+          };
+        };
+      };
+    };
+    fd.enable = true;
   };
 
   dconf.settings = {
@@ -63,7 +77,7 @@
       EDITOR = "nvim";
       VISUAL = "nvim";
       NIXOS_OZONE_WL = "1";
-      SSH_ASKPASS = "${pkgs.gnome.seahorse}/libexec/seahorse/ssh-askpass";
+      SSH_ASKPASS = "${pkgs.seahorse}/libexec/seahorse/ssh-askpass";
     };
   };
 

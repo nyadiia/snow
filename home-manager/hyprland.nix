@@ -12,6 +12,7 @@
     ./alacritty.nix
     ./gtk.nix
     ./fuzzel.nix
+    ./swaylock.nix
     ./hyprlock.nix
   ];
   services.cliphist.enable = true;
@@ -27,6 +28,7 @@
       "$runner" = "fuzzel";
       "$files" = "nautilus";
       "$browser" = "brave --enable-features=TouchpadOverscrollHistoryNavigation";
+      "$lock" = "hyprlock";
 
       exec-once = [
         "cliphist wipe"
@@ -37,7 +39,8 @@
       ];
 
       monitor = [
-        "eDP-1,prefferd,auto,2"
+        "eDP-1,2880x1920@120.00Hz,auto,2,vrr,1"
+        "desc:GIGA-BYTE TECHNOLOGY CO. LTD. M27Q 20530B002634,2560x1440@169.83Hz,auto-left,1,vrr,1"
         ",preferred,auto,auto"
       ];
       misc.vfr = true;
@@ -119,7 +122,7 @@
           "$mod Shift, Space, togglefloating"
           "$mod, F, fullscreen"
           "$mod, V, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
-          # "$mod, L, exec, hyprlock"
+          "$mod, L, exec, $lock"
 
           # move focus
           "$mod, Left, movefocus, l"
@@ -155,7 +158,7 @@
         );
       # works while locked
       bindl = [
-        # ",switch:Lid Switch, exec, hyprlock"
+        ",switch:Lid Switch, exec, $lock"
 
         # audio
         ",XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"

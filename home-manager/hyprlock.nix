@@ -1,36 +1,49 @@
 {
-  programs.swaylock.enable = true;
   programs.hyprlock = {
     enable = true;
     settings = {
-      general = {
-        disable_loading_bar = true;
-        grace = 300;
-        hide_cursor = true;
-        no_fade_in = false;
-      };
-
       background = [
         {
           path = "screenshot";
           blur_passes = 3;
           blur_size = 8;
+          noise = 0.08;
+          brightness = 0.8;
+          contrast = 1.4;
+          vibrancy = 0.3;
+          vibrancy_darkness = 0.5;
+        }
+      ];
+
+      label = [
+        {
+          monitor = "";
+          text = "$TIME";
+          text_align = "center"; # center/right or any value for default left. multi-line text alignment inside label container
+          color = "rgb(200, 200, 200)";
+          font_size = 96;
+          font_family = "CozetteVector";
+
+          position = "0, 80";
+          halign = "center";
+          valign = "center";
         }
       ];
 
       input-field = [
         {
-          size = "200, 50";
-          position = "0, -80";
+          size = "400, 75";
+          position = "0, 300";
+          valign = "bottom";
           monitor = "";
           dots_center = true;
           fade_on_empty = false;
-          font_color = "rgb(202, 211, 245)";
-          inner_color = "rgb(91, 96, 120)";
-          outer_color = "rgb(24, 25, 38)";
-          outline_thickness = 5;
-          placeholder_text = "'<span foreground=\"##cad3f5\">Password...</span>'";
-          shadow_passes = 2;
+          font_color = "rgb(212, 190, 152)";
+          inner_color = "rgb(29, 32, 33)";
+          outer_color = "rgb(212, 190, 152)";
+          outline_thickness = 1;
+          rounding = "-1";
+          placeholder_text = "pwease say the magic words";
         }
       ];
     };
