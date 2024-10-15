@@ -83,15 +83,6 @@
       pkgs = import nixpkgs { inherit overlays system config; };
       small = import nixpkgs-small { inherit system config; };
 
-      eachSystem =
-        function:
-        nixpkgs.lib.genAttrs [
-          "aarch64-darwin"
-          "aarch64-linux"
-          "x86_64-darwin"
-          "x86_64-linux"
-        ] (system: function (import nixpkgs { inherit config system; }));
-
       specialArgs = {
         inherit
           inputs
@@ -102,13 +93,18 @@
           small
           ;
       };
-
-      nixvim' = nixvim.legacyPackages.x86_64-linux;
+      nixvimModule = {
+        inherit pkgs;
+        module = import ./packages/nixvim; # import the module directly
+        # You can use `extraSpecialArgs` to pass additional arguments to your module files
+        extraSpecialArgs = {
+          # inherit (inputs) foo;
+        };
+      };
     in
     {
-      packages.x86_64-linux = {
-        nvim = nixvim'.makeNixvim (import ./packages/nixvim);
-      };
+      packages.x86_64-linux.nvim = nixvim.legacyPackages.x86_64-linux.makeNixvimWithModule nixvimModule;
+
       nixosConfigurations = {
         hyprdash = nixpkgs.lib.nixosSystem {
           inherit specialArgs;

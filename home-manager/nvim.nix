@@ -3,13 +3,14 @@ let
   module = import ../packages/nixvim/nixvim.nix;
 in
 {
-  home.packages = with pkgs; [
-    nixfmt-rfc-style
-    typstyle
-  ];
   programs.nixvim = {
     enable = true;
     defaultEditor = true;
+
+    extraPackages = with pkgs; [
+      nixfmt-rfc-style
+      typstyle
+    ];
 
     colorscheme = "gruvbox-material";
     extraPlugins = [ pkgs.vimPlugins.gruvbox-material-nvim ];

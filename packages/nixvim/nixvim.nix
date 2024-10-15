@@ -58,7 +58,10 @@
         };
       };
     };
-    treesitter.enable = true;
+    treesitter = {
+      enable = true;
+      settings.auto_install = true;
+    };
     gitsigns.enable = true;
     floaterm = {
       enable = true;
@@ -93,7 +96,7 @@
   };
   performance = {
     combinePlugins = {
-      enable = false;
+      enable = true;
       standalonePlugins = [
         "nvim-treesitter"
       ];
