@@ -8,7 +8,7 @@
   imports = [
     ./mako.nix
     ./ironbar.nix
-    ./kitty.nix
+    ./kitty
     ./alacritty.nix
     ./gtk.nix
     ./fuzzel.nix

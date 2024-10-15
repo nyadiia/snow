@@ -126,7 +126,7 @@
       twitter-color-emoji
       (nerdfonts.override { fonts = [ "FiraCode" ]; })
       cozette
-      self.packages.${pkgs.system}.azuki
+      azuki
     ];
     fontconfig = {
       defaultFonts = {

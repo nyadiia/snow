@@ -2,6 +2,10 @@
 {
   # stylix.targets.kitty.enable = false;
 
+  nixpkgs.overlays =
+    [
+    ];
+
   programs.kitty = {
     enable = true;
     settings = {
@@ -9,11 +13,12 @@
       confirm_os_window_close = "0";
       background_opacity = lib.mkForce "0.8";
       background = lib.mkForce "#000000";
+      #modify_font = "baseline 3";
     };
 
     font = {
       name = lib.mkForce "CozetteHiDpi";
-      size = lib.mkForce 10;
+      size = lib.mkForce 11;
       package = lib.mkForce pkgs.cozette;
     };
 

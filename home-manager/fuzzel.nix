@@ -1,10 +1,9 @@
-{ pkgs, ... }:
 {
   programs.fuzzel = {
     enable = true;
     settings = {
       main = {
-        terminal = "${pkgs.kitty}/bin/alacirtty";
+        terminal = "alacritty";
         layer = "overlay";
         width = 45;
         lines = 15;

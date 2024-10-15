@@ -7,7 +7,7 @@
           path = "screenshot";
           blur_passes = 3;
           blur_size = 8;
-          noise = 0.08;
+          noise = 8.0e-2;
           brightness = 0.8;
           contrast = 1.4;
           vibrancy = 0.3;

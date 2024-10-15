@@ -6,10 +6,11 @@
     ./firefox.nix
     # ./chrome.nix
     ./vscode.nix
-    # ./nvim.nix
+    ./nvim.nix
     ./hyprland.nix
     ./fcitx.nix
     ./alacritty.nix
+    ./foot.nix
   ];
 
   home.sessionVariables = {
@@ -40,12 +41,11 @@
   };
 
   home.packages = with pkgs; [
-    kdePackages.dolphin
     vlc
     zathura
     brave
     libreoffice-fresh
-    neovim
+    # neovim
     yubioath-flutter
     small.proton-pass
     anki
