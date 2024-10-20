@@ -11,6 +11,7 @@
     ./fcitx.nix
     ./alacritty.nix
     ./foot.nix
+    ./xcompose.nix
   ];
 
   home.sessionVariables = {
@@ -41,6 +42,8 @@
   };
 
   home.packages = with pkgs; [
+    # cargo
+    # rustc
     vlc
     zathura
     brave

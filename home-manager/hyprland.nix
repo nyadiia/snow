@@ -1,5 +1,4 @@
 {
-  hyprpaper,
   hyprland,
   pkgs,
   ...
@@ -14,9 +13,10 @@
     ./fuzzel.nix
     ./swaylock.nix
     ./hyprlock.nix
+    ./hyprpaper.nix
+    ./wezterm.nix
   ];
   services.cliphist.enable = true;
-  services.hyprpaper.package = hyprpaper.packages.${pkgs.system}.hyprpaper;
 
   wayland.windowManager.hyprland = {
     enable = true;
@@ -24,7 +24,7 @@
     systemd.enableXdgAutostart = true;
     settings = {
       "$mod" = "SUPER";
-      "$term" = "alacritty";
+      "$term" = "foot";
       "$runner" = "fuzzel";
       "$files" = "nautilus";
       "$browser" = "brave --enable-features=TouchpadOverscrollHistoryNavigation";
@@ -47,6 +47,7 @@
 
       input = {
         kb_layout = "us";
+        kb_options = "compose:caps";
         repeat_rate = 50;
         repeat_delay = 250;
         touchpad = {
@@ -115,6 +116,7 @@
           ", Print, exec, grimblast copy area"
           "$mod, Print, exec, grimblast copy screen"
           "$mod, Return, exec, $term"
+          # "$mod, Return, exec, [float;tile] wezterm start --always-new-process"
           "$mod, Q, killactive"
           "$mod Shift, R, exec, hyprctl reload && pkill -USR2 waybar"
           "$mod, P, pseudo" # dwindle

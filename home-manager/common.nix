@@ -22,6 +22,7 @@
       extraConfig = {
         core.editor = "nvim";
         init.defaultBranch = "main";
+        feature.manyFiles = true;
       };
       signing = {
         signByDefault = true;

@@ -72,13 +72,23 @@
       overlays = [
         inputs.nix-matlab.overlay
         # (final: prev: { neovim = inputs.nadiavim.packages.${system}.default; })
-        (final: prev: {
-          kitty = prev.kitty.overrideAttrs (old: {
-            patches = (old.patches or [ ]) ++ [
-              ./patches/allow_bitmap_fonts.patch
-            ];
-          });
-        })
+        # (final: prev: {
+        #   kitty = prev.kitty.overrideAttrs (old: {
+        #     patches = (old.patches or [ ]) ++ [
+        #       ./patches/allow_bitmap_fonts.patch
+        #     ];
+        #   });
+        #   alacritty = prev.alacritty.overrideAttrs (old: {
+        #     src = pkgs.fetchFromGitHub {
+        #       owner = "ayosec";
+        #       repo = "alacritty";
+        #       rev = "refs/heads/graphics";
+        #       hash = "sha256-PgUxUdP6pW7/aqlbR29gVhLQZZ2m15j1WMNyyUKgwew=";
+        #     };
+        #
+        #     cargoHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+        #   });
+        # })
       ];
       pkgs = import nixpkgs { inherit overlays system config; };
       small = import nixpkgs-small { inherit system config; };

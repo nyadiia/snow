@@ -1,23 +1,19 @@
 # Get editor completions based on the config schema
 "$schema" = 'https://starship.rs/config-schema.json'
 
-# Inserts a blank line between shell prompts
-add_newline = true
+add_newline = false
 
-format = '$username$directory$character'
-right_format = '$container$hostname$status$git_status$git_branch$nix_shell'
-
-[character]
-format = '[❯ ](#FF0066)'
+format = '$directory$git_branch$git_status$character'
+right_format = '$status $nix_shell $container $username@$hostname'
 
 [package]
 disabled = false
 
 [username]
 show_always = false
-format = '[$user ]($style)'
-style_user = 'bold #FF0066'
-style_root = 'bold #A00CE8'
+format = '[$user]($style)'
+style_user = '#FF0066'
+style_root = 'bold red'
 
 [hostname]
 ssh_only = true
@@ -39,21 +35,31 @@ map_symbol = true
 disabled = false
 
 [directory]
-truncate_to_repo = true
-truncation_length = 2
+truncate_to_repo = false
+truncation_length = 8
 truncation_symbol = '…/'
 style = 'cyan'
 
 [git_branch]
 disabled = false
-symbol = ' '
-style = 'bold dimmed green'
-format = '[$symbol$branch]($style)'
-truncation_length = 4
-# ignore_branches = ['master', 'main']
+style = 'green'
+format = '[$branch ]($style)'
 
 [git_status]
-style = 'bold green'
+style = 'yellow'
+format = '[$all_status$ahead_behind]($style)'
+
+# Modify the display for each git status indicator to show count after symbol
+stashed = '\$$count '
+ahead = '⇡$count '
+behind = '⇣$count '
+diverged = '⇡$ahead_count⇣$behind_count '
+untracked = '?$count '
+modified = '!$count '
+staged = '+$count '
+renamed = '»$count '
+deleted = '×$count '
+conflicted = '≠$count '
 
 [git_commit]
 disabled = true

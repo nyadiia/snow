@@ -108,7 +108,7 @@
     isNormalUser = true;
     home = "/home/nyadiia";
     # for systems that don't use home-manager ( like servers )
-    shell = pkgs.fish;
+    shell = pkgs.nushell;
     # !! please use home-manager if you can !!
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIUjzKy5ccDe6Ij8zQG3/zqIjoKwo3kfU/0Ui50hZs+r"
@@ -121,18 +121,22 @@
     packages = with pkgs; [
       corefonts
       vistafonts
-      noto-fonts
+      noto-fonts-emoji
       noto-fonts-cjk
       twitter-color-emoji
-      (nerdfonts.override { fonts = [ "FiraCode" ]; })
+      (nerdfonts.override {
+        fonts = [
+          "Mononoki"
+        ];
+      })
       cozette
       azuki
     ];
     fontconfig = {
       defaultFonts = {
-        serif = [ "Noto Serif" ];
-        sansSerif = [ "Noto Sans" ];
-        monospace = [ "FiraCode Nerd Font" ];
+        serif = [ "Roboto" ];
+        sansSerif = [ "Roboto" ];
+        monospace = [ "Mononoki Nerd Font" ];
       };
     };
   };

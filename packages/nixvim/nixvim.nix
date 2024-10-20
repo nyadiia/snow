@@ -1,4 +1,8 @@
 {
+  extraConfigVim = ''
+    highlight QuickScopePrimary guifg='#89b482' gui=underline ctermfg=155 cterm=underline
+    highlight QuickScopeSecondary guifg='#d3869b' gui=underline ctermfg=81 cterm=underline
+  '';
   opts = {
     number = true;
     relativenumber = true;
@@ -14,6 +18,11 @@
       {
         action = ":Telescope find_files<cr>";
         key = "<C-f>";
+        mode = "n";
+      }
+      {
+        action = ":Telescope live_grep<cr>";
+        key = "<C-S-f>";
         mode = "n";
       }
     ]
@@ -34,17 +43,10 @@
     );
   globals.mapleader = " ";
   plugins = {
-    coq-nvim = {
-      enable = true;
-      installArtifacts = true;
-    };
-    coq-thirdparty.enable = true;
-    cmp.enable = true;
-    cmp-treesitter.enable = true;
-    cmp-nvim-lsp.enable = true;
     barbar.enable = true;
-    nvim-autopairs.enable = true;
-    lsp-format.enable = false;
+    cmp-nvim-lsp.enable = true;
+    cmp-treesitter.enable = true;
+    cmp.enable = true;
     conform-nvim = {
       enable = true;
       settings = {
@@ -58,53 +60,60 @@
         };
       };
     };
-    treesitter = {
+    coq-nvim = {
       enable = true;
-      settings.auto_install = true;
+      installArtifacts = true;
     };
-    gitsigns.enable = true;
+    coq-thirdparty.enable = true;
     floaterm = {
       enable = true;
       keymaps.toggle = "<F7>";
     };
-    flash.enable = true;
-    which-key.enable = true;
-    trouble.enable = true;
-    telescope.enable = true;
-    web-devicons.enable = true;
-    # lz-n.enable = true;
+    gitsigns.enable = true;
+    lsp-format.enable = false;
     lualine.enable = true;
     neo-tree = {
       enable = true;
       closeIfLastWindow = true;
     };
+    nvim-autopairs.enable = true;
+    telescope.enable = true;
+    treesitter = {
+      enable = true;
+      settings.auto_install = true;
+    };
+    trouble.enable = true;
+    web-devicons.enable = true;
+    which-key.enable = true;
     lsp = {
       enable = true;
       servers = {
-        typst_lsp.enable = true;
+        lua_ls.enable = true;
+        markdown_oxide.enable = true;
         nil_ls.enable = true;
         nixd.enable = true;
+        nushell.enable = true;
         rust_analyzer = {
           enable = true;
           installCargo = true;
           installRustc = true;
         };
-        markdown_oxide.enable = true;
         ts_ls.enable = true;
+        typst_lsp.enable = true;
       };
     };
   };
   performance = {
+    byteCompileLua = {
+      enable = true;
+      nvimRuntime = true;
+      plugins = true;
+    };
     combinePlugins = {
       enable = true;
       standalonePlugins = [
         "nvim-treesitter"
       ];
-    };
-    byteCompileLua = {
-      enable = true;
-      nvimRuntime = true;
-      plugins = true;
     };
   };
 }

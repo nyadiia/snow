@@ -12,8 +12,13 @@ in
       typstyle
     ];
 
+    plugins.treesitter.settings.grammarPackages = [ pkgs.tree-sitter-grammars.tree-sitter-nu ];
+
     colorscheme = "gruvbox-material";
-    extraPlugins = [ pkgs.vimPlugins.gruvbox-material-nvim ];
+    extraPlugins = with pkgs.vimPlugins; [
+      gruvbox-material-nvim
+      quick-scope
+    ];
     extraConfigLuaPre = ''
       require('gruvbox-material').setup({
       	italics = true,             -- enable italics in general

@@ -2,7 +2,7 @@
 {
   stylix = {
     enable = true;
-    image = ../wallpapers/camping.png;
+    image = ../wallpapers/lain_lucy.jpg;
     polarity = "dark";
     base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-material-dark-hard.yaml";
     fonts = {
@@ -13,24 +13,9 @@
 
       serif = config.stylix.fonts.sansSerif;
 
-      # serif = {
-      #   package = pkgs.roboto-serif;
-      #   name = "Roboto Serif";
-      # };
-      #
-      # monospace = {
-      #   package = azuki-pkgs.azuki;
-      #   name = "azuki_font";
-      # };
-
-      # sansSerif = {
-      #   package = pkgs.roboto;
-      #   name = "Roboto";
-      # };
-
       monospace = {
-        package = pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; };
-        name = "FiraCode Nerd Font";
+        package = pkgs.nerdfonts.override { fonts = [ "Mononoki" ]; };
+        name = "Mononoki Nerd Font";
       };
 
       emoji = {
