@@ -4,8 +4,6 @@
     ./nixvim.nix
   ];
 
-  defaultEditor = true;
-
   # for some reason this works with home-manager but not standalone...
   performance.combinePlugins.enable = lib.mkForce false;
 
