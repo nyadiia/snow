@@ -18,6 +18,109 @@ include "%L"
 #     bracketright, asciicircum, underscore, grave, braceleft, bar,
 #     braceright, asciitilde.
 
+#typography
+
+# <Multi_key> <-> <-> <-> : "—"
+
+#Mathbb
+<Multi_key> <b> <b> <R> : "ℝ"
+<Multi_key> <b> <b> <C> : "ℂ"
+<Multi_key> <b> <b> <Z> : "ℤ"
+<Multi_key> <b> <b> <N> : "ℕ"
+<Multi_key> <b> <b> <Q> : "ℚ"
+<Multi_key> <b> <b> <K> : "𝕂"
+<Multi_key> <b> <b> <H> : "ℍ"
+<Multi_key> <b> <b> <1> : "𝟙"
+<Multi_key> <b> <b> <E> : "𝔼"
+<Multi_key> <b> <b> <P> : "ℙ"
+
+#
+#
+# #Mathcal
+# <Multi_key> <m> <c> <G> : "𝓖"
+# <Multi_key> <m> <c> <P> : "𝒫"
+# <Multi_key> <m> <c> <M> : "𝓜"
+#
+# #math prefix
+# <Multi_key> <m> <i> <n> <f> : "∞"
+# <Multi_key> <m> <i> <n> : "∈"
+# <Multi_key> <m> <o> <+> : "⊕"
+# <Multi_key> <m> <o> : "∘"
+#
+# <Multi_key> <m> <d> : "∂"
+# <Multi_key> <m> <p> <m> : "±"
+# <Multi_key> <m> <m> <p> : "∓"
+#
+# #big symbols
+# <Multi_key> <i> <n> <t> : "∫"
+# <Multi_key> <s> <u> <m> : "∑"
+# <Multi_key> <p> <r> <o> <d> : "∏"
+#
+# #math non-prefixed
+# <Multi_key> <s> <q> <r> <t> : "√"
+# <Multi_key> <i> <n> <f> : "∞"
+#
+#
+# <Multi_key> <n> <e> : "≠"
+# <Multi_key> <e> <q> <u> : "≡"
+# <Multi_key> <s> <i> <m> : "∼"
+# <Multi_key> <~> <=> : "≃"
+# <Multi_key> <~> <~> : "≈"
+#
+# <Multi_key> <d> <e> <f> : "≔"
+#
+# <Multi_key> <p> <r> <e> <c> : "≺"
+# <Multi_key> <s> <u> <c> <c> : "≻"
+#
+<Multi_key> <g> <r> <a> <d> : "∇"
+#
+# #arrows
+#
+# <Multi_key> <i> <f> <f> : "⟺"
+# <Multi_key> <i> <n> <j> : "↪"
+# <Multi_key> <m> <a> <p> <t> <o> : "↦"
+# <Multi_key> <h> <a> <r> <p> : "⇀"
+#
+# #logic
+# <Multi_key> <a> <s> <s> <e> <r> <t> : "⊢"
+# <Multi_key> <e> <x> <i> <s> <t> : "∃"
+# <Multi_key> <a> <n> <y> : "∀"
+# <Multi_key> <n> <e> <g> : "⌐"
+#
+# #set
+# <Multi_key> <b> <c> <a> <p> : "⋂"
+# <Multi_key> <b> <c> <u> <p> : "⋃"
+# <Multi_key> <c> <a> <p> : "∩"
+# <Multi_key> <c> <u> <p> : "∪"
+# <Multi_key> <i> <n> : "∈"
+#
+# <Multi_key> <n> <i> <n> : "∉"
+# <Multi_key> <i> <n> <c> <l> : "⊂"
+#
+# <Multi_key> <o> <+> : "⊕"
+# <Multi_key> <o> <*> : "⨂"
+# <Multi_key> <o> <.> : "⨀"
+#
+# <Multi_key> <o> <r> : "∨"
+# <Multi_key> <a> <n> <d> : "∧"
+#
+# <Multy_key> <c> <+> : "⊕"
+# <Multy_key> <c> <-> : "⊖"
+# <Multy_key> <c> <x> : "⊗"
+# <Multy_key> <c> </> : "⊘"
+# <Multy_key> <c> <d> : "⊙"
+# <Multi_key> <c> <c> :"⊚"
+# <Multy_key> <c> <*> : "⊛"
+# <Multi_key> <c> <=> : "⊜"
+#
+#
+# #math bracket-like
+# <Multi_key> <b> <r> <a> : "⟨"
+# <Multi_key> <k> <e> <t> : "⟩"
+#
+#
+# <Multi_key> <bar> <greater> : "⊳"
+
 # greek
 <Multi_key> <asterisk> <a> : "α"
 <Multi_key> <asterisk> <b> : "β"

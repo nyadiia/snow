@@ -4,7 +4,7 @@
 add_newline = false
 
 format = '$directory$git_branch$git_status$character'
-right_format = '$status $nix_shell $container $username@$hostname'
+right_format = '$status $nix_shell $container $username$hostname'
 
 [package]
 disabled = false
@@ -18,11 +18,11 @@ style_root = 'bold red'
 [hostname]
 ssh_only = true
 style = 'bold blue'
-format = '[$hostname]($style)'
+format = '[@](white)[$hostname]($style)'
 
 [container]
 style = 'dimmed white'
-format = '[$name](style)'
+format = '[$name]($style)'
 
 [status]
 style = 'bold red'

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, small, ... }:
 {
   programs.vscode = {
     enable = true;
@@ -11,7 +11,7 @@
       [
         ms-python.python
         ms-toolsai.jupyter
-        rust-lang.rust-analyzer
+        (small.pkgs.vscode-extensions.rust-lang.rust-analyzer)
         serayuzgur.crates
         ms-vscode.cpptools
         ecmel.vscode-html-css

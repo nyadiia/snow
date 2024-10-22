@@ -31,11 +31,12 @@
       "$lock" = "hyprlock";
 
       exec-once = [
-        "cliphist wipe"
+        "cliphist wipe" # wipe clipboard history
         "ironbar &"
         "wl-paste --type text --watch cliphist store" # Stores only text data
         "wl-paste --type image --watch cliphist store" # Stores only image data
-        "mako &"
+        "mako &" # notification daemon
+        "wpctl set-mute @DEFAULT_AUDIO_SINK@ 1" # make sure speakers are muted on startup
       ];
 
       monitor = [

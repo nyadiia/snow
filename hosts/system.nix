@@ -77,16 +77,33 @@
     lz4
   ];
 
-  # hardware.opentabletdriver.enable = true;
-
   services = {
+    xserver.xkb.layout = "us";
+    kmscon = {
+      enable = true;
+      hwRender = true;
+      extraConfig = ''
+        font-dpi=192
+      '';
+      fonts = [
+        {
+          name = "Mononoki Nerd Font";
+          package = pkgs.nerdfonts.override {
+            fonts = [ "Mononoki" ];
+          };
+        }
+      ];
+
+    };
+
     chrony.enable = true;
-    # TODO: remember to login to tailscale!!
     tailscale.enable = true;
+
     # iphone stuff
     usbmuxd.enable = true;
     usbmuxd.package = pkgs.usbmuxd2;
 
+    # disk management
     gvfs.enable = true;
     udisks2.enable = true;
     devmon.enable = true;
@@ -108,7 +125,7 @@
     isNormalUser = true;
     home = "/home/nyadiia";
     # for systems that don't use home-manager ( like servers )
-    shell = pkgs.nushell;
+    shell = pkgs.fish;
     # !! please use home-manager if you can !!
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIUjzKy5ccDe6Ij8zQG3/zqIjoKwo3kfU/0Ui50hZs+r"
@@ -122,7 +139,7 @@
       corefonts
       vistafonts
       noto-fonts-emoji
-      noto-fonts-cjk
+      noto-fonts-cjk-sans
       twitter-color-emoji
       (nerdfonts.override {
         fonts = [
@@ -142,7 +159,6 @@
   };
 
   nix = {
-    package = pkgs.nixFlakes;
     settings = {
       auto-optimise-store = true;
       experimental-features = [
@@ -202,7 +218,5 @@
     };
   };
   # Configure keymap in X11
-  services.xserver.xkb.layout = "us";
-
   system.stateVersion = "23.11";
 }
