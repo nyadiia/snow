@@ -1,63 +1,46 @@
 {
-  config,
-  lib,
+  hyprpaper,
+  hyprland,
   pkgs,
   ...
 }:
 {
-  imports = [
-    ./mako.nix
-    ./ironbar.nix
-    ./alacritty.nix
-    ./fuzzel.nix
-  ];
-
   services.cliphist.enable = true;
-  home.sessionVariables = {
-    XDG_SESSION_DESKTOP = "Hyprland";
-    XDG_CURRENT_DESKTOP = "Hyprland";
-
-    NIXOS_OZONE_WL = "1";
-    XDG_SESSION_TYPE = "wayland";
-    _JAVA_AWT_WM_NONREPARENTING = "1";
-    QT_QPA_PLATFORM = "wayland;xcb";
-    QT_AUTO_SCREEN_SCALE_FACTOR = "1";
-    QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-    GDK_BACKEND = "wayland";
-    CLUTTER_BACKEND = "wayland";
-    SDL_VIDEODRIVER = "wayland";
-  };
+  services.hyprpaper.package = hyprpaper.packages.${pkgs.system}.hyprpaper;
 
   wayland.windowManager.hyprland = {
     enable = true;
-    # package = inputs.hyprland.package.${pkgs.system}.hyprland;
+    package = hyprland.packages.${pkgs.system}.hyprland;
+    systemd.enableXdgAutostart = true;
     settings = {
       "$mod" = "SUPER";
       "$term" = "alacritty";
       "$runner" = "fuzzel";
-      "$browser" = "brave";
+      "$files" = "nautilus";
+      "$browser" = "brave --enable-features=TouchpadOverscrollHistoryNavigation";
 
       exec-once = [
-        #  "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
+        "cliphist wipe"
         "ironbar &"
-	"cliphist wipe"
         "wl-paste --type text --watch cliphist store" # Stores only text data
         "wl-paste --type image --watch cliphist store" # Stores only image data
         "mako &"
       ];
 
       monitor = [
-        "eDP-1,preferred,auto,1.175"
+        "eDP-1,prefferd,auto,2"
         ",preferred,auto,auto"
       ];
-      xwayland.force_zero_scaling = true;
       misc.vfr = true;
 
       input = {
         kb_layout = "us";
         repeat_rate = 50;
         repeat_delay = 250;
-        touchpad.natural_scroll = true;
+        touchpad = {
+          natural_scroll = true;
+          disable_while_typing = false;
+        };
         sensitivity = 0;
       };
       gestures = {
@@ -70,50 +53,64 @@
         preserve_split = true;
       };
 
-      workspace = "w[t1], bordersize:0, rounding:0, gapsout:0";
+      workspace = "w[t1], gapsout:3";
 
       general = {
         layout = "dwindle";
 
-        gaps_in = 3;
-        gaps_out = 3;
-        border_size = 2;
-
-        "col.active_border" = lib.mkDefault "rgb(ebdbb2)";
-        "col.inactive_border" = lib.mkDefault "rgb(1d2021)";
+        gaps_in = 3.5;
+        gaps_out = 7;
+        border_size = 0;
+        resize_on_border = true;
       };
 
-      # bezier = "ease-out,0.165,0.84,0.44,1";
+      bezier = "ease-out,0.165,0.84,0.44,1";
       animations = {
-        enabled = false;
-        #  animation = [
-        #   "workspaces,1,3,ease-out"
-        #   "windows,1,3,ease-out"
-        #   "windowsOut,1,3,ease-out"
-        # ];
+        enabled = true;
+        animation = [
+          "workspaces,1,3,ease-out"
+          "windows,1,3,ease-out"
+          "windowsOut,1,3,ease-out"
+        ];
       };
-
+      # windowrulev2 = "bordercolor rgb(fabd2f),xwayland:1";
+      windowrulev2 = [
+        "workspace 10 silent, title:[Vv]esktop"
+        "workspace 9 silent, class:signal"
+      ];
       decoration = {
-        rounding = "3";
-        blur.enabled = false;
+        rounding = 10;
+        blur = {
+          enabled = true;
+          xray = false;
+          passes = 3;
+          size = 9;
+          noise = 8.0e-2;
+          brightness = 0.8;
+          contrast = 1.4;
+          vibrancy = 0.3;
+          vibrancy_darkness = 0.5;
+        };
         drop_shadow = false;
+        dim_strength = 0.2;
       };
 
       bind =
         [
           "$mod, W, exec, $browser"
-          "$mod, N, exec, thunar"
+          "$mod, N, exec, $files"
           "$mod, D, exec, $runner"
           ", Print, exec, grimblast copy area"
           "$mod, Print, exec, grimblast copy screen"
           "$mod, Return, exec, $term"
           "$mod, Q, killactive"
+          "$mod Shift, R, exec, hyprctl reload && pkill -USR2 waybar"
           "$mod, P, pseudo" # dwindle
           "$mod, E, togglesplit" # dwindle
           "$mod Shift, Space, togglefloating"
           "$mod, F, fullscreen"
           "$mod, V, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
-          # "$mod, L, exec, hyprlock"
+          "$mod, L, exec, swaylock"
 
           # move focus
           "$mod, Left, movefocus, l"
@@ -161,8 +158,8 @@
       # works while locked and repeats when held
       bindel = [
         # audio
-        ",XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"
-        ",XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+        ",XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ --limit 1.25"
+        ",XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- --limit 1.25"
 
         # brightness
         ",XF86MonBrightnessUp, exec, light -A 5"

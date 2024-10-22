@@ -1,26 +1,7 @@
-{ config, ... }:
-
 {
   programs.ssh = {
     enable = true;
     matchBlocks = {
-      # my tailnet
-      "hyprdash" = {
-        user = "nyadiia";
-      };
-      "crystal-heart" = {
-        user = "nyadiia";
-      };
-      "farewell" = {
-        user = "nyadiia";
-      };
-      "demodash" = {
-        user = "nyadiia";
-      };
-      "wavedash" = {
-        user = "nyadiia";
-      };
-
       # acm servers
       "argo" = {
         hostname = "128.101.131.3";

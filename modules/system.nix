@@ -7,62 +7,105 @@
   lib,
   pkgs,
   flake,
+  username,
   ...
 }:
 
 {
-  options.custom = {
-    # forces you to set a username (i think)
-    user = {
-      name = lib.mkOption {
-        type = lib.types.nonEmptyStr;
-        default = "";
+  options = {
+    custom = {
+      user = {
+        sshKeys = lib.mkOption {
+          type = lib.types.listOf lib.types.nonEmpty.str;
+          default = [ ];
+        };
+
+        groups = lib.mkOption {
+          type = lib.types.listOf lib.types.nonEmptyStr;
+          default = [ ];
+        };
       };
 
-      sshKeys = lib.mkOption {
-        type = lib.types.listOf lib.types.nonEmpty.str;
-        default = [ ];
+      syncthing.enable = lib.mkEnableOption {
+        type = lib.types.bool;
+        default = true;
       };
 
-      groups = lib.mkOption {
-        type = lib.types.listOf lib.types.nonEmptyStr;
-        default = [ ];
+      laptop = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
       };
-    };
 
-    podman.enable = lib.mkEnableOption {
-      type = lib.types.bool;
-      default = false;
-    };
+      server = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+      };
 
-    nix-index.enable = lib.mkEnableOption {
-      type = lib.types.bool;
-      default = true;
-    };
+      desktop = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+      };
 
-    syncthing.enable = lib.mkEnableOption {
-      type = lib.types.bool;
-      default = true;
     };
-
-    laptop = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-    };
-
-    server = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-    };
-
-    desktop = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
+    hm = {
+      git = {
+        email = lib.mkOption {
+          type = lib.types.nonEmptyStr;
+          default = "";
+        };
+        signingKey = lib.mkOption {
+          type = lib.types.str;
+          default = "";
+        };
+      };
     };
 
   };
 
   config = {
+    home-manager = {
+      useGlobalPkgs = true;
+      useUserPackages = true;
+
+      users.${username} = {
+        home = {
+          inherit (config.system) stateVersion;
+          homeDirectory = "/home/${username}";
+          sessionVariables = {
+            EDITOR = "nvim";
+            VISUAL = "nvim";
+            SSH_ASKPASS = "${pkgs.seahorse}/libexec/seahorse/ssh-askpass";
+          };
+        };
+        programs = {
+          git = {
+            enable = true;
+            package = pkgs.gitAndTools.gitFull;
+            delta.enable = true;
+            userName = username;
+            userEmail = config.hm.git.email;
+            extraConfig = {
+              core.editor = "nvim";
+              init.defaultBranch = "main";
+            };
+            signing = lib.mkIf (config.hm.git.signingKey != "") {
+              signByDefault = true;
+              key = config.hm.git.signingKey;
+            };
+          };
+          direnv = {
+            enable = true;
+            nix-direnv.enable = true;
+          };
+          btop.enable = true;
+          home-manager.enable = true;
+        };
+
+        # these are for home-manager functionality
+        # don't edit these lines
+        systemd.user.startServices = "sd-switch";
+      };
+    };
     home-manager.sharedModules = [
       {
         options.custom.nix-index = {
@@ -74,10 +117,6 @@
             type = lib.types.bool;
             default = true;
           };
-        };
-
-        config = {
-          programs.nix-index = lib.mkIf config.custom.nix-index.enable { enable = true; };
         };
       }
     ];
@@ -97,21 +136,19 @@
         substituters = [
           "https://cache.garnix.io"
           "https://hyprland.cachix.org"
-          "https://nixpkgs-unfree.cachix.org"
         ];
         trusted-public-keys = [
           "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
           "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
-          "nixpkgs-unfree.cachix.org-1:hqvoInulhbV4nJ9yJOEr+4wxhDV4xq2d1DK7S6Nj6rs="
         ];
       };
     };
 
-    users.users.${config.custom.user.name} = {
+    users.users.${username} = {
       isNormalUser = true;
-      # group = config.custom.user.name;
+      # group = username;
       shell = pkgs.fish;
-      openssh.authorizedKeys.keys = config.custom.sshKeys;
+      openssh.authorizedKeys.keys = config.custom.user.sshKeys;
       extraGroups = [
         "input"
         "networkmanager"
@@ -119,32 +156,12 @@
       ] ++ (lib.optionals config.custom.laptop) [ "video" ] ++ config.custom.user.groups;
     };
 
-    programs.command-not-found.enable = lib.mkIf config.custom.nix-index.enable false;
-    programs.nix-index = lib.mkIf config.custom.nix-index.enable {
-      enable = true;
-    };
-
-    virtualisation.podman = lib.mkIf config.custom.podman.enable {
-      enable = true;
-      dockerCompat = true;
-    };
-
-    services.syncthing = lib.mkIf config.custom.syncthing.enable {
-      enable = true;
-      user = config.custom.user.name;
-      dataDir = "/home/${config.custom.user.name}/Documents"; # Default folder for new synced folders
-      configDir = "/home/${config.custom.user.name}/Documents/.config/syncthing"; # Folder for Syncthing's settings and keys
-    };
-
-    services.dbus = lib.mkIf (!config.custom.server) {
-      enable = true;
-      packages = [ pkgs.dconf ];
-    };
-
     # Use the systemd-boot EFI boot loader.
-    boot.loader.systemd-boot.enable = true;
-    boot.loader.efi.canTouchEfiVariables = true;
-    boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
+    boot = {
+      loader.systemd-boot.enable = true;
+      loader.efi.canTouchEfiVariables = true;
+      kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
+    };
 
     networking.networkmanager.enable = true;
     # if your config errors, uncomment this
@@ -161,7 +178,7 @@
         inherit flake;
         enable = true;
         clean.enable = true;
-        clean.extraArgs = "--keep-since 30d --keep 10";
+        clean.extraArgs = "--keep-since 30d --keep 10 --nogcroots";
       };
     };
 
@@ -201,6 +218,17 @@
       udisks2.enable = true;
       gvfs.enable = true;
       devmon.enable = true;
+      syncthing = lib.mkIf config.custom.syncthing.enable {
+        enable = true;
+        user = username;
+        dataDir = "/home/${username}/Documents"; # Default folder for new synced folders
+        configDir = "/home/${username}/Documents/.config/syncthing"; # Folder for Syncthing's settings and keys
+      };
+      dbus = lib.mkIf (!config.custom.server) {
+        enable = true;
+        packages = [ pkgs.dconf ];
+      };
+
     };
 
     # Fonts config
@@ -213,16 +241,16 @@
         (nerdfonts.override { fonts = [ "FiraCode" ]; })
         cozette
         corefonts
-	vistafonts
+        vistafonts
       ];
       # stylix handles it
-#      fontconfig = {
-#        defaultFonts = {
-#          serif = [ "Noto Serif" ];
-#          sansSerif = [ "Noto Sans" ];
-#          monospace = [ "FiraCode Nerd Font" ];
-#        };
-#      };
+      #      fontconfig = {
+      #        defaultFonts = {
+      #          serif = [ "Noto Serif" ];
+      #          sansSerif = [ "Noto Sans" ];
+      #          monospace = [ "FiraCode Nerd Font" ];
+      #        };
+      #      };
     };
 
     nixpkgs.config.allowUnfree = true;
@@ -246,8 +274,10 @@
     services.xserver.xkb.layout = "us";
 
     # Enable virtualization
-    virtualisation.libvirtd.enable = true;
-    virtualisation.spiceUSBRedirection.enable = true;
+    virtualisation = {
+      libvirtd.enable = true;
+      spiceUSBRedirection.enable = true;
+    };
 
     system.stateVersion = "23.11";
   };

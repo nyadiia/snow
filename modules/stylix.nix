@@ -1,26 +1,36 @@
-{
-  pkgs,
-  pkgs-azuki,
-  config,
-  ...
-}:
+{ pkgs, config, ... }:
 {
   stylix = {
     enable = true;
     image = ../wallpapers/camping.png;
-    # polarity = "dark";
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/everforest-dark-hard.yaml";
+    polarity = "dark";
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-material-dark-hard.yaml";
     fonts = {
       sansSerif = {
-        package = pkgs-azuki.azuki;
-        name = "azukifontP";
+        package = pkgs.roboto;
+        name = "Roboto";
       };
 
       serif = config.stylix.fonts.sansSerif;
 
+      # serif = {
+      #   package = pkgs.roboto-serif;
+      #   name = "Roboto Serif";
+      # };
+      #
+      # monospace = {
+      #   package = azuki-pkgs.azuki;
+      #   name = "azuki_font";
+      # };
+
+      # sansSerif = {
+      #   package = pkgs.roboto;
+      #   name = "Roboto";
+      # };
+
       monospace = {
-        package = pkgs-azuki.azuki;
-        name = "azuki_font";
+        package = pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; };
+        name = "FiraCode Nerd Font";
       };
 
       emoji = {
@@ -29,16 +39,19 @@
       };
 
       sizes = {
-        applications = 14;
-        desktop = 14;
-        popups = 14;
-        terminal = 14;
+        applications = 10;
+        desktop = 10;
+        popups = 10;
+        terminal = 10;
       };
     };
     cursor = {
       name = "BreezeX-RosePine-Linux";
       package = pkgs.rose-pine-cursor;
       size = 20;
+    };
+    targets = {
+      regreet.enable = false;
     };
   };
 }
