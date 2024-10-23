@@ -65,7 +65,7 @@
               EDITOR = "nvim";
               VISUAL = "nvim";
             }
-            ++ (lib.mkIf (config.custom.deviceType != "server")) {
+            // (lib.mkIf (config.custom.deviceType != "server")) {
               SSH_ASKPASS = "${pkgs.seahorse}/libexec/seahorse/ssh-askpass";
             };
         };

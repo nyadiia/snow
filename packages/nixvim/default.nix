@@ -4,6 +4,10 @@
     nixfmt-rfc-style
     typstyle
   ];
+  extraPlugins = with pkgs.vimPlugins; [
+    gruvbox-material-nvim
+    quick-scope
+  ];
   colorscheme = "gruvbox-material";
   extraConfigLuaPre = ''
     require('gruvbox-material').setup({
@@ -89,10 +93,6 @@
     );
   globals.mapleader = " ";
   plugins = {
-    extraPlugins = with pkgs.vimPlugins; [
-      gruvbox-material-nvim
-      quick-scope
-    ];
 
     barbar.enable = true;
     cmp-nvim-lsp.enable = true;
