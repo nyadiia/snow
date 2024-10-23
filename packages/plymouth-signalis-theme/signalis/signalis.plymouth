@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=signalis
+Description=animation from signalis.mp4 video
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/signalis
+ScriptFile=/usr/share/plymouth/themes/signalis/script.script

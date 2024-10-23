@@ -1,7 +1,3 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 {
   config,
   lib,
@@ -31,21 +27,14 @@
         default = true;
       };
 
-      laptop = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
+      deviceType = lib.mkOption {
+        type = lib.types.enum [
+          "desktop"
+          "laptop"
+          "server"
+        ];
+        default = "desktop";
       };
-
-      server = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-      };
-
-      desktop = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-      };
-
     };
     hm = {
       git = {
@@ -71,13 +60,17 @@
         home = {
           inherit (config.system) stateVersion;
           homeDirectory = "/home/${username}";
-          sessionVariables = {
-            EDITOR = "nvim";
-            VISUAL = "nvim";
-            SSH_ASKPASS = "${pkgs.seahorse}/libexec/seahorse/ssh-askpass";
-          };
+          sessionVariables =
+            {
+              EDITOR = "nvim";
+              VISUAL = "nvim";
+            }
+            ++ (lib.mkIf (config.custom.deviceType != "server")) {
+              SSH_ASKPASS = "${pkgs.seahorse}/libexec/seahorse/ssh-askpass";
+            };
         };
         programs = {
+          gpg.enable = true;
           git = {
             enable = true;
             package = pkgs.gitAndTools.gitFull;
@@ -87,6 +80,7 @@
             extraConfig = {
               core.editor = "nvim";
               init.defaultBranch = "main";
+              feature.manyFiles = true;
             };
             signing = lib.mkIf (config.hm.git.signingKey != "") {
               signByDefault = true;
@@ -98,7 +92,28 @@
             nix-direnv.enable = true;
           };
           btop.enable = true;
+          bat = {
+            enable = true;
+            themes = {
+              gruvbox-material = {
+                src = pkgs.fetchFromGitHub {
+                  owner = "karimlevallois";
+                  repo = "gruvbox-material-sublime-text";
+                  rev = "f37e5b0b89c78d2121daff6f82e6a244a25b7e84";
+                  hash = "sha256-PU483frm8O9Z2xHddzdbt6SAg80TZkv1JYfe9A+UoIA=";
+                };
+              };
+            };
+          };
+          fd.enable = true;
           home-manager.enable = true;
+        };
+
+        services = {
+          gpg-agent = {
+            enable = true;
+            enableSshSupport = true;
+          };
         };
 
         # these are for home-manager functionality
@@ -106,20 +121,6 @@
         systemd.user.startServices = "sd-switch";
       };
     };
-    home-manager.sharedModules = [
-      {
-        options.custom.nix-index = {
-          enable = lib.mkOption {
-            type = lib.types.bool;
-            default = true;
-          };
-          database.enable = lib.mkOption {
-            type = lib.types.bool;
-            default = true;
-          };
-        };
-      }
-    ];
 
     nix = {
       settings = {
@@ -148,11 +149,13 @@
       # group = username;
       shell = pkgs.fish;
       openssh.authorizedKeys.keys = config.custom.user.sshKeys;
-      extraGroups = [
-        "input"
-        "networkmanager"
-        "wheel"
-      ] ++ (lib.optionals config.custom.laptop) [ "video" ] ++ config.custom.user.groups;
+      extraGroups =
+        [
+          "input"
+          "networkmanager"
+          "wheel"
+        ]
+        ++ (lib.optionals (config.custom.deviceType == "laptop")) [ "video" ] ++ config.custom.user.groups;
     };
 
     # Use the systemd-boot EFI boot loader.
@@ -206,6 +209,7 @@
     ];
 
     services = {
+      xserver.xkb.layout = "us";
       # TODO: remember to login to tailscale!!
       tailscale.enable = true;
       chrony.enable = true;
@@ -223,7 +227,7 @@
         dataDir = "/home/${username}/Documents"; # Default folder for new synced folders
         configDir = "/home/${username}/Documents/.config/syncthing"; # Folder for Syncthing's settings and keys
       };
-      dbus = lib.mkIf (!config.custom.server) {
+      dbus = lib.mkIf (config.custom.deviceType != "server") {
         enable = true;
         packages = [ pkgs.dconf ];
       };
@@ -234,22 +238,25 @@
     fonts = {
       enableDefaultPackages = true;
       packages = with pkgs; [
-        noto-fonts
-        noto-fonts-cjk
+        noto-fonts-cjk-sans
         twitter-color-emoji
-        (nerdfonts.override { fonts = [ "FiraCode" ]; })
+        (nerdfonts.override {
+          fonts = [
+            "Mononoki"
+          ];
+        })
         cozette
         corefonts
         vistafonts
+        roboto
       ];
-      # stylix handles it
-      #      fontconfig = {
-      #        defaultFonts = {
-      #          serif = [ "Noto Serif" ];
-      #          sansSerif = [ "Noto Sans" ];
-      #          monospace = [ "FiraCode Nerd Font" ];
-      #        };
-      #      };
+      fontconfig = {
+        defaultFonts = {
+          serif = [ "Roboto" ];
+          sansSerif = [ "Roboto" ];
+          monospace = [ "Mononoki Nerd Font" ];
+        };
+      };
     };
 
     nixpkgs.config.allowUnfree = true;
@@ -269,8 +276,6 @@
         LC_TIME = "en_US.UTF-8";
       };
     };
-    # Configure keymap in X11
-    services.xserver.xkb.layout = "us";
 
     # Enable virtualization
     virtualisation = {

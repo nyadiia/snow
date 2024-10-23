@@ -9,7 +9,7 @@
   custom = {
     user.sshKeys = [ ssh-keys.outPath ];
     syncthing.enable = true;
-    laptop = true;
+    deviceType = "laptop";
   };
 
   hm.git = {

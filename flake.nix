@@ -2,7 +2,6 @@
   description = "nyadiia's systems configuration";
 
   inputs = {
-
     # nixpkgs
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-small.url = "github:NixOS/nixpkgs/nixos-unstable-small";
@@ -46,6 +45,8 @@
       url = "https://github.com/nyadiia.keys";
       flake = false;
     };
+
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
   outputs =
@@ -55,6 +56,8 @@
       nixpkgs-small,
       nixos-hardware,
       hyprland,
+      flake-utils,
+      nixvim,
       ...
     }:
     let
@@ -109,6 +112,7 @@
                 users.${username}.imports = [
                   hmConfig
                   inputs.nix-index-database.hmModules.nix-index
+                  inputs.nixvim.homeManagerModules.nixvim
                 ] ++ hm-modules;
                 extraSpecialArgs = specialArgs;
               };
@@ -116,17 +120,7 @@
           ] ++ modules;
         };
     in
-    # nixvimModule = {
-    #   inherit pkgs;
-    #   module = import ./packages/nixvim; # import the module directly
-    #   # You can use `extraSpecialArgs` to pass additional arguments to your module files
-    #   extraSpecialArgs = {
-    #     # inherit (inputs) foo;
-    #   };
-    # };
     {
-      # packages.x86_64-linux.nvim = nixvim.legacyPackages.x86_64-linux.makeNixvimWithModule nixvimModule;
-
       nixosConfigurations = {
         hyprdash = mkSystem {
           name = "hyprdash";
@@ -137,10 +131,35 @@
           ];
           hm-modules = [
             inputs.ironbar.homeManagerModules.default
-            inputs.nix-index-database.hmModules.nix-index
-            inputs.ironbar.homeManagerModules.default
           ];
         };
       };
-    };
+    }
+    // flake-utils.lib.eachDefaultSystem (
+      system:
+      let
+        pkgs = import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        };
+        nixvimPkgs = nixvim.legacyPackages."${system}";
+        nixvimLib = nixvim.lib."${system}";
+        nvim = nixvimPkgs.makeNixvimWithModule {
+          inherit pkgs;
+          module = import ./packages/nixvim;
+        };
+      in
+      {
+        checks = {
+          nvim = nixvimLib.check.mkTestDerivationFromNvim {
+            inherit nvim;
+            name = "nadiavim configuration";
+          };
+        };
+        packages = {
+          inherit nvim;
+        };
+        formatter = pkgs.nixfmt-rfc-style;
+      }
+    );
 }

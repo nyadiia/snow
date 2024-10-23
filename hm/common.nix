@@ -1,17 +1,6 @@
 { pkgs, small, ... }:
 {
-  imports = [ ./shell ];
-
-  home = {
-    username = "nyadiia";
-    homeDirectory = "/home/nyadiia";
-  };
-
   programs = {
-    direnv = {
-      enable = true;
-      nix-direnv.enable = true;
-    };
     git = {
       enable = true;
       package = pkgs.gitAndTools.gitFull;

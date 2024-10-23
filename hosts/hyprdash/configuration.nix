@@ -247,9 +247,9 @@
     };
     tumbler.enable = true; # Thumbnail support for images
     psd.enable = false;
-    zfs = {
-      autoScrub.enable = true;
-      trim.enable = true;
-    };
+    # zfs = {
+    #   autoScrub.enable = true;
+    #   trim.enable = true;
+    # };
   };
 }

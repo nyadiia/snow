@@ -47,17 +47,17 @@
   };
 
   fileSystems."/" = {
-    device = "rpool/root";
-    fsType = "zfs";
+    device = "/dev/sda2";
+    fsType = "ext4";
   };
 
-  fileSystems."/home" = {
-    device = "rpool/home";
-    fsType = "zfs";
-  };
+  # fileSystems."/home" = {
+  #   device = "rpool/home";
+  #   fsType = "zfs";
+  # };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/5B33-A077";
+    device = "/dev/sda1";
     fsType = "vfat";
     options = [
       "fmask=0077"
@@ -65,18 +65,18 @@
     ];
   };
 
-  fileSystems."/var" = {
-    device = "rpool/var";
-    fsType = "zfs";
-  };
+  # fileSystems."/var" = {
+  #   device = "rpool/var";
+  #   fsType = "zfs";
+  # };
+  #
+  # fileSystems."/nix" = {
+  #   device = "rpool/nix";
+  #   fsType = "zfs";
+  # };
 
-  fileSystems."/nix" = {
-    device = "rpool/nix";
-    fsType = "zfs";
-  };
-
-  boot.resumeDevice = "/dev/disk/by-uuid/4b07b1e0-bc31-438c-9adc-4cf15bb48245";
-  swapDevices = [ { device = "/dev/disk/by-uuid/4b07b1e0-bc31-438c-9adc-4cf15bb48245"; } ];
+  # boot.resumeDevice = "/dev/disk/by-uuid/4b07b1e0-bc31-438c-9adc-4cf15bb48245";
+  # swapDevices = [ { device = "/dev/disk/by-uuid/4b07b1e0-bc31-438c-9adc-4cf15bb48245"; } ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
