@@ -2,7 +2,6 @@
 {
   imports = [
     ./ssh.nix
-    ./tide.nix
   ];
 
   programs = {

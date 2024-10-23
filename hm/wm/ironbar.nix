@@ -67,7 +67,7 @@
       /* -- base styles -- */
 
       * {
-        font-family: FiraCode Nerd Font, sans-serif;
+        font-family: Roboto, sans-serif;
 	      font-size: 10px;
         border: none;
         border-radius: 0;

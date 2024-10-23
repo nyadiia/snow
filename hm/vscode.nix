@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, small, ... }:
 {
   programs.vscode = {
     enable = true;
@@ -11,7 +11,7 @@
       [
         ms-python.python
         ms-toolsai.jupyter
-        rust-lang.rust-analyzer
+        (small.pkgs.vscode-extensions.rust-lang.rust-analyzer)
         serayuzgur.crates
         ms-vscode.cpptools
         ecmel.vscode-html-css
@@ -41,6 +41,12 @@
           publisher = "yandeu";
           version = "0.3.1";
           hash = "sha256-C0dzedKMH2tgospzS+o1eqBmNYEKurEOTPbt0t+22t8=";
+        }
+        {
+          name = "gruvbox-material";
+          publisher = "sainnhe";
+          version = "6.5.2";
+          hash = "sha256-D+SZEQQwjZeuyENOYBJGn8tqS3cJiWbEkmEqhNRY/i4=";
         }
       ];
   };

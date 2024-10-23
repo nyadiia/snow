@@ -1,12 +1,10 @@
 {
-  hyprpaper,
   hyprland,
   pkgs,
   ...
 }:
 {
   services.cliphist.enable = true;
-  services.hyprpaper.package = hyprpaper.packages.${pkgs.system}.hyprpaper;
 
   wayland.windowManager.hyprland = {
     enable = true;
@@ -14,27 +12,31 @@
     systemd.enableXdgAutostart = true;
     settings = {
       "$mod" = "SUPER";
-      "$term" = "alacritty";
+      "$term" = "foot";
       "$runner" = "fuzzel";
       "$files" = "nautilus";
       "$browser" = "brave --enable-features=TouchpadOverscrollHistoryNavigation";
+      "$lock" = "hyprlock";
 
       exec-once = [
-        "cliphist wipe"
+        "cliphist wipe" # wipe clipboard history
         "ironbar &"
         "wl-paste --type text --watch cliphist store" # Stores only text data
         "wl-paste --type image --watch cliphist store" # Stores only image data
-        "mako &"
+        "mako &" # notification daemon
+        "wpctl set-mute @DEFAULT_AUDIO_SINK@ 1" # make sure speakers are muted on startup
       ];
 
       monitor = [
-        "eDP-1,prefferd,auto,2"
+        "eDP-1,2880x1920@120.00Hz,auto,2,vrr,1"
+        "desc:GIGA-BYTE TECHNOLOGY CO. LTD. M27Q 20530B002634,2560x1440@169.83Hz,auto-left,1,vrr,1"
         ",preferred,auto,auto"
       ];
       misc.vfr = true;
 
       input = {
         kb_layout = "us";
+        kb_options = "compose:caps";
         repeat_rate = 50;
         repeat_delay = 250;
         touchpad = {
@@ -103,6 +105,7 @@
           ", Print, exec, grimblast copy area"
           "$mod, Print, exec, grimblast copy screen"
           "$mod, Return, exec, $term"
+          # "$mod, Return, exec, [float;tile] wezterm start --always-new-process"
           "$mod, Q, killactive"
           "$mod Shift, R, exec, hyprctl reload && pkill -USR2 waybar"
           "$mod, P, pseudo" # dwindle
@@ -110,7 +113,7 @@
           "$mod Shift, Space, togglefloating"
           "$mod, F, fullscreen"
           "$mod, V, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
-          "$mod, L, exec, swaylock"
+          "$mod, L, exec, $lock"
 
           # move focus
           "$mod, Left, movefocus, l"
@@ -146,7 +149,7 @@
         );
       # works while locked
       bindl = [
-        # ",switch:Lid Switch, exec, hyprlock"
+        ",switch:Lid Switch, exec, $lock"
 
         # audio
         ",XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"

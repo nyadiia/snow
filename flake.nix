@@ -15,7 +15,6 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     hyprland.url = "github:hyprwm/hyprland";
-    hyprpaper.url = "github:hyprwm/hyprpaper";
 
     nix-index-database = {
       url = "github:Mic92/nix-index-database";
@@ -27,23 +26,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # other programs
     nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # my neovim flake
-    nadiavim = {
-      url = "github:nyadiia/nadiavim-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # matlab
     nix-matlab = {
-      # Recommended if you also override the default nixpkgs flake, common among
-      # nixos-unstable users:
-      inputs.nixpkgs.follows = "nixpkgs";
       url = "gitlab:doronbehar/nix-matlab";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     stylix = {
@@ -59,14 +50,11 @@
 
   outputs =
     inputs@{
+      self,
       nixpkgs,
       nixpkgs-small,
-      home-manager,
       nixos-hardware,
-      nix-index-database,
       hyprland,
-      hyprpaper,
-      stylix,
       ...
     }:
     let
@@ -88,18 +76,16 @@
         }:
         let
           pkgs = import nixpkgs { inherit system config overlays; };
-          pkgs-small = import nixpkgs-small { inherit system config overlays; };
+          small = import nixpkgs-small { inherit system config overlays; };
           # style = import ./style/default.nix { inherit pkgs; };
           nixosConfig = ./. + "/hosts/${name}";
           hmConfig = ./. + "/hm/${name}.nix";
           specialArgs = {
             inherit
               inputs
-              stylix
               pkgs
-              pkgs-small
+              small
               hyprland
-              hyprpaper
               username
               email
               signingKey
@@ -114,66 +100,47 @@
             ./modules/stylix.nix
             nixosConfig
             hardware
-            nix-index-database.nixosModules.nix-index
-            home-manager.nixosModules.home-manager
-            stylix.nixosModules.stylix
+            inputs.nix-index-database.nixosModules.nix-index
+            inputs.home-manager.nixosModules.home-manager
             {
               home-manager = {
                 useGlobalPkgs = true;
                 useUserPackages = true;
                 users.${username}.imports = [
                   hmConfig
-                  nix-index-database.hmModules.nix-index
+                  inputs.nix-index-database.hmModules.nix-index
                 ] ++ hm-modules;
                 extraSpecialArgs = specialArgs;
               };
             }
           ] ++ modules;
         };
-
     in
+    # nixvimModule = {
+    #   inherit pkgs;
+    #   module = import ./packages/nixvim; # import the module directly
+    #   # You can use `extraSpecialArgs` to pass additional arguments to your module files
+    #   extraSpecialArgs = {
+    #     # inherit (inputs) foo;
+    #   };
+    # };
     {
+      # packages.x86_64-linux.nvim = nixvim.legacyPackages.x86_64-linux.makeNixvimWithModule nixvimModule;
+
       nixosConfigurations = {
         hyprdash = mkSystem {
           name = "hyprdash";
           hardware = nixos-hardware.nixosModules.framework-11th-gen-intel;
+          modules = [
+            inputs.stylix.nixosModules.stylix
+            ./modules/stylix.nix
+          ];
           hm-modules = [
+            inputs.ironbar.homeManagerModules.default
+            inputs.nix-index-database.hmModules.nix-index
             inputs.ironbar.homeManagerModules.default
           ];
         };
-        # hyprdash = nixpkgs.lib.nixosSystem rec {
-        #   system = "x86_64-linux";
-        #   specialArgs = {
-        #     inherit inputs username;
-        #   };
-        #   modules = [
-        #     {
-        #       home-manager.users.${username}.imports = [
-        #         ./hm-modules/shell
-        #         ./hm-modules/gtk.nix
-        #         ./hm-modules/mako.nix
-        #         ./hm-modules/fcitx.nix
-        #         ./hm-modules/alacritty.nix
-        #         ./hm-modules/fuzzel.nix
-        #         ./hm-modules/vscode.nix
-        #         ./hm-modules/firefox.nix
-        #         ./hm-modules/ironbar.nix
-        #         ./hm-modules/hyprland.nix
-        #         ironbar.homeManagerModules.default
-        #       ];
-        #     }
-        #     nix-index-database.nixosModules.nix-index
-        #     nixos-hardware.nixosModules.framework-11th-gen-intel
-        #     home-manager.nixosModules.home-manager
-        #     stylix.nixosModules.stylix
-        #     ./hosts/system.nix
-        #     ./hosts/hyprdash/configuration.nix
-        #     ./hosts/hyprdash/hardware-configuration.nix
-        #     ./hosts/home.nix
-        #     ./modules/stylix.nix
-        #     ./modules/suspend-then-hibernate.nix
-        #   ];
-        # };
       };
     };
 }
