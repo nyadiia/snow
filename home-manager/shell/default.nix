@@ -29,8 +29,8 @@
         set --universal zoxide_cmd cd
       '';
       shellAliases = {
-        # s = "kitten ssh";
-        s = "ssh";
+        s = "kitten ssh";
+        # s = "ssh";
         cl = "clear";
         l = "ls";
         la = "ls -al";
@@ -68,12 +68,13 @@
         "--cycle"
         "--layout=reverse"
         "--border"
-        "--height=40%"
+        "--height=50%"
         "--preview-window=wrap"
         "--marker=\"*\""
         "--color=bg+:#1d2021,gutter:-1"
       ];
       fileWidgetOptions = [ "--preview 'bat {}'" ];
+      changeDirWidgetOptions = [ "--preview 'eza --color=always --icons=always --tree {} | head -20'" ];
     };
     nix-index = {
       enable = true;
@@ -81,7 +82,8 @@
     };
     eza = {
       enable = true;
-      icons = "auto";
+      extraOptions = [ "--color=always" ];
+      icons = "always";
     };
   };
 }

@@ -8,26 +8,28 @@
     ./mako.nix
     ./ironbar.nix
     ./kitty
-    ./alacritty.nix
+    # ./alacritty.nix
     ./gtk.nix
     ./fuzzel.nix
     ./swaylock.nix
     ./hyprlock.nix
     ./hyprpaper.nix
+    ./hypridle.nix
     ./wezterm.nix
   ];
   services.cliphist.enable = true;
 
+  stylix.targets.hyprland.enable = false;
   wayland.windowManager.hyprland = {
     enable = true;
     package = hyprland.packages.${pkgs.system}.hyprland;
     systemd.enableXdgAutostart = true;
     settings = {
       "$mod" = "SUPER";
-      "$term" = "foot";
+      "$term" = "kitty";
       "$runner" = "fuzzel";
       "$files" = "nautilus";
-      "$browser" = "brave --enable-features=TouchpadOverscrollHistoryNavigation";
+      "$browser" = "zen";
       "$lock" = "hyprlock";
 
       exec-once = [
@@ -36,7 +38,8 @@
         "wl-paste --type text --watch cliphist store" # Stores only text data
         "wl-paste --type image --watch cliphist store" # Stores only image data
         "mako &" # notification daemon
-        "wpctl set-mute @DEFAULT_AUDIO_SINK@ 1" # make sure speakers are muted on startup
+        # "wpctl set-mute @DEFAULT_AUDIO_SINK@ 1" # make sure speakers are muted on startup
+        "nm-applet"
       ];
 
       monitor = [
@@ -82,15 +85,25 @@
       animations = {
         enabled = true;
         animation = [
-          "workspaces,1,3,ease-out"
+          "workspaces,1,2,ease-out"
           "windows,1,3,ease-out"
           "windowsOut,1,3,ease-out"
+          "layers,1,3,ease-out"
+          "fade,1,3,ease-out"
         ];
       };
       # windowrulev2 = "bordercolor rgb(fabd2f),xwayland:1";
       windowrulev2 = [
-        "workspace 10 silent, title:[Vv]esktop"
-        "workspace 9 silent, class:signal"
+        # "workspace 10 silent, title:[Vv]esktop"
+        "workspace 10 silent, class:signal"
+        "float, class:Picture-in-Picture"
+      ];
+      windowrule = [
+        "float, com-group_finity-mascot-Main"
+        "noblur, com-group_finity-mascot-Main"
+        # "nofocus, com-group_finity-mascot-Main"
+        "noshadow, com-group_finity-mascot-Main"
+        "noborder, com-group_finity-mascot-Main"
       ];
       decoration = {
         rounding = 10;
@@ -105,7 +118,7 @@
           vibrancy = 0.3;
           vibrancy_darkness = 0.5;
         };
-        drop_shadow = false;
+        shadow.enabled = false;
         dim_strength = 0.2;
       };
 

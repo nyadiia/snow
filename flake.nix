@@ -5,6 +5,14 @@
     # nixpkgs
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-small.url = "github:NixOS/nixpkgs/nixos-unstable-small";
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    systems.url = "github:nix-systems/default";
+
+    # it's funny
+    lix-module = {
+      url = "https://git.lix.systems/lix-project/nixos-module/archive/2.91.1-1.tar.gz";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -16,11 +24,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-
     # de
     hyprland.url = "github:hyprwm/hyprland";
-    hyprpaper.url = "github:hyprwm/hyprpaper";
 
     ironbar = {
       url = "github:JakeStanger/ironbar";
@@ -38,15 +43,18 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nadiavim = {
-      url = "github:nyadiia/nadiavim-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     nix-matlab = {
       url = "gitlab:doronbehar/nix-matlab";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    zen = {
+      url = "github:0xc000022070/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    matugen.url = "github:InioX/Matugen";
+
   };
 
   nixConfig = { };
@@ -60,9 +68,9 @@
       nixos-hardware,
       nix-index-database,
       hyprland,
-      hyprpaper,
       stylix,
       nixvim,
+      systems,
       ...
     }:
 
@@ -71,27 +79,11 @@
       config.allowUnfree = true;
       overlays = [
         inputs.nix-matlab.overlay
-        # (final: prev: { neovim = inputs.nadiavim.packages.${system}.default; })
-        # (final: prev: {
-        #   kitty = prev.kitty.overrideAttrs (old: {
-        #     patches = (old.patches or [ ]) ++ [
-        #       ./patches/allow_bitmap_fonts.patch
-        #     ];
-        #   });
-        #   alacritty = prev.alacritty.overrideAttrs (old: {
-        #     src = pkgs.fetchFromGitHub {
-        #       owner = "ayosec";
-        #       repo = "alacritty";
-        #       rev = "refs/heads/graphics";
-        #       hash = "sha256-PgUxUdP6pW7/aqlbR29gVhLQZZ2m15j1WMNyyUKgwew=";
-        #     };
-        #
-        #     cargoHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
-        #   });
-        # })
+        inputs.lix-module.overlays.default
       ];
       pkgs = import nixpkgs { inherit overlays system config; };
       small = import nixpkgs-small { inherit system config; };
+      style = import ./modules/matugen.nix { inherit pkgs small inputs; };
 
       specialArgs = {
         inherit
@@ -99,29 +91,37 @@
           self
           pkgs
           hyprland
-          hyprpaper
           small
+          style
           ;
       };
-      nixvimModule = {
-        inherit pkgs;
-        module = import ./packages/nixvim; # import the module directly
-        # You can use `extraSpecialArgs` to pass additional arguments to your module files
-        extraSpecialArgs = {
-          # inherit (inputs) foo;
-        };
-      };
+
+      eachSystem =
+        function: nixpkgs.lib.genAttrs (import systems) (system: function nixpkgs.legacyPackages.${system});
     in
     {
-      packages.x86_64-linux.nvim = nixvim.legacyPackages.x86_64-linux.makeNixvimWithModule nixvimModule;
+
+      packages = eachSystem (pkgs: {
+        nvim = nixvim.legacyPackages.${pkgs.system}.makeNixvimWithModule {
+          inherit pkgs;
+          module = import ./packages/nixvim;
+        };
+      });
 
       nixosConfigurations = {
         hyprdash = nixpkgs.lib.nixosSystem {
           inherit specialArgs;
           modules = [
+            inputs.lix-module.nixosModules.default
             ./hosts/hyprdash
             nix-index-database.nixosModules.nix-index
             nixos-hardware.nixosModules.framework-11th-gen-intel
+            {
+              hardware.framework.laptop13.audioEnhancement = {
+                enable = true;
+                rawDeviceName = "alsa_output.pci-0000_00_1f.3.analog-stereo";
+              };
+            }
             stylix.nixosModules.stylix
             ./modules/stylix.nix
             home-manager.nixosModules.home-manager
@@ -130,6 +130,9 @@
                 useGlobalPkgs = true;
                 useUserPackages = true;
                 users.nyadiia.imports = [
+                  {
+                    home.packages = [ inputs.zen.packages.x86_64-linux.specific ];
+                  }
                   ./home-manager/laptop.nix
                   inputs.nixvim.homeManagerModules.nixvim
                   inputs.nix-index-database.hmModules.nix-index
@@ -140,26 +143,6 @@
             }
           ];
         };
-        # crystal-heart = nixpkgs.lib.nixosSystem {
-        #   specialArgs = {
-        #     inherit inputs pkgs;
-        #   };
-        #   modules = [
-        #     ./hosts/crystal-heart
-        #     nix-index-database.nixosModules.nix-index
-        #     home-manager.nixosModules.home-manager
-        #     {
-        #       home-manager = {
-        #         useGlobalPkgs = true;
-        #         useUserPackages = true;
-        #         users.nyadiia.imports = [ ./home-manager/server.nix ];
-        #         extraSpecialArgs = {
-        #           inherit inputs;
-        #         };
-        #       };
-        #     }
-        #   ];
-        # };
       };
     };
 }

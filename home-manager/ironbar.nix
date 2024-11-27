@@ -1,5 +1,32 @@
-{ config, ... }:
 {
+  style,
+  config,
+  ...
+}:
+{
+  systemd.user.services.ironbar-restart = {
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
+
+    Unit = {
+      ConditionEnvironment = "WAYLAND_DISPLAY";
+      Description = "ironbar";
+      After = [ "graphical-session-pre.target" ];
+      PartOf = [ "graphical-session.target" ];
+      X-Restart-Triggers = [
+        "${config.xdg.configFile."ironbar/config.json".source}"
+        "${config.xdg.configFile."ironbar/style.css".source}"
+      ];
+    };
+
+    Service = {
+      ExecStart = "${config.programs.ironbar.package}/bin/ironbar";
+      Restart = "always";
+      RestartSec = "10";
+    };
+  };
+
   programs.ironbar = {
     enable = true;
     config = {
@@ -19,17 +46,10 @@
             "6" = "六";
             "7" = "七";
             "8" = "八";
-            "9" = "";
-            "10" = "󰙯";
+            "9" = "九";
+            "10" = " ";
           };
         }
-        # {
-        #   type = "focused";
-        #   show_icon = false;
-        #   show_title = true;
-        #   icon_size = 32;
-        #   truncate = "end";
-        # }
       ];
       center = [
         {
@@ -40,13 +60,6 @@
       ];
       end = [
         { type = "volume"; }
-        # {
-        #   type = "sys_info";
-        #   format = [ " {cpu_percent}% | {temp_c:coretemp-Package-id-0}°C" ];
-        #   interval = {
-        #     cpu = 1;
-        #   };
-        # }
         {
           type = "tray";
           icon_size = 32;
@@ -57,25 +70,30 @@
         }
       ];
     };
-    style = "
-      @define-color color_bg #${config.lib.stylix.colors.base01};
-      @define-color color_bg_dark #${config.lib.stylix.colors.base00};
-      @define-color color_border #${config.lib.stylix.colors.base05};
-      @define-color color_border_active #${config.lib.stylix.colors.base0A};
-      @define-color color_text #${config.lib.stylix.colors.base05};
-      @define-color color_urgent #${config.lib.stylix.colors.base08};
+    style =
+      with style.colors;
+      "
+      @define-color color_bg #${surface};
+      @define-color color_bg_dark #${surface_variant};
+      @define-color color_border #${outline};
+      @define-color color_border_active #${primary};
+      @define-color color_border_active_text #${on_primary};
+      @define-color color_text #${on_surface};
+      @define-color color_urgent #${tertiary};
+
+      
       /* -- base styles -- */
 
       * {
         font-family: Roboto, sans-serif;
 	      font-size: 10px;
         border: none;
-        border-radius: 0;
+        border-radius: 15px;
         min-width: 1rem;
       }
 
       box, menubar, button {
-        background-color: @color_bg_dark;
+        background-color: @color_bg;
         background-image: none;
         box-shadow: none;
       }
@@ -123,6 +141,7 @@
       }
 
       .popup-clock .calendar:selected {
+        color: @color_border_active_text;
         background-color: @color_border_active;
       }
 
@@ -131,7 +150,7 @@
       .music:hover * {
         background-color: @color_bg_dark;
       }
-
+·
       .popup-music .album-art {
         margin-right: 1em;
       }
@@ -180,12 +199,7 @@
       /* -- workspaces -- */
       .workspaces .item.focused {
         margin-left: inherit;
-        box-shadow: inset 0 -3px @color_border_active;
         background-color: @color_bg_dark;
-      }
-
-      .workspaces .item:hover {
-        box-shadow: inset 0 -3px @color_border_active;
       }
 
       /* -- focused -- */

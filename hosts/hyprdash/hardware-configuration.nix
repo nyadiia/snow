@@ -9,27 +9,21 @@
   ...
 }:
 
-{
-  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
-
-  networking.hostId = "215f7219";
-  zramSwap.enable = true;
-
-  boot.plymouth.enable = true;
-  boot.plymouth.theme = lib.mkForce "bgrt";
-  boot.loader.grub.gfxmodeEfi = "1440x960";
-
-  boot.initrd.systemd.enable = true;
-  boot.initrd.services.lvm.enable = true;
-  # boot.initrd.preLVMCommands = ''alias lvm=echo $@'';
-
-  boot.kernelParams = [
-    "nohibernate"
-    "quiet"
-    "mem_sleep_default=deep"
-    "nowatchdog"
-    "resume=UUID=4b07b1e0-bc31-438c-9adc-4cf15bb48245"
+let
+  mount_opts = [
+    "rw"
+    "noatime"
+    "discard=async"
+    "ssd"
+    "compress-force=zstd"
+    "space_cache=v2"
   ];
+in
+{
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
+  ];
+
   boot.initrd.availableKernelModules = [
     "xhci_pci"
     "thunderbolt"
@@ -39,44 +33,70 @@
     "aesni_intel"
     "cryptd"
   ];
+  boot.kernelParams = [
+    "quiet"
+    "mem_sleep_default=deep"
+    "nowatchdog"
+    "resume_offset=533760"
+  ];
   boot.initrd.kernelModules = [ ];
+  boot.initrd.systemd.enable = true;
+  boot.initrd.services.lvm.enable = true;
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
-  boot.initrd.luks.devices = {
-    "luks-rpool-nvme-Samsung_SSD_970_EVO_Plus_1TB_S59ANMFNB34408L-part2".device = "/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_1TB_S59ANMFNB34408L-part2";
-  };
+  boot.supportedFilesystems = [ "btrfs" ];
 
   fileSystems."/" = {
-    device = "rpool/root";
-    fsType = "zfs";
+    device = "/dev/disk/by-uuid/d3d771ef-4ed9-4139-8670-e867f99ab80e";
+    fsType = "btrfs";
+    options = [ "subvol=@" ] ++ mount_opts;
   };
+
+  boot.initrd.luks.devices."crypt".device = "/dev/disk/by-uuid/9704a321-63f6-481e-bb68-d3fd8362d61b";
 
   fileSystems."/home" = {
-    device = "rpool/home";
-    fsType = "zfs";
-  };
-
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/5B33-A077";
-    fsType = "vfat";
-    options = [
-      "fmask=0077"
-      "dmask=0077"
-    ];
-  };
-
-  fileSystems."/var" = {
-    device = "rpool/var";
-    fsType = "zfs";
+    device = "/dev/disk/by-uuid/d3d771ef-4ed9-4139-8670-e867f99ab80e";
+    fsType = "btrfs";
+    options = [ "subvol=@home" ] ++ mount_opts;
   };
 
   fileSystems."/nix" = {
-    device = "rpool/nix";
-    fsType = "zfs";
+    device = "/dev/disk/by-uuid/d3d771ef-4ed9-4139-8670-e867f99ab80e";
+    fsType = "btrfs";
+    options = [ "subvol=@nix" ] ++ mount_opts;
   };
 
-  boot.resumeDevice = "/dev/disk/by-uuid/4b07b1e0-bc31-438c-9adc-4cf15bb48245";
-  swapDevices = [ { device = "/dev/disk/by-uuid/4b07b1e0-bc31-438c-9adc-4cf15bb48245"; } ];
+  fileSystems."/var/log" = {
+    device = "/dev/disk/by-uuid/d3d771ef-4ed9-4139-8670-e867f99ab80e";
+    fsType = "btrfs";
+    options = [ "subvol=@log" ] ++ mount_opts;
+  };
+
+  fileSystems."/swap" = {
+    device = "/dev/disk/by-uuid/d3d771ef-4ed9-4139-8670-e867f99ab80e";
+    fsType = "btrfs";
+    options = [
+      "subvol=@swap"
+      "ssd"
+    ];
+  };
+
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/BA27-059F";
+    fsType = "vfat";
+    options = [
+      "fmask=0022"
+      "dmask=0022"
+    ];
+  };
+
+  boot.resumeDevice = "/dev/mapper/crypt";
+  swapDevices = [
+    {
+      device = "/swap/swapfile";
+    }
+  ];
+  zramSwap.enable = true;
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's

@@ -1,15 +1,18 @@
-{ hyprpaper, pkgs, ... }:
+{
+  style,
+  lib,
+  ...
+}:
 let
-  wallpaper = "${../wallpapers/lain_lucy.jpg}";
+  wallpaper = builtins.toString style.wallpaper;
 in
 {
+  stylix.targets.hyprpaper.enable = lib.mkForce false;
   services.hyprpaper = {
     enable = true;
-    package = hyprpaper.packages.${pkgs.system}.hyprpaper;
-    # stylix handling it
-    # settings = {
-    #   preload = [ wallpaper ];
-    #   wallpaper = [ ",${wallpaper}" ];
-    # };
+    settings = {
+      preload = [ wallpaper ];
+      wallpaper = [ ",${wallpaper}" ];
+    };
   };
 }

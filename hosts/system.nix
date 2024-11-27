@@ -1,4 +1,4 @@
-{ pkgs, self, ... }:
+{ pkgs, ... }:
 
 {
   networking.networkmanager.enable = true;
@@ -79,22 +79,22 @@
 
   services = {
     xserver.xkb.layout = "us";
-    kmscon = {
-      enable = true;
-      hwRender = true;
-      extraConfig = ''
-        font-dpi=192
-      '';
-      fonts = [
-        {
-          name = "Mononoki Nerd Font";
-          package = pkgs.nerdfonts.override {
-            fonts = [ "Mononoki" ];
-          };
-        }
-      ];
+    # kmscon = {
+    #   enable = true;
+    #   hwRender = true;
+    #   extraConfig = ''
+    #     font-dpi=192
+    #   '';
+    #   fonts = [
+    #     {
+    #       name = "Mononoki Nerd Font";
+    #       package = pkgs.nerdfonts.override {
+    #         fonts = [ "Mononoki" ];
+    #       };
+    #     }
+    #   ];
 
-    };
+    # };
 
     chrony.enable = true;
     tailscale.enable = true;

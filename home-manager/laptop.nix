@@ -3,14 +3,13 @@
 {
   imports = [
     ./common.nix
-    ./firefox.nix
-    # ./chrome.nix
     ./vscode.nix
     ./nvim.nix
     ./hyprland.nix
     ./fcitx.nix
-    ./alacritty.nix
-    ./foot.nix
+    # ./alacritty.nix
+    # ./foot.nix
+    ./kitty
     ./xcompose.nix
   ];
 
@@ -42,22 +41,18 @@
   };
 
   home.packages = with pkgs; [
-    # cargo
-    # rustc
+    networkmanagerapplet
     vlc
     zathura
-    brave
-    libreoffice-fresh
-    # neovim
+    # libreoffice-fresh
     yubioath-flutter
     small.proton-pass
     anki
     imv
     mpv
-    nil
     obsidian
     spotify
-    nixpkgs-fmt
+    nixfmt-rfc-style
     vesktop
     tigervnc
     prismlauncher
@@ -89,4 +84,13 @@
       ]
     ))
   ];
+
+  home.file.".octaverc" = {
+    target = "/.octaverc";
+    text = ''
+      pkg load symbolic
+      pkg load control
+      pkg load audio
+    '';
+  };
 }

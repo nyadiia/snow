@@ -2,10 +2,6 @@
 {
   # stylix.targets.kitty.enable = false;
 
-  nixpkgs.overlays =
-    [
-    ];
-
   programs.kitty = {
     enable = true;
     settings = {
@@ -16,11 +12,11 @@
       #modify_font = "baseline 3";
     };
 
-    font = {
-      name = lib.mkForce "CozetteHiDpi";
-      size = lib.mkForce 11;
-      package = lib.mkForce pkgs.cozette;
-    };
+    # font = {
+    #   name = lib.mkForce "CozetteHiDpi";
+    #   size = lib.mkForce 11;
+    #   package = lib.mkForce pkgs.cozette;
+    # };
 
     # extraConfig = builtins.fetchurl {
     #   url = "https://raw.githubusercontent.com/hbjydev/oxocarbon-kitty/refs/heads/main/skin.conf";

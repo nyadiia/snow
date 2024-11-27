@@ -1,8 +1,6 @@
 {
   pkgs,
   hyprland,
-  config,
-  lib,
   ...
 }:
 {
@@ -20,6 +18,10 @@
 
   environment.systemPackages =
     (with pkgs; [
+      libgpod
+      pavucontrol
+      solaar
+      nix-output-monitor
       yubikey-manager-qt
       yubikey-personalization-gui
       yubikey-personalization
@@ -81,13 +83,17 @@
     ];
   };
 
-  services.udev.packages = [
-    pkgs.yubikey-manager-qt
-    pkgs.yubikey-personalization-gui
-    pkgs.yubikey-personalization
+  services.udev.packages = with pkgs; [
+    libgpod
+    solaar
+    logitech-udev-rules
+    yubikey-manager-qt
+    yubikey-personalization-gui
+    yubikey-personalization
   ];
 
   systemd = {
+    sleep.extraConfig = "HibernateDelaySec=1h";
     user.services.polkit-gnome-authentication-agent-1 = {
       description = "polkit-gnome-authentication-agent-1";
       wantedBy = [ "graphical-session.target" ];
@@ -149,20 +155,14 @@
     };
   };
 
-  systemd.sleep.extraConfig = "HibernateDelaySec=1h";
   services = {
     pcscd.enable = true;
     gnome.sushi.enable = true;
     gnome.gnome-keyring.enable = true;
     greetd = {
       enable = true;
-      #      settings.default_session = {
-      #        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --asterisks -r --cmd Hyprland";
-      #        user = "greeter";
-      #      };
       settings = {
         default_session = {
-          # command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --greeting 'Welcome to PwNixOS!' --cmd Hyprland";
           command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --asterisks -r --cmd Hyprland";
           user = "nyadiia";
         };
@@ -174,18 +174,13 @@
     };
 
     # framework specific services
-    # logind = {
-    #   lidSwitch = "suspend-then-hibernate";
-    #   extraConfig = ''
-    #     HandlePowerKey=suspend-then-hibernate
-    #     IdleAction=suspend-then-hibernate
-    #     IdleActionSec=2m
-    #   '';
-    # };
-    logind.extraConfig = ''
-      # don’t shutdown when power button is short-pressed
-        HandlePowerKey=poweroff
-    '';
+    logind = {
+      lidSwitch = "suspend-then-hibernate";
+      extraConfig = ''
+        HandlePowerKey=suspend-then-hibernate
+        SleepOperation=suspend-then-hibernate
+      '';
+    };
     fprintd.enable = true;
     fwupd = {
       enable = true;
@@ -199,40 +194,40 @@
     };
     tlp = {
       enable = true;
-      #   settings = {
-      #     CPU_SCALING_GOVERNOR_ON_AC = "performance";
-      #     CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
-      #     CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
-      #     CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
-      #     CPU_MIN_ON_AC = 0;
-      #     CPU_MAX_ON_AC = 100;
-      #     CPU_MIN_ON_BAT = 0;
-      #     CPU_MAX_ON_BAT = 30;
-      #     CPU_BOOST_ON_AC = 1;
-      #     CPU_BOOST_ON_BAT = 0;
-      #     CPU_HWP_DYN_BOOST_ON_AC = 1;
-      #     CPU_HWP_DYN_BOOST_ON_BAT = 0;
-      #
-      #     INTEL_GPU_MIN_FREQ_ON_AC = 100;
-      #     INTEL_GPU_MIN_FREQ_ON_BAT = 100;
-      #     INTEL_GPU_MAX_FREQ_ON_AC = 1300;
-      #     INTEL_GPU_MAX_FREQ_ON_BAT = 900;
-      #     INTEL_GPU_BOOST_FREQ_ON_AC = 1300;
-      #     INTEL_GPU_BOOST_FREQ_ON_BAT = 1000;
-      #
-      #     NMI_WATCHDOG = 0;
-      #     PLATFORM_PROFILE_ON_AC = "performance";
-      #     PLATFORM_PROFILE_ON_BAT = "power";
-      #     DISK_DEVICES = "nvme0n1";
-      #     WIFI_PWR_ON_AC = "off";
-      #     WIFI_PWR_ON_BAT = "off";
-      #     WOL_DISABLE = "Y";
-      #
-      #     PCIE_ASPM_ON_AC = "default";
-      #     PCIE_ASPM_ON_BAT = "powersupersave";
-      #     RUNTIME_PM_ON_AC = "on";
-      #     RUNTIME_PM_ON_BAT = "auto";
-      #   };
+      settings = {
+        CPU_SCALING_GOVERNOR_ON_AC = "performance";
+        CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+        CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
+        CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
+        CPU_MIN_ON_AC = 0;
+        CPU_MAX_ON_AC = 100;
+        CPU_MIN_ON_BAT = 0;
+        CPU_MAX_ON_BAT = 30;
+        CPU_BOOST_ON_AC = 1;
+        CPU_BOOST_ON_BAT = 0;
+        CPU_HWP_DYN_BOOST_ON_AC = 1;
+        CPU_HWP_DYN_BOOST_ON_BAT = 0;
+
+        INTEL_GPU_MIN_FREQ_ON_AC = 100;
+        INTEL_GPU_MIN_FREQ_ON_BAT = 100;
+        INTEL_GPU_MAX_FREQ_ON_AC = 1300;
+        INTEL_GPU_MAX_FREQ_ON_BAT = 900;
+        INTEL_GPU_BOOST_FREQ_ON_AC = 1300;
+        INTEL_GPU_BOOST_FREQ_ON_BAT = 1000;
+
+        NMI_WATCHDOG = 0;
+        PLATFORM_PROFILE_ON_AC = "performance";
+        PLATFORM_PROFILE_ON_BAT = "power";
+        DISK_DEVICES = "nvme0n1";
+        WIFI_PWR_ON_AC = "off";
+        WIFI_PWR_ON_BAT = "off";
+        WOL_DISABLE = "Y";
+
+        PCIE_ASPM_ON_AC = "default";
+        PCIE_ASPM_ON_BAT = "powersupersave";
+        RUNTIME_PM_ON_AC = "on";
+        RUNTIME_PM_ON_BAT = "auto";
+      };
     };
     upower.enable = true;
 
@@ -247,9 +242,9 @@
     };
     tumbler.enable = true; # Thumbnail support for images
     psd.enable = false;
-    zfs = {
-      autoScrub.enable = true;
-      trim.enable = true;
+    btrfs.autoScrub = {
+      enable = true;
+      interval = "weekly";
     };
   };
 }
