@@ -12,7 +12,6 @@
         set fish_greeting
       '';
       shellInit = ''
-        any-nix-shell fish --info-right | source
         set --universal zoxide_cmd cd
       '';
       shellAliases = {
