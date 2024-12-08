@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+_:
 let
   wallpaper = "${../../wallpapers/lain_lucy.jpg}";
 in

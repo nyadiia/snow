@@ -4,6 +4,7 @@
   pkgs,
   flake,
   username,
+  ssh-keys,
   ...
 }:
 
@@ -149,7 +150,7 @@
     users.users.${username} = {
       isNormalUser = true;
       shell = pkgs.fish;
-      openssh.authorizedKeys.keys = config.custom.user.sshKeys;
+      openssh.authorizedKeys.keyFiles = ssh-keys.outPath;
       extraGroups =
         [
           "input"
@@ -213,7 +214,11 @@
     services = {
       xserver.xkb.layout = "us";
       # TODO: remember to login to tailscale!!
-      tailscale.enable = true;
+      tailscale = {
+        enable = true;
+        useRoutingFeatures = "both";
+      };
+
       chrony.enable = true;
 
       # iphone stuff
@@ -234,6 +239,13 @@
         packages = [ pkgs.dconf ];
       };
 
+      openssh = lib.mkIf (config.custom.deviceType != "laptop") {
+        enable = true;
+        settings = {
+          PasswordAuthentication = false;
+          PermitRootLogin = "prohibit-password";
+        };
+      };
     };
 
     # Fonts config

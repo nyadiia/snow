@@ -1,12 +1,12 @@
 {
   pkgs,
-  small,
   zen,
   ...
 }:
 {
   imports = [
     ./shell
+    ./nvim.nix
   ];
 
   programs = {

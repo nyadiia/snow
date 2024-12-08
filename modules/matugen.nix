@@ -1,6 +1,6 @@
 { pkgs, inputs, ... }:
 let
-  lib = pkgs.lib;
+  inherit (pkgs) lib;
 
   contrast = 0;
   wallpaper = ../wallpapers/lain_lucy.jpg;

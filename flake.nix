@@ -63,9 +63,9 @@
       nixos-hardware,
       hyprland,
       nixvim,
-      systems,
       zen,
       flake-utils,
+      ssh-keys,
       ...
     }:
     let
@@ -106,6 +106,7 @@
               email
               signingKey
               flake
+              ssh-keys
               ;
           };
         in

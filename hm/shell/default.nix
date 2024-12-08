@@ -2,6 +2,7 @@
 {
   imports = [
     ./ssh.nix
+    ./starship
   ];
 
   programs = {

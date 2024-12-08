@@ -67,13 +67,13 @@
     #      };
     #
     #      userChrome = ''
-    #        /* Remove close button*/ 
-    #        .titlebar-buttonbox-container { 
+    #        /* Remove close button*/
+    #        .titlebar-buttonbox-container {
     #          display:none
     #        };
     #        #titlebar {
     #          background-color: #${config.lib.stylix.colors.base01} !important;
-    #        };  
+    #        };
     #      '';
     #    };
   };

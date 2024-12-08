@@ -11,7 +11,7 @@
       [
         ms-python.python
         ms-toolsai.jupyter
-        (small.pkgs.vscode-extensions.rust-lang.rust-analyzer)
+        small.pkgs.vscode-extensions.rust-lang.rust-analyzer
         serayuzgur.crates
         ms-vscode.cpptools
         ecmel.vscode-html-css

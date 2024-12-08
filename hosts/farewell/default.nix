@@ -1,5 +1,4 @@
 {
-  ssh-keys,
   email,
   signingKey,
   pkgs,
@@ -10,7 +9,6 @@
   custom = {
     user = {
       groups = [ "docker" ];
-      sshKeys = [ ssh-keys.outPath ];
     };
     syncthing.enable = true;
     deviceType = "desktop"; # technically we're a media server but there is a DE
@@ -35,7 +33,7 @@
     ];
     # extraPackages32 = with pkgs.pkgsi686Linux; [ vpl-gpu-rt ];
   };
-  
+
   services.xserver = {
     enable = true;
     displayManager.gdm.enable = true;
@@ -53,7 +51,7 @@
         withMfx = false;
         withVpl = true;
       })
-      
+
       powertop
       swtpm
       libvirt
@@ -80,9 +78,9 @@
 
   nixpkgs.overlays = [
     # GNOME 46: triple-buffering-v4-46
-    (final: prev: {
-      mutter = prev.mutter.overrideAttrs (old: {
-        src = pkgs.fetchFromGitLab  {
+    (_final: prev: {
+      mutter = prev.mutter.overrideAttrs (_old: {
+        src = pkgs.fetchFromGitLab {
           domain = "gitlab.gnome.org";
           owner = "vanvugt";
           repo = "mutter";
@@ -92,4 +90,9 @@
       });
     })
   ];
+
+  boot.plymouth = {
+    enable = true;
+    theme = "bgrt";
+  };
 }
