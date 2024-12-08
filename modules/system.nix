@@ -150,7 +150,7 @@
     users.users.${username} = {
       isNormalUser = true;
       shell = pkgs.fish;
-      openssh.authorizedKeys.keyFiles = ssh-keys.outPath;
+      openssh.authorizedKeys.keyFiles = [ "${ssh-keys.outPath}" ];
       extraGroups =
         [
           "input"
