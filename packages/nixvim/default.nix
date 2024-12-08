@@ -3,39 +3,37 @@
   extraPackages = with pkgs; [
     nixfmt-rfc-style
     typstyle
+    rustfmt
   ];
   extraPlugins = with pkgs.vimPlugins; [
-    gruvbox-material-nvim
     quick-scope
   ];
-  colorscheme = "gruvbox-material";
+  colorschemes.rose-pine = {
+    enable = true;
+    settings = {
+      styles = {
+        bold = false;
+        italic = true;
+        transparency = true;
+      };
+      variant = "dawn";
+    };
+  };
   extraConfigLuaPre = ''
-    require('gruvbox-material').setup({
-      italics = true,             -- enable italics in general
-      contrast = "hard",        -- set contrast, can be any of "hard", "medium", "soft"
-      comments = {
-    italics = true,           -- enable italic comments
-      },
-      background = {
-    transparent = true,      -- set the background to transparent
-      },
-      float = {
-    force_background = false, -- force background on floats even when background.transparent is set
-    background_color = nil,   -- set color for float backgrounds. If nil, uses the default color set
-      },
-      signs = {
-    highlight = true,         -- whether to highlight signs
-      },
-    }) 
-      -- Function to get the foreground color of a highlight group
+    -- Function to get the foreground color of a highlight group
     local function get_hl_fg(group)
-      local hl = vim.api.nvim_get_hl_by_name(group, true)
-      if hl and hl.foreground then
-    -- Return the color in #RRGGBB format
-    return string.format("#%06x", hl.foreground)
+    local hl = vim.api.nvim_get_hl_by_name(group, true)
+    if hl and hl.foreground then
+      -- Return the color in #RRGGBB format
+      return string.format("#%06x", hl.foreground)
       end
     end
   '';
+  # extraConfigLua = ''
+  #   require('typst-preview').setup({
+  #
+  #   })
+  # '';
   performance = {
     byteCompileLua = {
       enable = true;
@@ -146,12 +144,14 @@
         lua_ls.enable = true;
         markdown_oxide.enable = true;
         nil_ls.enable = true;
-        nixd.enable = true;
+        # nixd.enable = true;
         nushell.enable = true;
         rust_analyzer = {
           enable = true;
-          installCargo = true;
           installRustc = true;
+          rustcPackage = pkgs.rustc;
+          installCargo = true;
+          cargoPackage = pkgs.cargo;
         };
         ts_ls.enable = true;
         typst_lsp.enable = true;

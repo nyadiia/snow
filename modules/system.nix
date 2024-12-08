@@ -65,7 +65,7 @@
               EDITOR = "nvim";
               VISUAL = "nvim";
             }
-            // (lib.mkIf (config.custom.deviceType != "server")) {
+            // (lib.optionals (config.custom.deviceType != "server")) {
               SSH_ASKPASS = "${pkgs.seahorse}/libexec/seahorse/ssh-askpass";
             };
         };
@@ -95,14 +95,14 @@
           bat = {
             enable = true;
             themes = {
-              gruvbox-material = {
-                src = pkgs.fetchFromGitHub {
-                  owner = "karimlevallois";
-                  repo = "gruvbox-material-sublime-text";
-                  rev = "f37e5b0b89c78d2121daff6f82e6a244a25b7e84";
-                  hash = "sha256-PU483frm8O9Z2xHddzdbt6SAg80TZkv1JYfe9A+UoIA=";
-                };
-              };
+              # gruvbox-material = {
+              #   src = pkgs.fetchFromGitHub {
+              #     owner = "karimlevallois";
+              #     repo = "gruvbox-material-sublime-text";
+              #     rev = "f37e5b0b89c78d2121daff6f82e6a244a25b7e84";
+              #     hash = "sha256-PU483frm8O9Z2xHddzdbt6SAg80TZkv1JYfe9A+UoIA=";
+              #   };
+              # };
             };
           };
           fd.enable = true;
@@ -136,17 +136,18 @@
         substituters = [
           "https://cache.garnix.io"
           "https://hyprland.cachix.org"
+          "https://nix-community.cachix.org"
         ];
         trusted-public-keys = [
           "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
           "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+          "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         ];
       };
     };
 
     users.users.${username} = {
       isNormalUser = true;
-      # group = username;
       shell = pkgs.fish;
       openssh.authorizedKeys.keys = config.custom.user.sshKeys;
       extraGroups =
@@ -182,6 +183,7 @@
         clean.enable = true;
         clean.extraArgs = "--keep-since 30d --keep 10 --nogcroots";
       };
+      light.enable = lib.mkIf (config.custom.deviceType == "laptop") true;
     };
 
     environment.systemPackages = with pkgs; [
@@ -240,11 +242,7 @@
       packages = with pkgs; [
         noto-fonts-cjk-sans
         twitter-color-emoji
-        (nerdfonts.override {
-          fonts = [
-            "Mononoki"
-          ];
-        })
+        nerd-fonts.mononoki
         cozette
         corefonts
         vistafonts

@@ -24,15 +24,6 @@
       };
       plugins = [
         {
-          name = "zoxide";
-          src = pkgs.fetchFromGitHub {
-            owner = "kidonng";
-            repo = "zoxide.fish";
-            rev = "bfd5947bcc7cd01beb23c6a40ca9807c174bba0e";
-            hash = "sha256-Hq9UXB99kmbWKUVFDeJL790P8ek+xZR5LDvS+Qih+N4=";
-          };
-        }
-        {
           name = "autopair";
           src = pkgs.fetchFromGitHub {
             owner = "jorgebucaran";
@@ -43,10 +34,7 @@
         }
       ];
     };
-    zoxide = {
-      enable = true;
-      enableFishIntegration = false; # we're using zoxide.fish for faster init and slightly nicer results so we don't want this doing anything
-    };
+    zoxide.enable = true;
     fzf.enable = true;
     nix-index = {
       enable = true;
@@ -56,6 +44,5 @@
       enable = true;
       icons = "auto";
     };
-    gh.enable = true;
   };
 }

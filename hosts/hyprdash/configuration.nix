@@ -1,8 +1,6 @@
 {
   pkgs,
   hyprland,
-  config,
-  lib,
   ...
 }:
 {
@@ -20,11 +18,6 @@
 
   environment.systemPackages =
     (with pkgs; [
-      yubikey-manager-qt
-      yubikey-personalization-gui
-      yubikey-personalization
-      yubikey-manager
-
       powertop
       swtpm
       libvirt

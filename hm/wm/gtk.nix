@@ -8,7 +8,7 @@
     };
   };
   dconf = {
-    enable = true;
+    enable = false;
     #    settings = {
     #      "org/gnome/desktop/interface" = {
     #        color-scheme = "prefer-dark";

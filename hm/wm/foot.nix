@@ -1,4 +1,4 @@
-{ lib, ... }:
+# { style, ... }:
 {
   programs.foot = {
     enable = true;
@@ -7,7 +7,10 @@
         # term = "xterm-256color";
       };
       colors = {
-        alpha = lib.mkForce 0.8;
+        # background = style.colors.surface;
+        # text = style.colors.on_surface;
+        
+        alpha = 0.8;
       };
     };
   };

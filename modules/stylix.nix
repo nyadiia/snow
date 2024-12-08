@@ -1,7 +1,7 @@
 { pkgs, config, ... }:
 {
   stylix = {
-    enable = true;
+    enable = false;
     image = ../wallpapers/lain_lucy.jpg;
     polarity = "dark";
     base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-material-dark-hard.yaml";
@@ -14,7 +14,7 @@
       serif = config.stylix.fonts.sansSerif;
 
       monospace = {
-        package = pkgs.nerdfonts.override { fonts = [ "Mononoki" ]; };
+        package = pkgs.nerd-fonts.mononoki;
         name = "Mononoki Nerd Font";
       };
 

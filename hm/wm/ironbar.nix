@@ -58,12 +58,12 @@
       ];
     };
     style = "
-      @define-color color_bg #${config.lib.stylix.colors.base01};
-      @define-color color_bg_dark #${config.lib.stylix.colors.base00};
-      @define-color color_border #${config.lib.stylix.colors.base05};
-      @define-color color_border_active #${config.lib.stylix.colors.base0A};
-      @define-color color_text #${config.lib.stylix.colors.base05};
-      @define-color color_urgent #${config.lib.stylix.colors.base08};
+      @define-color color_bg #F9FAEF;
+      @define-color color_bg_dark #E1E4D5;
+      @define-color color_border #75796C;
+      @define-color color_border_active #C5C8BA;
+      @define-color color_text #1A1C16;
+      @define-color color_urgent #BA1A1A;
       /* -- base styles -- */
 
       * {

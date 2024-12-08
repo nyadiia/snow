@@ -1,10 +1,14 @@
-{ pkgs, small, ... }:
+{
+  pkgs,
+  small,
+  zen,
+  ...
+}:
 {
   imports = [
     ./shell
     ./wm
     ./vscode.nix
-    ./firefox.nix
     ./nvim.nix
   ];
 
@@ -18,13 +22,10 @@
   };
 
   home.packages = with pkgs; [
-    # cargo
-    # rustc
+    zen.packages.${pkgs.system}.specific
     vlc
     zathura
-    brave
     libreoffice-fresh
-    # neovim
     yubioath-flutter
     small.proton-pass
     anki

@@ -1,7 +1,4 @@
-# make sure that you have bot boot.resumeDevices and swapDevices defined or else you cannot hibernate
-
-{ config, lib, ... }:
-
+# make sure that you have both boot.resumeDevices and swapDevices defined or else you cannot hibernate
 {
   services.logind = {
     lidSwitch = "suspend-then-hibernate";
@@ -11,6 +8,5 @@
       IdleActionSec=2m
     '';
   };
-  systemd.sleep.extraConfig = "HibernateDelaySec=2h";
-
+  systemd.sleep.extraConfig = "HibernateDelaySec=1h";
 }

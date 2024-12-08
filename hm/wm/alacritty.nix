@@ -1,7 +1,7 @@
 { lib, ... }:
 {
   programs.alacritty = {
-    enable = true;
+    enable = false;
     settings = lib.mkForce {
       font.normal = {
         family = "CozetteHiDpi";

@@ -2,23 +2,30 @@
   description = "nyadiia's systems configuration";
 
   inputs = {
-    # nixpkgs
+    # nix basics
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-small.url = "github:NixOS/nixpkgs/nixos-unstable-small";
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    systems.url = "github:nix-systems/default";
+    flake-utils.url = "github:numtide/flake-utils";
+
+    # to be honest it's just because it's "lesbian nix" and that's funny
+    lix = {
+      url = "https://git.lix.systems/lix-project/nixos-module/archive/2.91.1-1.tar.gz";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-
-    hyprland.url = "github:hyprwm/hyprland";
-
     nix-index-database = {
       url = "github:Mic92/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    hyprland.url = "github:hyprwm/hyprland";
 
     ironbar = {
       url = "github:JakeStanger/ironbar";
@@ -26,6 +33,11 @@
     };
 
     # other programs
+    zen = {
+      url = "github:ch4og/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -36,33 +48,32 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    stylix = {
-      url = "github:danth/stylix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    matugen.url = "github:/InioX/Matugen";
 
     ssh-keys = {
       url = "https://github.com/nyadiia.keys";
       flake = false;
     };
-
-    flake-utils.url = "github:numtide/flake-utils";
   };
 
   outputs =
     inputs@{
-      self,
       nixpkgs,
       nixpkgs-small,
       nixos-hardware,
       hyprland,
-      flake-utils,
       nixvim,
+      systems,
+      zen,
+      flake-utils,
       ...
     }:
     let
       config.allowUnfree = true;
-      overlays = [ inputs.nix-matlab.overlay ];
+      overlays = [
+        inputs.nix-matlab.overlay
+        inputs.lix.overlays.default
+      ];
 
       username = "nyadiia";
       email = "nyadiia@pm.me";
@@ -73,14 +84,14 @@
         {
           system ? "x86_64-linux",
           name,
-          hardware,
+          hardware ? nixos-hardware.nixosModules.common-pc,
           modules ? [ ],
           hm-modules ? [ ],
         }:
         let
           pkgs = import nixpkgs { inherit system config overlays; };
           small = import nixpkgs-small { inherit system config overlays; };
-          # style = import ./style/default.nix { inherit pkgs; };
+          style = import ./modules/matugen.nix { inherit pkgs inputs; };
           nixosConfig = ./. + "/hosts/${name}";
           hmConfig = ./. + "/hm/${name}.nix";
           specialArgs = {
@@ -88,6 +99,8 @@
               inputs
               pkgs
               small
+              style
+              zen
               hyprland
               username
               email
@@ -99,8 +112,8 @@
         nixpkgs.lib.nixosSystem {
           inherit specialArgs;
           modules = [
+            inputs.lix.nixosModules.default
             ./modules/system.nix
-            ./modules/stylix.nix
             nixosConfig
             hardware
             inputs.nix-index-database.nixosModules.nix-index
@@ -126,11 +139,20 @@
           name = "hyprdash";
           hardware = nixos-hardware.nixosModules.framework-11th-gen-intel;
           modules = [
-            inputs.stylix.nixosModules.stylix
-            ./modules/stylix.nix
+            inputs.matugen.nixosModules.default
+            # ./modules/matugen.nix
+            ./modules/hyprland.nix
+            ./modules/yubikey.nix
           ];
           hm-modules = [
             inputs.ironbar.homeManagerModules.default
+          ];
+        };
+        farewell = mkSystem {
+          name = "farewell";
+          modules = [
+            nixos-hardware.nixosModules.common-pc
+            nixos-hardware.nixosModules.common-cpu-intel
           ];
         };
       };
